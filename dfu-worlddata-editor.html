@@ -314,8 +314,8 @@
 	            	name = prompt('Please enter a location name or leave blank to use the original name','Missing Location name');
 	            	if(name == '') {
 	            		name = this.original.Name;
-	            		this.form.locationName.value = name;
                     }
+		            this.form.locationName.value = name;
                 }
 	            this.new.Name = name;
 	            this.new.Exterior.RecordElement.Header.LocationName = name;
