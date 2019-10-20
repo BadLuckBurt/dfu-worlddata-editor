@@ -51,6 +51,11 @@
     <script type="text/javascript">
 
         var dfuWorldDataEditor = {
+        	error: false,
+        	mapMaxX: 999,
+            mapMaxY: 499,
+            minLocationId: 25000,
+            maxLocationId: 32768,
         	latLongMultiplier: 128,
             worldCoordinateMultiplier: 32768,
             locationTypes: [
@@ -128,6 +133,9 @@
 
 		        this.generateButton = document.getElementById('dfu-worlddata-generate');
 		        this.generateButton.addEventListener('click', this.generateJSON.bind(this));
+
+		        document.getElementById('dfu-worlddata-minlocationid').innerHTML = this.minLocationId.toString();
+		        document.getElementById('dfu-worlddata-maxlocationid').innerHTML = this.maxLocationId.toString();
             },
             populateList: function(el, type) {
         		var options;
@@ -149,13 +157,13 @@
         		return ((mapY * 1000) + mapX);
             },
             calculateLatitude: function(mapY) {
-        		return ((499 - mapY) * this.latLongMultiplier);
+        		return ((this.mapMaxY - mapY) * this.latLongMultiplier);
             },
             calculateLongitude: function(mapX) {
         		return (mapX * this.latLongMultiplier);
             },
             calculateWorldCoordinateY: function(mapY) {
-	            return ((499 - mapY) * this.worldCoordinateMultiplier);
+	            return ((this.mapMaxY - mapY) * this.worldCoordinateMultiplier);
             },
             calculateWorldCoordinateX: function(mapX) {
 	            return (mapX * this.worldCoordinateMultiplier);
@@ -214,49 +222,58 @@
 	                this.form.dungeonBlock.value = dungeonBlock;
                 }
             },
+            addError: function(message) {
+	            this.errors[this.errors.length] = message;
+            },
 	        generateJSON: function(event) {
         		event.preventDefault();
                 event.stopPropagation();
 
+                this.error = false;
+                this.errors = [];
+
                 var mapX, mapY;
                 mapX = parseInt(this.form.mapX.value,10);
+                if(mapX < 0 || mapX > this.mapMaxX) {
+                	this.addError('Map coordinate X should be between 0 and ' + this.mapMaxX);
+                	this.error = true;
+                }
                 mapY = parseInt(this.form.mapY.value,10);
+		        if(mapY < 0 || mapY > this.mapMaxY) {
+			        this.addError('Map coordinate Y should be between 0 and ' + this.mapMaxY);
+			        this.error = true;
+		        }
 
                 var type = this.form.location.value;
-
                 if(type == 'new') {
                 	if(mapX == this.original.mapId[1] && mapY == this.original.mapId[0]) {
-                		alert('The Map pixel X and Y can not be at the same location as the original JSON');
-                		return false;
+		                this.addError('The Map pixel X and Y can not be at the same location as the original JSON');
+                		this.error = true;
                     }
                 }
 
 		        this.setLocationIndex(type);
                 this.setLocationId(type);
-
                 this.setName(type);
-
-                this.setMapId(type, mapX, mapY);
-
-                this.setLatLong(type, mapX, mapY);
-
                 this.setLocationType(type);
-
                 this.setDungeonType(type);
-
-                this.setWorldCoordinates(type, mapX, mapY);
-
                 this.setExteriorBlock(type);
-
                 this.deleteDungeonHeader(type);
-
                 this.setDungeonBlock(type);
 
-                console.log(this.new);
+		        this.setMapId(type, mapX, mapY);
+		        this.setLatLong(type, mapX, mapY);
+		        this.setWorldCoordinates(type, mapX, mapY);
 
-                var text = JSON.stringify(this.new, null, 1);
-                document.getElementById('dfu-worlddata-result').innerHTML = text;
-                return true;
+		        var text;
+		        if(this.error) {
+                    text = this.errors.join("\n");
+                } else {
+			        console.log(this.new);
+			        text = JSON.stringify(this.new, null, 1);
+		        }
+		        document.getElementById('dfu-worlddata-result').innerHTML = text;
+		        return true;
 	        },
             setLocationIndex: function(type) {
         		if(type == 'new') {
@@ -269,7 +286,17 @@
             },
             setLocationId: function(type) {
         		if(type == 'new') {
+        			if(this.form.locationId.value == '') {
+        				this.addError('Please enter an location id');
+        				this.error = true;
+        				return false;
+                    }
 			        var locationId = parseInt(this.form.locationId.value);
+			        if(locationId < this.minLocationId || locationId > this.maxLocationId) {
+				        this.addError('Location ID should be between ' + this.minLocationId + ' and 32768');
+			        	this.error = true;
+			        	return false;
+                    }
 			        this.new.Exterior.RecordElement.Header.LocationId = locationId;
 			        this.new.Exterior.ExteriorData.LocationId = locationId;
 			        this.new.Dungeon.RecordElement.Header.LocationId = locationId;
@@ -283,6 +310,13 @@
             },
             setName: function(type) {
 	            var name = this.form.locationName.value;
+	            if(name == '') {
+	            	name = prompt('Please enter a location name or leave blank to use the original name','Missing Location name');
+	            	if(name == '') {
+	            		name = this.original.Name;
+	            		this.form.locationName.value = name;
+                    }
+                }
 	            this.new.Name = name;
 	            this.new.Exterior.RecordElement.Header.LocationName = name;
 	            this.new.Exterior.ExteriorData.AnotherName = name;
@@ -311,9 +345,19 @@
                 }
             },
             setLocationType: function(type) {
+        		if(this.form.locationType.value == '') {
+			        this.addError('Please choose a location type');
+        			this.error = true;
+        			return false;
+                }
 	            this.new.MapTableData.LocationType = this.form.locationType.value;
             },
             setDungeonType: function(type) {
+        		if(this.form.dungeonType.value == '') {
+			        this.addError('Please choose a dungeon type');
+        			this.error = true;
+        			return false;
+                }
 	            this.new.MapTableData.DungeonType = this.form.dungeonType.value;
             },
             setWorldCoordinates: function(type, mapX, mapY) {
@@ -334,10 +378,20 @@
                 }
             },
             setExteriorBlock: function(type) {
+        		if(this.form.exteriorBlock.value == '') {
+			        this.addError('Please choose a exterior block');
+        			this.error = true;
+        			return false;
+                }
 	            var blockName = this.form.exteriorBlock.value + '.RMB';
 	            this.new.Exterior.ExteriorData.BlockNames = [blockName];
             },
             setDungeonBlock: function(type) {
+                if(this.form.dungeonBlock.value == '') {
+	                this.addError('Please choose a dungeon block');
+                	this.error = true;
+                	return false;
+                }
 	            var blockName = this.form.dungeonBlock.value + '.RDB';
 	            this.new.Dungeon.Blocks = [{
 		            X: 0,
@@ -428,22 +482,23 @@
             <h3>Map pixels</h3>
             <p>You can find the map pixel coordinates in-game using the <code>tdbg</code> command from the console</p>
             <div>
-                <label for="dfu-worlddata-mapX">X:</label>
-                <input type="text" name="mapX" id="dfu-worlddata-mapX" />
+                <label for="dfu-worlddata-mapX">X (0 to 999):</label>
+                <input type="number" min="0" step="1" max="999" name="mapX" id="dfu-worlddata-mapX" maxlength="3" />
             </div>
             <div>
-                <label for="dfu-worlddata-mapY">Y:</label>
-                <input type="text" name="mapY" id="dfu-worlddata-mapY" />
+                <label for="dfu-worlddata-mapY">Y (0 to 499):</label>
+                <input type="number" min="0" step="1" max="499" name="mapY" id="dfu-worlddata-mapY" maxlength="3" />
             </div>
             <h3>Location Name / ID</h3>
-            <p>You only need to change the location name and ID to something unique if you're making a new location</p>
+            <p>You only need to change the location name and ID to something unique if you're making a new location.
+                Please note that if you change the name of an existing location it will not show on the worldmap but it will be shown using the <code>tdbg</code> command in the console.</code></p>
             <div>
                 <label for="dfu-worlddata-name">Location name:</label>
                 <input type="text" name="locationName" id="dfu-worlddata-name" />
             </div>
             <div>
-                <label for="dfu-worlddata-id">Location ID:</label>
-                <input type="text" name="locationId" id="dfu-worlddata-id" />
+                <label for="dfu-worlddata-id">Location ID (<span id="dfu-worlddata-minlocationid"></span> to <span id="dfu-worlddata-maxlocationid"></span>):</label>
+                <input type="number" min="25000" step="1" max="32768" name="locationId" id="dfu-worlddata-id" value="" />
             </div>
             <h3>Location / dungeon types</h3>
             <div>
