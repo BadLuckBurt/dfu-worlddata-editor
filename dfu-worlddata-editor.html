@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity World Data Editor</title>
+    <style type="text/css">
+        h1,h2,h3 {
+            margin: 0 0 1rem 0;
+        }
+        div {
+            box-sizing: border-box;
+        }
+        .wrapper {
+            max-width: 60rem;
+            padding: 1rem;
+            margin: auto;
+        }
+        .wrapper > div {
+            padding: 1rem 0;
+        }
+        form > div {
+            padding-bottom: 0.5rem;
+            display: flex;
+        }
+
+        button,
+        label {
+            display: block;
+            width: 16rem;
+        }
+
+        input, select {
+            display: block;
+        }
+
+        .radio label {
+            width: auto;
+            margin-right: 1rem;
+        }
+        .radio input {
+            display: inline;
+        }
+
+        .dfu-worlddata-result textarea{
+            box-sizing: border-box;
+            width: 100%;
+            height: 50rem;
+        }
+
+    </style>
+    <script type="text/javascript">
+
+        var dfuWorldDataEditor = {
+        	latLongMultiplier: 128,
+            worldCoordinateMultiplier: 32768,
+            locationTypes: [
+                {label: 'Large settlement', value: 'TownCity'},
+                {label: 'Medium settlement', value: 'TownHamlet'},
+                {label: 'Small settlement', value: 'TownVillage'},
+                {label: 'Farmhouse', value: 'HomeFarms'},
+	            {label: 'Tavern', value: 'Tavern'},
+	            {label: 'Wealthy home', value: 'HomeWealthy'},
+	            {label: 'Poor home', value: 'HomePoor'},
+                {label: 'Temple', value: 'ReligionTemple'},
+                {label: 'Cult', value: 'ReligionCult'},
+                {label: 'Graveyard', value: 'Graveyard'},
+                {label: 'Coven', value: 'Coven'},
+	            {label: 'Large Dungeon', value: 'DungeonLabyrinth'},
+	            {label: 'Medium dungeon', value: 'DungeonKeep'},
+	            {label: 'Small dungeon', value: 'DungeonRuin'},
+	            {label: 'Player ship', value: 'HomeYourShips'}
+            ],
+            dungeonTypes: [
+	            {label: 'Barbarian stronghold', value: 'BarbarianStronghold'},
+	            {label: 'Cemetery', value: 'Cemetery'},
+	            {label: 'Coven', value: 'Coven'},
+	            {label: 'Crypt', value: 'Crypt'},
+	            {label: 'Desecrated temple', value: 'DesecratedTemple'},
+	            {label: 'Dragon\'s den', value: 'DragonsDen'},
+	            {label: 'Giant stronghold', value: 'GiantStronghold'},
+	            {label: 'Harpy nest', value: 'HarpyNest'},
+	            {label: 'Human stronghold', value: 'HumanStronghold'},
+	            {label: 'Laboratory', value: 'Laboratory'},
+	            {label: 'Mine', value: 'Mine'},
+	            {label: 'Natural cave', value: 'NaturalCave'},
+                {label: 'Orc stronghold', value: 'OrcStronghold'},
+                {label: 'Prison', value: 'Prison'},
+	            {label: 'Ruined castle', value: 'RuinedCastle'},
+	            {label: 'Scorpion nest', value: 'ScorpionNest'},
+	            {label: 'Spider nest', value: 'SpiderNest'},
+                {label: 'Vampire haunt', value: 'VampireHaunt'},
+                {label: 'Volcanic caves', value: 'VolcanicCaves'}
+            ],
+            exteriorBlocks: [
+	            {label: 'Castle ruins', name: 'CARNAA', count: 25},
+	            {label: 'Castles', name: 'CASTAA', count: 35},
+	            {label: 'Dungeons', name: 'DUNGAA', count: 19},
+	            {label: 'Epic castle', name: 'EPCAS', count: 1, value: 'EPCAS3'},
+	            {label: 'Foo', name: 'FOO', count: 1, value: 'FOO'},
+	            {label: 'Graveyards 1', name: 'GRVEAL', count: 43},
+	            {label: 'Graveyards 2', name: 'GRVEAM', count: 43},
+	            {label: 'Graveyards 3', name: 'GRVEAS', count: 43},
+	            {label: 'Lysandus\' Tomb', name: 'LYSAN', count: 1, value: 'LYSAN'},
+	            {label: 'Asylum', name: 'NASYLUM', count: 1, value: 'NASYLUM'},
+	            {label: 'Ruins', name: 'RUINAA', count: 29},
+	            {label: 'Scourg Barrow', name: 'SCO', count: 1, value: 'SCO'},
+	            {label: 'Shedungent', name: 'SHE', count: 1, value: 'SHE'}
+            ],
+            dungeonBlocks: [
+                {label: 'Single blocks', name: 'M', count: 9}
+            ],
+        	init: function() {
+        		this.locationTypeList = document.getElementById('dfu-worlddata-locationtype');
+        		this.populateList(this.locationTypeList, 'locationType');
+		        this.dungeonTypeList = document.getElementById('dfu-worlddata-dungeontype');
+		        this.populateList(this.dungeonTypeList, 'dungeonType');
+                this.exteriorBlocksList = document.getElementById('dfu-worlddata-exteriorblock');
+                this.populateList(this.exteriorBlocksList, 'exteriorBlock');
+                this.dungeonBlocksList = document.getElementById('dfu-worlddata-dungeonblock');
+		        this.populateList(this.dungeonBlocksList, 'dungeonBlock');
+
+		        this.fileInput = document.getElementById('json-upload-file');
+
+		        this.loadFileButton = document.getElementById('json-upload-button');
+		        this.loadFileButton.addEventListener('click', this.loadJSON.bind(this));
+
+		        this.form = document.getElementById('dfu-worlddata-form');
+
+		        this.generateButton = document.getElementById('dfu-worlddata-generate');
+		        this.generateButton.addEventListener('click', this.generateJSON.bind(this));
+            },
+            populateList: function(el, type) {
+        		var options;
+        		if(type == 'locationType') {
+        			options = this.generateTypeOptions(this.locationTypes);
+                } else if(type == 'dungeonType') {
+        			options = this.generateTypeOptions(this.dungeonTypes);
+                } else if(type == 'exteriorBlock') {
+			        options = this.generateBlockOptions(this.exteriorBlocks, 2);
+                } else if(type == 'dungeonBlock') {
+        			options = this.generateBlockOptions(this.dungeonBlocks, 7);
+                }
+	            while (el.firstChild) {
+		            el.removeChild(el.firstChild);
+	            }
+	            el.appendChild(options);
+            },
+            calculateMapId: function(mapX, mapY) {
+        		return ((mapY * 1000) + mapX);
+            },
+            calculateLatitude: function(mapY) {
+        		return ((499 - mapY) * this.latLongMultiplier);
+            },
+            calculateLongitude: function(mapX) {
+        		return (mapX * this.latLongMultiplier);
+            },
+            calculateWorldCoordinateY: function(mapY) {
+	            return ((499 - mapY) * this.worldCoordinateMultiplier);
+            },
+            calculateWorldCoordinateX: function(mapX) {
+	            return (mapX * this.worldCoordinateMultiplier);
+            },
+	        loadJSON: function () {
+        		event.preventDefault();
+        		event.stopPropagation();
+        		if(this.fileInput.files.length == 0) {
+        			alert('Please select a location JSON file to load');
+        			return false;
+                }
+                // Check for the various File API support.
+                if (window.File && window.FileReader && window.FileList && window.Blob) {
+        			var file = this.fileInput.files[0];
+                    if(file) {
+                        var fr = new FileReader();
+                        fr.onload = function(e) {
+                            var output = document.querySelector('#output');
+                            var text = e.target.result;
+                            this.processJSON(text);
+                        }.bind(this);
+                        fr.readAsText(file);
+                    }
+                } else {
+                    alert('FileReader is not supported by your browser.');
+                }
+            },
+            processJSON: function(location) {
+        		this.original = JSON.parse(location);
+        		this.new = JSON.parse(location);
+
+        		console.log(this.original);
+
+        		var mapId = (this.original.Exterior.ExteriorData.MapId / 1000).toString().split('.');
+        		mapId[0] = parseInt(mapId[0]);
+        		mapId[1] = parseInt(mapId[1]);
+        		this.original.mapId = mapId;
+        		this.form.locationName.value = this.original.Name;
+        		this.form.locationId.value = this.original.Exterior.RecordElement.Header.LocationId;
+        		this.form.mapY.value = this.original.mapId[0];
+        		this.form.mapX.value = this.original.mapId[1];
+        		this.form.locationType.value = this.original.MapTableData.LocationType;
+        		this.form.exteriorBlock.value = this.original.Exterior.ExteriorData.BlockNames[0].replace('.RMB','');
+        		this.form.dungeonType.value = this.original.MapTableData.DungeonType;
+        		var dungeonBlocks = this.original.Dungeon.Blocks;
+        		var dungeonBlock = '';
+        		for(var index = 0; index < dungeonBlocks.length; index++) {
+        			if(dungeonBlocks[index].IsStartingBlock == true) {
+        				dungeonBlock = dungeonBlocks[index].BlockName.replace('.RDB','');
+        				break;
+                    }
+                }
+                if(dungeonBlock == '') {
+        			alert('Error: Unable to find starting dungeon block');
+                } else {
+	                this.form.dungeonBlock.value = dungeonBlock;
+                }
+            },
+	        generateJSON: function(event) {
+        		event.preventDefault();
+                event.stopPropagation();
+
+                var mapX, mapY;
+                mapX = parseInt(this.form.mapX.value,10);
+                mapY = parseInt(this.form.mapY.value,10);
+
+                var type = this.form.location.value;
+
+                if(type == 'new') {
+                	if(mapX == this.original.mapId[1] && mapY == this.original.mapId[0]) {
+                		alert('The Map pixel X and Y can not be at the same location as the original JSON');
+                		return false;
+                    }
+                }
+
+		        this.setLocationIndex(type);
+                this.setLocationId(type);
+
+                this.setName(type);
+
+                this.setMapId(type, mapX, mapY);
+
+                this.setLatLong(type, mapX, mapY);
+
+                this.setLocationType(type);
+
+                this.setDungeonType(type);
+
+                this.setWorldCoordinates(type, mapX, mapY);
+
+                this.setExteriorBlock(type);
+
+                this.deleteDungeonHeader(type);
+
+                this.setDungeonBlock(type);
+
+                console.log(this.new);
+
+                var text = JSON.stringify(this.new, null, 1);
+                document.getElementById('dfu-worlddata-result').innerHTML = text;
+                return true;
+	        },
+            setLocationIndex: function(type) {
+        		if(type == 'new') {
+			        this.new.Exterior.RecordElement.Header.Unknown2 = 0;
+			        this.new.LocationIndex = 0;
+                } else {
+			        this.new.Exterior.RecordElement.Header.Unknown2 = this.original.Exterior.RecordElement.Header.Unknown2;
+			        this.new.LocationIndex = this.original.LocationIndex;
+                }
+            },
+            setLocationId: function(type) {
+        		if(type == 'new') {
+			        var locationId = parseInt(this.form.locationId.value);
+			        this.new.Exterior.RecordElement.Header.LocationId = locationId;
+			        this.new.Exterior.ExteriorData.LocationId = locationId;
+			        this.new.Dungeon.RecordElement.Header.LocationId = locationId;
+			        this.new.Dungeon.RecordElement.Header.ExteriorLocationId = locationId;
+                } else {
+			        this.new.Exterior.RecordElement.Header.LocationId = this.original.Exterior.RecordElement.Header.LocationId;
+			        this.new.Exterior.ExteriorData.LocationId = this.original.Exterior.ExteriorData.LocationId;
+			        this.new.Dungeon.RecordElement.Header.LocationId = this.original.Dungeon.RecordElement.Header.LocationId;
+			        this.new.Dungeon.RecordElement.Header.ExteriorLocationId = this.original.Dungeon.RecordElement.Header.ExteriorLocationId;
+                }
+            },
+            setName: function(type) {
+	            var name = this.form.locationName.value;
+	            this.new.Name = name;
+	            this.new.Exterior.RecordElement.Header.LocationName = name;
+	            this.new.Exterior.ExteriorData.AnotherName = name;
+	            this.new.Dungeon.RecordElement.Header.LocationName = name;
+            },
+            setMapId: function(type, mapX, mapY) {
+        		if(type == 'new') {
+			        var mapId = this.calculateMapId(mapX, mapY);
+			        this.new.MapTableData.MapId = mapId;
+			        this.new.Exterior.ExteriorData.MapId = mapId;
+                } else {
+			        this.new.MapTableData.MapId = this.original.MapTableData.MapId;
+			        this.new.Exterior.ExteriorData.MapId = this.original.Exterior.ExteriorData.MapId;
+                }
+            },
+            setLatLong: function(type, mapX, mapY) {
+        		if(type == 'new') {
+			        var latitude = this.calculateLatitude(mapY);
+			        var longitude = this.calculateLongitude(mapX);
+
+			        this.new.MapTableData.Latitude = latitude;
+			        this.new.MapTableData.Longitude = longitude;
+		        } else {
+			        this.new.MapTableData.Latitude = this.original.MapTableData.Latitude;
+			        this.new.MapTableData.Longitude = this.original.MapTableData.Longitude;
+                }
+            },
+            setLocationType: function(type) {
+	            this.new.MapTableData.LocationType = this.form.locationType.value;
+            },
+            setDungeonType: function(type) {
+	            this.new.MapTableData.DungeonType = this.form.dungeonType.value;
+            },
+            setWorldCoordinates: function(type, mapX, mapY) {
+        		if(type == 'new') {
+                    var worldX, worldY;
+                    worldX = this.calculateWorldCoordinateX(mapX);
+                    worldY = this.calculateWorldCoordinateY(mapY);
+
+                    this.new.Exterior.RecordElement.Header.X = worldX;
+                    this.new.Exterior.RecordElement.Header.Y = worldY;
+                    this.new.Dungeon.RecordElement.Header.X = worldX;
+                    this.new.Dungeon.RecordElement.Header.Y = worldY;
+                } else {
+			        this.new.Exterior.RecordElement.Header.X = this.original.Exterior.RecordElement.Header.X;
+			        this.new.Exterior.RecordElement.Header.Y = this.original.Exterior.RecordElement.Header.Y;
+			        this.new.Dungeon.RecordElement.Header.X = this.original.Dungeon.RecordElement.Header.X;
+			        this.new.Dungeon.RecordElement.Header.Y = this.original.Dungeon.RecordElement.Header.Y;
+                }
+            },
+            setExteriorBlock: function(type) {
+	            var blockName = this.form.exteriorBlock.value + '.RMB';
+	            this.new.Exterior.ExteriorData.BlockNames = [blockName];
+            },
+            setDungeonBlock: function(type) {
+	            var blockName = this.form.dungeonBlock.value + '.RDB';
+	            this.new.Dungeon.Blocks = [{
+		            X: 0,
+		            Z: 0,
+		            IsStartingBlock: true,
+		            BlockName: blockName,
+		            WaterLevel: 0,
+		            CastleBlock: false
+	            }];
+            },
+            deleteDungeonHeader: function(type) {
+	            delete this.new.Dungeon.Header;
+            },
+            generateTypeOptions: function(types) {
+        		var documentFragment, index, option;
+        		documentFragment = document.createDocumentFragment();
+	            option = document.createElement('option');
+	            option.innerHTML = 'Please choose a type';
+	            option.value = '';
+	            documentFragment.appendChild(option);
+        		for(index = 0; index < types.length; index++) {
+        			option = document.createElement('option');
+        			option.value = types[index].value;
+        			option.innerHTML = types[index].label;
+        			documentFragment.appendChild(option);
+                }
+                return documentFragment;
+            },
+            generateBlockOptions: function(blocks, padLength) {
+        		var documentFragment = new DocumentFragment();
+        		var index, count, optionGroup, option, optionName;
+        		option = document.createElement('option');
+        		option.innerHTML = 'Please choose a block';
+        		option.value = '';
+        		documentFragment.appendChild(option);
+        		for(index = 0; index < blocks.length; index++) {
+        			optionGroup = document.createElement('optgroup');
+        			optionGroup.label = blocks[index].label;
+        			if(blocks[index].count > 1) {
+        				for(count = 0; count < blocks[index].count; count++) {
+        					optionName = blocks[index].name + count.toString().padStart(padLength,'0');
+        					option = document.createElement('option');
+        					option.innerHTML = optionName;
+        					option.value = optionName;
+					        optionGroup.appendChild(option);
+                        }
+                    } else {
+        				optionName = blocks[index].value;
+        				option = document.createElement('option');
+        				option.innerHTML = optionName;
+        				option.value = optionName;
+        				optionGroup.appendChild(option);
+                    }
+			        documentFragment.appendChild(optionGroup);
+                }
+        		return documentFragment;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function(event) {
+	        dfuWorldDataEditor.init();
+        });
+
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <h1>Daggerfall Unity Worlddata Editor</h1>
+    <div class="json-upload">
+        <h2>Load Location JSON</h2>
+        <p>Please select the location JSON file you exported from Daggerfall Unity and click the Load JSON button</p>
+        <form id="json-upload-form" method="post" action="">
+            <div>
+                <input type="file" name="json-upload-file" id="json-upload-file" />
+                <button type="submit" id="json-upload-button" name="json-upload-button">Load JSON</button>
+            </div>
+        </form>
+    </div>
+    <div class="dfu-worlddata">
+        <h2>Settings</h2>
+        <form id="dfu-worlddata-form" method="post" action="">
+            <h3>Existing / new location</h3>
+            <p>Please specify if you are making a new location or altering an existing one</p>
+            <div class="radio">
+                <label for="dfu-worlddata-new"><input type="radio" id="dfu-worlddata-new" name="location" value="new" /> New</label>
+                <label for="dfu-worlddata-existing"><input type="radio" id="dfu-worlddata-existing" name="location" value="existing" /> Existing</label>
+            </div>
+            <h3>Map pixels</h3>
+            <p>You can find the map pixel coordinates in-game using the <code>tdbg</code> command from the console</p>
+            <div>
+                <label for="dfu-worlddata-mapX">X:</label>
+                <input type="text" name="mapX" id="dfu-worlddata-mapX" />
+            </div>
+            <div>
+                <label for="dfu-worlddata-mapY">Y:</label>
+                <input type="text" name="mapY" id="dfu-worlddata-mapY" />
+            </div>
+            <h3>Location Name / ID</h3>
+            <p>You only need to change the location name and ID to something unique if you're making a new location</p>
+            <div>
+                <label for="dfu-worlddata-name">Location name:</label>
+                <input type="text" name="locationName" id="dfu-worlddata-name" />
+            </div>
+            <div>
+                <label for="dfu-worlddata-id">Location ID:</label>
+                <input type="text" name="locationId" id="dfu-worlddata-id" />
+            </div>
+            <h3>Location / dungeon types</h3>
+            <div>
+                <label for="dfu-worlddata-locationtype">Location type:</label>
+                <select id="dfu-worlddata-locationtype" name="locationType"></select>
+            </div>
+            <div>
+                <label for="dfu-worlddata-dungeontype">Dungeon type:</label>
+                <select id="dfu-worlddata-dungeontype" name="dungeonType"></select>
+            </div>
+            <h3>Exterior / dungeon blocks</h3>
+            <div>
+                <label for="dfu-worlddata-exteriorblock">Exterior block:</label>
+                <select id="dfu-worlddata-exteriorblock" name="exteriorBlock"></select>
+            </div>
+            <div>
+                <label for="dfu-worlddata-dungeonblock">Dungeon block:</label>
+                <select id="dfu-worlddata-dungeonblock" name="dungeonBlock"></select>
+            </div>
+            <div>
+                <button type="submit" id="dfu-worlddata-generate" name="generateButton">Generate JSON</button>
+            </div>
+        </form>
+        <h2>Result</h2>
+        <div class="dfu-worlddata-result">
+            <textarea id="dfu-worlddata-result" name="dfu-worlddata-result"></textarea>
+        </div>
+    </div>
+</div>
+</body>
+</html>
