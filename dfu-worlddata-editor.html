@@ -26,11 +26,12 @@
         button,
         label {
             display: block;
-            width: 16rem;
+            width: 15rem;
         }
 
         input, select {
             display: block;
+            min-width: 15rem;
         }
 
         .radio label {
@@ -39,6 +40,7 @@
         }
         .radio input {
             display: inline;
+            min-width: auto;
         }
 
         .dfu-worlddata-result textarea{
@@ -54,7 +56,7 @@
         	error: false,
         	mapMaxX: 999,
             mapMaxY: 499,
-            minLocationId: 25000,
+            minLocationId: 29500,
             maxLocationId: 32768,
         	latLongMultiplier: 128,
             worldCoordinateMultiplier: 32768,
@@ -130,6 +132,14 @@
 		        this.loadFileButton.addEventListener('click', this.loadJSON.bind(this));
 
 		        this.form = document.getElementById('dfu-worlddata-form');
+
+		        this.form.locationId.min = this.minLocationId;
+		        this.form.locationId.max = this.maxLocationId;
+
+		        this.form.mapX.min = 0;
+		        this.form.mapY.min = 0;
+		        this.form.mapX.max = this.mapMaxX;
+		        this.form.mapY.max = this.mapMaxY;
 
 		        this.generateButton = document.getElementById('dfu-worlddata-generate');
 		        this.generateButton.addEventListener('click', this.generateJSON.bind(this));
@@ -421,7 +431,7 @@
                 return documentFragment;
             },
             generateBlockOptions: function(blocks, padLength) {
-        		var documentFragment = new DocumentFragment();
+	            var documentFragment = document.createDocumentFragment();
         		var index, count, optionGroup, option, optionName;
         		option = document.createElement('option');
         		option.innerHTML = 'Please choose a block';
@@ -483,11 +493,11 @@
             <p>You can find the map pixel coordinates in-game using the <code>tdbg</code> command from the console</p>
             <div>
                 <label for="dfu-worlddata-mapX">X (0 to 999):</label>
-                <input type="number" min="0" step="1" max="999" name="mapX" id="dfu-worlddata-mapX" maxlength="3" />
+                <input type="number" step="1" name="mapX" id="dfu-worlddata-mapX" maxlength="3" />
             </div>
             <div>
                 <label for="dfu-worlddata-mapY">Y (0 to 499):</label>
-                <input type="number" min="0" step="1" max="499" name="mapY" id="dfu-worlddata-mapY" maxlength="3" />
+                <input type="number" step="1" name="mapY" id="dfu-worlddata-mapY" maxlength="3" />
             </div>
             <h3>Location Name / ID</h3>
             <p>You only need to change the location name and ID to something unique if you're making a new location.
@@ -498,7 +508,7 @@
             </div>
             <div>
                 <label for="dfu-worlddata-id">Location ID (<span id="dfu-worlddata-minlocationid"></span> to <span id="dfu-worlddata-maxlocationid"></span>):</label>
-                <input type="number" min="25000" step="1" max="32768" name="locationId" id="dfu-worlddata-id" value="" />
+                <input type="number" step="1" name="locationId" id="" value="" />
             </div>
             <h3>Location / dungeon types</h3>
             <div>
