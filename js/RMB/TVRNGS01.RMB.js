@@ -1,0 +1,2 @@
+var blockBuildings = {BlockName: 'TVRNGS01.RMB', Buildings: [{NameSeed: 0, FactionId: 0, BuildingType: 'House2', Quality: 7}, {NameSeed: 0, FactionId: 0, BuildingType: 'House2', Quality: 7}, {NameSeed: 0, FactionId: 0, BuildingType: 'House2', Quality: 3}, {NameSeed: 0, FactionId: 0, BuildingType: 'House2', Quality: 4}, {NameSeed: 28516, FactionId: 510, BuildingType: 'Tavern', Quality: 13}, ]}
+dfuWorldDataEditor.registerBlockBuildings(blockBuildings);
