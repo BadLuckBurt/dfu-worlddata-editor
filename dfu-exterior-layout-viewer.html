@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Exterior layout editor</title>
+    <title>Daggerfall Unity Exterior / Interior Layout Viewer</title>
     <link href="css/base.css" rel="stylesheet" />
     <style type="text/css">
 
@@ -97,7 +97,6 @@
 	        },
             processJSON: function(rmb) {
 	            var rmbJSON = JSON.parse(rmb);
-	            console.log(rmbJSON);
 	            this.exterior.render(rmbJSON.RmbBlock.SubRecords, true);
             },
             render: function(records, renderInterior) {
@@ -334,7 +333,6 @@
 
         window.addEventListener('DOMContentLoaded',function() {
             layoutRenderer.init();
-            //layoutRenderer.render(records, true);
         });
 
     </script>
