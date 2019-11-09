@@ -3,34 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Daggerfall Unity World Data Editor</title>
+    <link href="css/base.css" rel="stylesheet" />
     <style type="text/css">
-
-        body {
-            background-color: #000;
-            color: #EEE;
-            font-family: Arial, 'Helvetica',sans-serif;
-        }
-
-        h1,h2,h3,h4,h5,h6 {
-            margin: 0;
-            padding: 0.5rem 0;
-        }
-        div {
-            box-sizing: border-box;
-        }
-        .wrapper {
-            max-width: 60rem;
-            padding: 1rem;
-            margin: auto;
-        }
-        .wrapper > div {
-            padding: 0.5rem 0;
-        }
-        form > div {
-            padding: 0.5rem;
-            display: flex;
-            background-color: #333;
-        }
 
         .map-coordinate-inputs {
             width: 100%;
@@ -257,20 +231,6 @@
             padding: 0.25rem;
             width: 14.5rem;
         }
-
-        h1 {
-            position: relative;
-        }
-        h1 img {
-            max-width: 35%;
-            height: auto;
-            vertical-align: top;
-        }
-        h1 span {
-            position: relative;
-            top: 3rem;
-        }
-
 
     </style>
     <script type="text/javascript" src="js/blockBuildingsMissing.js"></script>
@@ -791,7 +751,7 @@
 			        this.registerBlocksScript.type = 'text/javascript';
 			        this.registerBlocksScript.onerror = function() {this.handleBlockBuildingsScriptError()}.bind(this);
 			        this.registerBlocksScript.onload = function() {this.handleBlockBuildingsScriptLoad()}.bind(this);
-			        this.registerBlocksScript.src = 'js/RMB/' + this.blockNames[index] + '.js';
+			        this.registerBlocksScript.src = 'js/RMB-buildings/' + this.blockNames[index] + '.js';
 
 			        document.head.appendChild(this.registerBlocksScript);
 		        } else {
