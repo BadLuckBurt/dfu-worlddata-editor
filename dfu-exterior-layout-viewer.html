@@ -112,6 +112,10 @@
 
 			        var exterior, x, z, width, length, yRotation, modelId, div, layer, r, g, b, id;
 
+			        while(this.gridWrapper.firstElementChild) {
+			        	this.gridWrapper.removeChild(this.gridWrapper.firstElementChild);
+                    }
+
 			        layer = document.createElement('div');
 			        layer.className = 'layer';
 
