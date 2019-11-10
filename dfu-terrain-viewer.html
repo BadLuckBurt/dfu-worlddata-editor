@@ -87,6 +87,7 @@
 	            var textureSet = this.textureSelect.value;
 	            if(textureSet == '') {
 		            textureSet = 'temperate';
+		            this.textureSelect.value = textureSet;
 	            }
 	            for(index = 0; index < this.tiles.length; index++) {
 		            img = document.createElement('img');
@@ -105,6 +106,66 @@
 		            df.appendChild(img);
 	            }
 	            this.grid.appendChild(df);
+	            var template = this.getTiledTemplate();
+	            console.log(template);
+	            var text = JSON.stringify(template, null, "\t");
+	            document.getElementById('dfu-terrain-viewer-result').innerHTML = text;
+            },
+            getTiledTemplate: function() {
+        		var template = { "height":16,
+			        "infinite":false,
+			        "layers":[
+				        {
+					        "data":null,
+					        "height":16,
+					        "id":1,
+					        "name":"terrain",
+					        "opacity":1,
+					        "type":"tilelayer",
+					        "visible":true,
+					        "width":16,
+					        "x":0,
+					        "y":0
+				        }],
+			        "nextlayerid":43,
+			        "nextobjectid":1,
+			        "orientation":"orthogonal",
+			        "renderorder":"left-down",
+			        "tiledversion":"1.2.5",
+			        "tileheight":64,
+			        "tilesets":[
+				        {
+					        "firstgid":1,
+					        "source": null
+				        }],
+			        "tilewidth":64,
+			        "type":"map",
+			        "version":1.2,
+			        "width":16
+		        };
+
+        		var data = [];
+        		var id;
+        		for(var i = 0; i < this.tiles.length; i++) {
+        			id = this.tiles[i].TextureRecord + 1;
+        			if(this.tiles[i].IsFlipped && this.tiles[i].IsRotated) {
+        				//console.log('Flipped and rotated id ' + id);
+                        id = id + (TILED_FLIPPED_HORIZONTALLY_FLAG + TILED_FLIPPED_DIAGONALLY_FLAG);
+                        //console.log(id);
+                    } else if(this.tiles[i].IsFlipped) {
+				        //console.log('Flipped id ' + id);
+                        id = id + (TILED_FLIPPED_HORIZONTALLY_FLAG + TILED_FLIPPED_VERTICALLY_FLAG);
+				        //console.log(id);
+                    } else if(this.tiles[i].IsRotated) {
+				        //console.log('Rotated id ' + id);
+                        id = id + (TILED_FLIPPED_HORIZONTALLY_FLAG - TILED_FLIPPED_DIAGONALLY_FLAG);
+				        //console.log(id);
+                    }
+                    data[i] = parseInt(id,10);
+                }
+        		template.layers[0].data = data;
+        		template.tilesets[0].source = '..\/' + this.textureSelect.value + '.tsx';
+        		return template;
             }
         };
 
@@ -149,8 +210,12 @@
         <button type="button" onclick="switchGridSize('half');">Half size</button> |
         <button type="button" onclick="switchGridSize('');">Full size</button>
     </div>
-    <div id="grid">
+    <div id="grid" class="half">
 
+    </div>
+    <h2>Result</h2>
+    <div class="dfu-result">
+        <textarea id="dfu-terrain-viewer-result" name="dfu-terrain-viewer-result"></textarea>
     </div>
 </div>
 </body>
