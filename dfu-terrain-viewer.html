@@ -5,27 +5,53 @@
     <title>Daggerfall Unity Terrain Viewer</title>
     <link href="css/base.css" rel="stylesheet" />
     <style type="text/css">
+
         #grid {
+            position: relative;
             width: 1024px;
             height: 1024px;
-            display: flex;
-            flex-wrap: wrap;
             margin: auto;
         }
-        #grid img {
-            width: 64px;
-            height: 64px;
-            flex-grow: 0;
-            flex-shrink: 0;
-        }
+
         #grid.half {
             width: 512px;
             height: 512px;
         }
-        #grid.half img {
+
+        .grid-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            margin: auto;
+        }
+        .grid-wrapper img {
+            width: 64px;
+            height: 64px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            -ms-interpolation-mode: nearest-neighbor;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-pixelated;
+            image-rendering: pixelated;
+        }
+        #grid.half .grid-wrapper img {
             width: 32px;
             height: 32px;
         }
+
+        #automap-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            -ms-interpolation-mode: nearest-neighbor;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-pixelated;
+            image-rendering: pixelated;
+        }
+
     </style>
 
     <script type="text/javascript">
@@ -36,8 +62,9 @@
 
         var terrainViewer = {
         	init: function() {
+        		this.overlay = document.getElementById('automap-overlay');
         		this.fileInput = document.getElementById('json-upload-file');
-        		this.grid = document.getElementById('grid');
+        		this.grid = document.getElementById('grid').querySelector('.grid-wrapper');
         		this.tiles = null;
 
         		this.loadButton = document.getElementById('json-upload-button');
@@ -74,6 +101,14 @@
             },
             processJSON: function(rmb) {
 	            var rmbJSON = JSON.parse(rmb);
+	            var src = 'images/RMB/' + rmbJSON.Name + '.png';
+	            this.overlay.addEventListener('error',function() {
+	            	this.style.display = 'none';
+                });
+	            this.overlay.addEventListener('load', function() {
+	            	this.style.display = 'block';
+                });
+	            this.overlay.src = src;
 	            this.tiles = rmbJSON.RmbBlock.FldHeader.GroundData.GroundTiles;
 	            this.viewGroundTiles();
             },
@@ -211,7 +246,9 @@
         <button type="button" onclick="switchGridSize('');">Full size</button>
     </div>
     <div id="grid" class="half">
-
+        <div class="grid-wrapper">
+        </div>
+        <img id="automap-overlay" src="" style="display: none;" />
     </div>
     <h2>Result</h2>
     <div class="dfu-result">
