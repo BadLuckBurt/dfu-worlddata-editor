@@ -251,10 +251,18 @@
             generateAutomap: function() {
         		var automap = [];
         		var tiles = this.gridWrapper.querySelectorAll('.cell');
-        		for(var i = 0; i < tiles.length; i++) {
-        			automap[i] = tiles[i].getAttribute('data-type');
+                var result = "[\n\t\t";
+                var r = 1;
+        		for (var i = 0; i < tiles.length; i++) {
+                    result += tiles[i].getAttribute('data-type').padStart(3,' ');
+                    if (i < tiles.length-1)
+                        result += ',';
+                    if (r++ == 64) {
+                        result += "\n\t\t";
+                        r = 1;
+                    }
                 }
-                var result = "[\n\t" + automap.join(",\n\t") + "\n]";
+                result += "]";
         		this.result.innerHTML = result;
             },
             createGridControls: function() {
