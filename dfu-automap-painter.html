@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity Terrain Viewer</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <style type="text/css">
+
+        #grid {
+            position: relative;
+            width: 1024px;
+            margin: auto;
+        }
+
+        #grid.half .grid-wrapper {
+            width: 512px;
+            height: 512px;
+        }
+
+        .grid-wrapper {
+            outline: 1px #EEE solid;
+            display: flex;
+            width: 1024px;
+            height: 1024px;
+            flex-wrap: wrap;
+            margin: auto;
+        }
+        .grid-wrapper .cell {
+            width: 16px;
+            height: 16px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            -ms-interpolation-mode: nearest-neighbor;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-pixelated;
+            image-rendering: pixelated;
+        }
+        #grid.half .grid-wrapper .cell {
+            width: 8px;
+            height: 8px;
+        }
+        .cell:hover {
+            outline: 1px #EEE solid;
+        }
+
+        /*
+        case 12: // guildhall
+        case 15: // temple
+         */
+        .color-12, .color-15 {
+            background-color: rgba(69,125,195,255);
+        }
+        /*
+        case 1: // alchemist
+        case 3: // armorer
+        case 4: // bank
+        case 6: // bookseller
+        case 7: // clothing store
+        case 9: // gem store
+        case 10: // general store
+        case 11: // library
+        case 13: // pawn shop
+        case 14: // weapon smith
+        */
+
+
+        .color-1, .color-3, .color-4, .color-6, .color-7, .color-9,
+        .color-10, .color-11, .color-13, .color-14 {
+            background-color: rgba(190,85,24,255);
+        }
+        /* case 16: // tavern */
+        .color-16 {
+            background-color: rgba(85,117,48,255);
+        }
+
+        /*
+        // common
+        case 2: // house for sale
+        case 5: // town4
+        case 8: // furniture store
+        case 17: // palace
+        case 18: // house 1
+        case 19: // house 2
+        case 20: // house 3
+        case 21: // house 4
+        case 22: // house 5 (hedge)
+        case 23: // house 6
+        case 24: // town23
+        */
+        .color-2, .color-5, .color-8, .color-17, .color-18, .color-19, .color-20,
+        .color-21, .color-22, .color-23, .color-24 {
+            background-color: rgba(69,60,40,255);
+        }
+
+        /*
+        case 25: // ship
+        case 117: // special 1
+        case 224: // special 2
+        case 250: // special 3
+        case 251: // special 4
+        */
+        .color-25, .color-117, .color-224, .color-250, .color-251 {
+            background-color: rgba(69, 60, 40, 0);
+            /*background-color: rgba(69, 60, 40, 255);*/
+        }
+        .color-0 {
+            background-color: rgba(0,0,0,0);
+        }
+        .color-default {
+            background-color: rgba(255, 0, 128, 255);
+        }
+
+        #grid-controls {
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #grid-controls .paint-type {
+            width: 24px;
+            height: 24px;
+            outline: 1px #fff solid;
+        }
+
+
+    </style>
+
+    <script type="text/javascript">
+
+        var automapPainter = {
+        	paintTypes: [
+		        {type: 12, name: 'guildhall'},
+		        {type: 15, name: 'temple'},
+		        {type: 1, name: 'alchemist'},
+		        {type: 3, name: 'armorer'},
+		        {type: 4, name: 'bank'},
+		        {type: 6, name: 'bookseller'},
+		        {type: 7, name: 'clothing store'},
+		        {type: 9, name: 'gem store'},
+		        {type: 10, name: 'general store'},
+		        {type: 11, name: 'library'},
+		        {type: 13, name: 'pawn shop'},
+		        {type: 14, name: 'weapon smith'},
+		        {type: 16, name: 'tavern'},
+		        {type: 2, name: 'house for sale'},
+		        {type: 5, name: 'town4'},
+		        {type: 8, name: 'furniture store'},
+		        {type: 17, name: 'palace'},
+		        {type: 18, name: 'house 1'},
+		        {type: 19, name: 'house 2'},
+		        {type: 20, name: 'house 3'},
+		        {type: 21, name: 'house 4'},
+		        {type: 22, name: 'house 5 (hedge)'},
+		        {type: 23, name: 'house 6'},
+		        {type: 24, name: 'town23'},
+		        {type: 25, name: 'ship'},
+		        {type: 117, name: 'special 1'},
+		        {type: 224, name: 'special 2'},
+		        {type: 250, name: 'special 3'},
+		        {type: 251, name: 'special 4'},
+		        {type: 0, name: 'blank'},
+		        {type: 'default', name: 'default?'}
+	        ],
+        	init: function() {
+        		this.paint = false;
+		        this.fileInput = document.getElementById('json-upload-file');
+		        this.loadButton = document.getElementById('json-upload-button');
+		        this.loadButton.addEventListener('click', function() {
+			        this.loadJSON();
+		        }.bind(this));
+        		this.currentPaintType = 16;
+        		this.currentPaintName = 'tavern';
+        		this.gridControls = document.getElementById('grid-controls');
+        		this.gridControls.addEventListener('click', function(event) {
+        			if(event.target.classList.contains('paint-type')) {
+        				this.currentPaintName = event.target.title;
+        				this.currentPaintType = event.target.getAttribute('data-type');
+                    }
+                }.bind(this));
+        		this.createGridControls();
+        		this.grid = document.getElementById('grid');
+        		this.gridWrapper = this.grid.querySelector('.grid-wrapper');
+        		this.generateGridCells([]);
+        		this.grid.addEventListener('click', function(event) {
+                    //event.preventDefault();
+        			this.paintCell(event, true);
+                }.bind(this));
+        		this.grid.addEventListener('mousedown',function(event) {
+			        //event.preventDefault();
+        			this.paint = true;
+                }.bind(this));
+        		this.grid.addEventListener('mouseup', function(event) {
+			        //event.preventDefault();
+        			this.paint = false;
+                }.bind(this));
+        		this.grid.addEventListener('mousemove', function(event) {
+        			if(this.paint) {
+        				this.paintCell(event, false);
+                    }
+                }.bind(this));
+        		this.generateAutomapButton = document.getElementById('generate-automap');
+        		this.generateAutomapButton.addEventListener('click', function() {
+        			this.generateAutomap();
+                }.bind(this));
+        		this.result = document.getElementById('dfu-automap-generator-result');
+            },
+            paintCell: function(event, clicked) {
+	            if(event.target.classList.contains('cell')) {
+	            	console.log('painting cell');
+		            var cell = event.target;
+		            var currentType = cell.getAttribute('data-type');
+		            if(currentType == this.currentPaintType) {
+			            return false;
+		            }
+		            var colorClass = 'color-' + this.currentPaintType;
+		            cell.title = this.currentPaintName;
+		            cell.setAttribute('data-type', this.currentPaintType.toString());
+		            cell.classList.add(colorClass);
+		            colorClass = 'color-' + currentType;
+		            cell.classList.remove(colorClass);
+	            }
+            },
+	        loadJSON: function() {
+		        event.preventDefault();
+		        event.stopPropagation();
+		        if(this.fileInput.files.length == 0) {
+			        alert('Please select a location JSON file to load');
+			        return false;
+		        }
+		        // Check for the various File API support.
+		        if (window.File && window.FileReader && window.FileList && window.Blob) {
+			        var file = this.fileInput.files[0];
+			        if(file) {
+				        var fr = new FileReader();
+				        fr.onload = function(e) {
+					        var text = e.target.result;
+					        this.processJSON(text);
+				        }.bind(this);
+				        fr.readAsText(file);
+			        }
+		        } else {
+			        alert('FileReader is not supported by your browser.');
+		        }
+	        },
+	        processJSON: function(rmb) {
+		        var rmbJSON = JSON.parse(rmb);
+		        var automapData = rmbJSON.RmbBlock.FldHeader.AutoMapData;
+		        this.generateGridCells(automapData);
+	        },
+            generateAutomap: function() {
+        		var automap = [];
+        		var tiles = this.gridWrapper.querySelectorAll('.cell');
+        		for(var i = 0; i < tiles.length; i++) {
+        			automap[i] = tiles[i].getAttribute('data-type');
+                }
+                var result = "[\n\t" + automap.join(",\n\t") + "\n]";
+        		this.result.innerHTML = result;
+            },
+            createGridControls: function() {
+        		var df, el;
+        		df = document.createDocumentFragment();
+        		for(var i = 0; i < this.paintTypes.length; i++) {
+        			el = document.createElement('div');
+        			el.title = this.paintTypes[i].type.toString() + ': ' + this.paintTypes[i].name;
+        			el.setAttribute('data-type',this.paintTypes[i].type);
+        			el.classList.add('color-' + this.paintTypes[i].type);
+        			el.classList.add('paint-type');
+        			df.appendChild(el);
+                }
+                while(this.gridControls.firstElementChild) {
+        			this.gridControls.removeChild(this.gridControls.firstElementChild);
+                }
+                this.gridControls.appendChild(df);
+            },
+            generateGridCells: function(cellTypes) {
+        		var cell;
+        		var df = document.createDocumentFragment();
+        		var length = 64 * 64;
+        		for(var i = 0; i < length; i++) {
+                    cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    if(cellTypes.length = length) {
+                    	cell.classList.add('color-' + cellTypes[i]);
+                    	cell.setAttribute('data-type', cellTypes[i]);
+                    	cell.title = this.getPaintName(cellTypes[i]);
+                    } else {
+	                    cell.classList.add('color-0');
+	                    cell.setAttribute('data-type','0');
+	                    cell.title = '0: blank';
+                    }
+                    df.appendChild(cell);
+                }
+                while(this.gridWrapper.firstElementChild) {
+        			this.gridWrapper.removeChild(this.gridWrapper.firstElementChild);
+                }
+                this.gridWrapper.appendChild(df);
+            },
+            getPaintName: function(type) {
+        		for(var i = 0; i < this.paintTypes.length; i++) {
+        			if(this.paintTypes[i].type == type) {
+        				return type + ': ' + this.paintTypes[i].name;
+                    }
+                }
+                return 'error: paint type not found';
+            }
+        };
+
+		function switchGridSize(size) {
+			document.getElementById('grid').className = size;
+		}
+
+		window.addEventListener('DOMContentLoaded', function() {
+			automapPainter.init();
+		});
+
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity Automap Painter</span></h1>
+    <div class="json-upload">
+        <h2>Load RMB JSON</h2>
+        <p>Please select the RMB JSON file you exported from Daggerfall Unity and click the Load JSON button</p>
+        <form id="json-upload-form" method="post" action="">
+            <div>
+                <input type="file" name="json-upload-file" id="json-upload-file" />
+                <button type="submit" id="json-upload-button" name="json-upload-button">Load JSON</button>
+            </div>
+        </form>
+    </div>
+    <div id="grid-buttons">
+        <button type="button" onclick="switchGridSize('half');">Half size</button> |
+        <button type="button" onclick="switchGridSize('');">Full size</button>
+    </div>
+    <div id="grid-controls">
+
+    </div>
+    <div id="grid" class="half">
+        <div class="grid-wrapper">
+        </div>
+    </div>
+    <div class="form">
+        <div><button id="generate-automap">Generate automap array</button></div>
+    </div>
+    <h2>Result</h2>
+    <div class="dfu-result">
+        <textarea id="dfu-automap-generator-result" name="dfu-automap-generate-result"></textarea>
+    </div>
+</div>
+</body>
+</html>

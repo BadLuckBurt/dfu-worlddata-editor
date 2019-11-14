@@ -19,6 +19,7 @@ div {
 .wrapper > div {
     padding: 0.5rem 0;
 }
+.form > div,
 form > div {
     padding: 0.5rem;
     display: flex;
