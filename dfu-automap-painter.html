@@ -235,7 +235,6 @@
             },
 			paintCell: function(event, clicked) {
 				if(event.target.classList.contains('cell')) {
-					console.log('painting cell');
 					var cell = event.target;
 					var currentType = cell.getAttribute('data-type');
 					if(currentType == this.currentPaintType) {
@@ -253,7 +252,7 @@
 				event.preventDefault();
 				event.stopPropagation();
 				if(this.fileInput.files.length == 0) {
-					alert('Please select a location JSON file to load');
+					alert('Please select a RMB JSON file to load');
 					return false;
 				}
 				// Check for the various File API support.

@@ -208,6 +208,15 @@
         	document.getElementById('grid').className = size;
         }
 
+        function toggleAutomap() {
+        	var el = document.getElementById('automap-overlay');
+        	if(el.style.display == 'block') {
+		        el.style.display = 'none';
+            } else {
+		        el.style.display = 'block';
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', function() {
         	terrainViewer.init();
         });
@@ -243,7 +252,8 @@
             <option value="woodland_snow">Woodland Snow</option>
         </select>
         <button type="button" onclick="switchGridSize('half');">Half size</button> |
-        <button type="button" onclick="switchGridSize('');">Full size</button>
+        <button type="button" onclick="switchGridSize('');">Full size</button> |
+        <button type="button" onclick="toggleAutomap();">Show / hide automap</button>
     </div>
     <div id="grid" class="half">
         <div class="grid-wrapper">
