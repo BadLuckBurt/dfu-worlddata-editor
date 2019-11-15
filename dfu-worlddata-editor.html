@@ -219,6 +219,9 @@
         .cell:hover select {
             opacity: 1;
         }
+        #dfu-worlddata-exteriorblock-grid .cell:hover select {
+            display: none;
+        }
         .cell select, .cell label {
             opacity: 0;
             position: absolute;
@@ -266,14 +269,6 @@
             min-width: auto;
         }
 
-        #dfu-worlddata-generate {
-            display: block;
-            margin: auto;
-            width: 15rem;
-            padding: 1rem;
-            flex-wrap: wrap;
-        }
-
         #dfu-worlddata-exteriorblock-grid-controls {
             padding-right: 0.25rem;
             display: block;
@@ -282,6 +277,39 @@
         #dfu-worlddata-exteriorblock-grid-controls button {
             padding: 0.25rem;
             width: 14.5rem;
+        }
+
+        #dfu-exteriorblock-tiles {
+            padding-left: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            width: 224px;
+            height:512px;
+            overflow-y: scroll;
+            background-color: #000;
+            border-left: 1px #EEE solid;
+            border-top: 1px #EEE solid;
+        }
+
+        .exteriorblock-tile-title {
+            width: 100%;
+            padding: 0.25rem;
+        }
+
+        .exteriorblock-tile {
+            width: 64px;
+            height: 64px;
+            outline: 1px #EEE solid;
+            position: relative;
+            overflow: hidden;
+        }
+        .exteriorblock-tile img {
+            width: 100%;
+            height: auto;
+        }
+        .exteriorblock-tile.active {
+            outline: 4px #EEE solid;
+            z-index: 9001;
         }
 
     </style>
@@ -705,9 +733,57 @@
 			blockBuildings: {}, //Stores the buildings for each exterior block, needed when generating a new location
 			blockBuildingsMissing: [], //Keeps tracks of missing blockBuildings scripts, should not be filled
 			//Init is called when the DOM has been loaded
-			init: function() {
+			generateExteriorBlockTiles: function(type) {
+				var title, tile, img, blockNames;
+				var df = document.createDocumentFragment();
+                var blockGroups = this.generateBlockNames(this.exteriorLocationBlocks, 2, false, true);
+                for(var h = 0; h < blockGroups.length; h++) {
+                	title = document.createElement('div');
+                	title.classList.add('exteriorblock-tile-title');
+                	title.innerHTML = blockGroups[h].label;
+                	df.appendChild(title);
+                	blockNames = blockGroups[h].blockNames;
+	                for (var i = 0; i < blockNames.length; i++) {
+		                tile = document.createElement('div');
+		                tile.id = blockNames[i];
+		                tile.classList.add('exteriorblock-tile');
+		                tile.title = blockNames[i];
+		                tile.setAttribute('data-block', blockNames[i]);
+		                img = document.createElement('img');
+		                img.src = 'images/RMB/' + blockNames[i] + '.RMB.png';
+		                tile.appendChild(img);
+		                df.appendChild(tile);
+	                }
+                }
+                while(this.exteriorBlockTiles.firstElementChild) {
+					this.exteriorBlockTiles.removeChild(this.exteriorBlockTiles.firstElementChild);
+                }
+                this.exteriorBlockTiles.appendChild(df);
+            },
+            init: function() {
+				this.currentExteriorBlock = null;
+				this.exteriorBlockTiles = document.getElementById('dfu-exteriorblock-tiles');
+				this.exteriorBlockTiles.addEventListener('click', function(event) {
+					event.preventDefault();
+					var el, block;
+					if(event.target.parentNode.classList.contains('exteriorblock-tile')) {
+						block = event.target.parentNode.getAttribute('data-block');
+						if(this.currentExteriorBlock == block) {
+							return false;
+                        }
+                        if(this.currentExteriorBlock !== null) {
+                        	el = this.exteriorBlockTiles.querySelector('#' + this.currentExteriorBlock);
+                        	el.classList.remove('active');
+                        }
+                        el = this.exteriorBlockTiles.querySelector('#' + block);
+                        el.classList.add('active');
+                        this.currentExteriorBlock = block;
+                        console.log(this.currentExteriorBlock);
+                    }
+                }.bind(this));
+				this.generateExteriorBlockTiles();
 				//Load block buildings data
-				this.blockNames = this.generateBlockNames(this.exteriorLocationBlocks, 2);
+				this.blockNames = this.generateBlockNames(this.exteriorLocationBlocks, 2, true, false);
 				this.handleBlockBuildingsScriptLoad();
 
 				//Setup reference to DOM elements and add event listeners
@@ -725,6 +801,14 @@
 					return true;
 				}.bind(this));
 				this.exteriorGrid = document.getElementById('dfu-worlddata-exteriorblock-grid');
+				this.exteriorGrid.addEventListener('click', function(event) {
+					if(event.target.parentNode.classList.contains('cell')) {
+						var cell = event.target.parentNode;
+						var select = cell.querySelector('select');
+						select.value = this.currentExteriorBlock;
+						this.handleExteriorCellChange(select);
+                    }
+                }.bind(this));
 				this.exteriorGrid.addEventListener('change', function() {
 					if(!event.target) {
 						return false;
@@ -1462,8 +1546,7 @@
 						cell.title = blockName;
 						select = this.generateExteriorGridDropdown(height, width, blockName);
 						cell.appendChild(select);
-						span = this.setExteriorCellImage(span, blockName);
-						cell.appendChild(span);
+						cell = this.setExteriorCellImage(cell, blockName);
 					}
 				}
 
@@ -1524,12 +1607,15 @@
 					}
 				}
 
+				this.setMapId(type, mapX, mapY);
+
 				this.setLocationIndex(type);
 				this.setLocationId(type);
 				this.setName(type);
 				this.setLocationType(type);
 				this.setDungeonType(type);
 				this.setExteriorBlocks(type);
+
 				this.deleteDungeonHeader(type);
 
 				if(this.newJSON.MapTableData.DungeonType == this.noDungeonType) {
@@ -1538,7 +1624,6 @@
 					this.setDungeonBlocks(type);
 				}
 
-				this.setMapId(type, mapX, mapY);
 				this.setLatLong(type, mapX, mapY);
 				this.setWorldCoordinates(type, mapX, mapY);
 
@@ -1664,21 +1749,6 @@
 				}
 			},
 			setExteriorBlocks: function(type) {
-				if(2 == 3) {
-					this.newJSON.Exterior.ExteriorData.Width = this.original.Exterior.ExteriorData.Width;
-					this.newJSON.Exterior.ExteriorData.Height = this.original.Exterior.ExteriorData.Height;
-					this.newJSON.Exterior.ExteriorData.BlockNames = this.original.Exterior.ExteriorData.BlockNames;
-
-					this.newJSON.Exterior.Buildings = this.copyBuildings(this.original.Exterior.Buildings);
-					this.newJSON.Exterior.BuildingCount = this.newJSON.Exterior.Buildings.length;
-					if (type == 'new') {
-						for (var i = 0; i < this.newJSON.Exterior.Buildings.length; i++) {
-							this.newJSON.Exterior.Buildings[i].NameSeed = this.newJSON.Exterior.Buildings[i].NameSeed + 500;
-							this.newJSON.Exterior.Buildings[i].LocationId = 0 + this.newJSON.Exterior.RecordElement.Header.LocationId;
-						}
-					}
-					return true;
-				}
 				var exteriorBlockCells = this.exteriorGrid.querySelectorAll('.cell');
 				if(exteriorBlockCells.length == 0) {
 					this.addError('Please add one or more exterior blocks');
@@ -1692,13 +1762,31 @@
 				var width = this.exteriorGridBounds.width;
 				var height = this.exteriorGridBounds.height;
 
-				for(var h = (height - 1); h >= 0; h--) {
-					for (var w = 0; w < width; w++) {
-						index = (h * width) + w;
-						blockName = exteriorBlockCells[index].getAttribute('data-blockname') + '.RMB';
-						blockNames[blockNames.length] = blockName;
+				if(type == 'new') {
+					var buildings = [];
+					var b, building, seed, sector;
+					for (var h = (height - 1); h >= 0; h--) {
+						for (var w = 0; w < width; w++) {
+							index = (h * width) + w;
+							blockName = exteriorBlockCells[index].getAttribute('data-blockname');
+							for (b = 0; b < this.blockBuildings[blockName].length; b++) {
+								building = this.blockBuildings[blockName][b];
+                                seed = parseInt(this.newJSON.Exterior.RecordElement.Header.LocationId,10) + (h * 100) + (w * 10) + b;
+                                sector = (h * 100) + (w * 10) + b;
+								building.NameSeed = seed;
+								//building.FactionId = 0;
+								building.Sector = sector;
+								building.LocationId = this.newJSON.Exterior.ExteriorData.LocationId;
+								buildings[buildings.length] = building;
+							}
+							blockNames[blockNames.length] = blockName + '.RMB';
+						}
 					}
-				}
+					this.newJSON.Exterior.Buildings = buildings;
+				} else {
+					this.newJSON.Exterior.Buildings = this.copyBuildings(this.original);
+                }
+                this.newJSON.Exterior.BuildingCount = this.newJSON.Exterior.Buildings.length;
 				this.newJSON.Exterior.ExteriorData.Width = width;
 				this.newJSON.Exterior.ExteriorData.Height = height;
 				this.newJSON.Exterior.ExteriorData.BlockNames = blockNames;
@@ -1822,18 +1910,39 @@
 				}
 				return documentFragment;
 			},
-			generateBlockNames: function(blocks, padLength) {
-				var index, count, blockNames;
+			generateBlockNames: function(blocks, padLength, addRMB, addLabel) {
+				var index, count, blockGroups, blockNames, name;
+				if(addLabel) {
+					blockGroups = [];
+                }
 				blockNames = [];
 				for(index = 0; index < blocks.length; index++) {
 					if(blocks[index].count > 1) {
 						for(count = blocks[index].start; count <= blocks[index].end; count++) {
-							blockNames[blockNames.length] = this.generateBlockName(blocks[index].name, count, padLength) + '.RMB';
+							name = this.generateBlockName(blocks[index].name, count, padLength);
+							if(addRMB) {
+								name += '.RMB';
+                            }
+							blockNames[blockNames.length] =  name;
 						}
 					} else {
-						blockNames[blockNames.length] = blocks[index].value + '.RMB';
+						name = blocks[index].value;
+						if(addRMB) {
+							name += '.RMB';
+                        }
+						blockNames[blockNames.length] = name;
 					}
+					if(addLabel) {
+						blockGroups[blockGroups.length] = {
+							label: blocks[index].label,
+                            blockNames: blockNames
+                        };
+                        blockNames = [];
+                    }
 				}
+				if(addLabel) {
+					return blockGroups;
+                }
 				return blockNames;
 			},
 			generateBlockName: function(name, count, padLength) {
@@ -1871,21 +1980,6 @@
 					}
 					documentFragment.appendChild(optionGroup);
 				}
-                /*
-                 var img, imgs, missing;
-                 imgs = [];
-                 missing = [];
-                 for(var i = 0; i < names.length; i++) {
-                 img = document.createElement('img');
-                 img.setAttribute('data-blockname', names[i]);
-                 img.onerror = function() {
-                 console.log(this.getAttribute('data-blockname'));
-                 };
-                 img.src = 'images/RMB/' + names[i] + '.RMB.png';
-                 imgs[i] = img;
-                 }
-                 return false;
-                 */
 				return documentFragment;
 			}
 		};
@@ -1960,6 +2054,10 @@
                     <hr />
                     <button type="button">Delete row</button>
                     <button type="button">Delete column</button>
+                    <hr />
+                    <div id="dfu-exteriorblock-tiles">
+
+                    </div>
                 </div>
                 <div id="dfu-worlddata-exteriorblock-grid"></div>
             </div>
@@ -1969,7 +2067,7 @@
             </div>
             <h4>Generate JSON</h4>
             <div>
-                <button type="submit" id="dfu-worlddata-generate" name="generateButton">Generate JSON</button>
+                <button type="submit" id="dfu-worlddata-generate" class="generate-button" name="generateButton">Generate JSON</button>
             </div>
         </form>
         <h2>Result</h2>
