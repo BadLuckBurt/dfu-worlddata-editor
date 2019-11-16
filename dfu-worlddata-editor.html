@@ -281,8 +281,6 @@
 
         #dfu-exteriorblock-tiles {
             padding-left: 0.5rem;
-            display: flex;
-            flex-wrap: wrap;
             width: 224px;
             height:512px;
             overflow-y: scroll;
@@ -292,8 +290,22 @@
         }
 
         .exteriorblock-tile-title {
-            width: 100%;
             padding: 0.25rem;
+            cursor: pointer;
+            outline: 1px #EEE solid;
+            margin: 0.25rem 0.25rem 0.25rem 0;
+        }
+        .exteriorblock-tile-title:hover {
+            background-color: #333;
+        }
+
+        .exteriorblock-tiles-wrapper {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .exteriorblock-tiles-wrapper.collapse {
+            display: none;
         }
 
         .exteriorblock-tile {
@@ -302,6 +314,7 @@
             outline: 1px #EEE solid;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         .exteriorblock-tile img {
             width: 100%;
@@ -734,15 +747,25 @@
 			blockBuildingsMissing: [], //Keeps tracks of missing blockBuildings scripts, should not be filled
 			//Init is called when the DOM has been loaded
 			generateExteriorBlockTiles: function(type) {
-				var title, tile, img, blockNames;
+				var title, tile, img, blockNames, wrapper;
 				var df = document.createDocumentFragment();
                 var blockGroups = this.generateBlockNames(this.exteriorLocationBlocks, 2, false, true);
                 for(var h = 0; h < blockGroups.length; h++) {
                 	title = document.createElement('div');
                 	title.classList.add('exteriorblock-tile-title');
+                	title.setAttribute('data-index', h.toString());
                 	title.innerHTML = blockGroups[h].label;
+                	title.addEventListener('click', function() {
+                		console.log(this);
+                		var el = document.getElementById('tiles-wrapper-' + this.getAttribute('data-index'));
+                		el.classList.toggle('collapse');
+                    });
                 	df.appendChild(title);
                 	blockNames = blockGroups[h].blockNames;
+	                wrapper = document.createElement('div');
+	                wrapper.id = 'tiles-wrapper-' + h.toString();
+	                wrapper.classList.add('exteriorblock-tiles-wrapper');
+	                wrapper.classList.add('collapse');
 	                for (var i = 0; i < blockNames.length; i++) {
 		                tile = document.createElement('div');
 		                tile.id = blockNames[i];
@@ -752,8 +775,9 @@
 		                img = document.createElement('img');
 		                img.src = 'images/RMB/' + blockNames[i] + '.RMB.png';
 		                tile.appendChild(img);
-		                df.appendChild(tile);
+		                wrapper.appendChild(tile);
 	                }
+	                df.appendChild(wrapper);
                 }
                 while(this.exteriorBlockTiles.firstElementChild) {
 					this.exteriorBlockTiles.removeChild(this.exteriorBlockTiles.firstElementChild);
