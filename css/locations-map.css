@@ -1,0 +1,114 @@
+#dfu-location-buttons button {
+    width: 10.95em;
+}
+
+#dfu-location-map {
+    position: relative;
+    padding: 0;
+    overflow: scroll;
+    height: 500px;
+}
+.map-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.map-wrapper img {
+    position: relative;
+    z-index: 0;
+    display: block;
+    width: 4000px;
+    height: auto;
+}
+#location-layer {
+    z-index: 1;
+}
+#road-layer {
+    z-index: 2;
+}
+.pixel {
+    position: absolute;
+    background-color: #DDD;
+    z-index: 10;
+    width: 4px;
+    height: 4px;
+}
+.pixel:hover {
+    z-index: 100;
+}
+.pixel-details {
+    display: none;
+    padding: 0.5em;
+    width: 20em;
+    background-color: #EEE;
+    color: #111;
+}
+.pixel-details p {
+    margin: 0;
+}
+.pixel:hover .pixel-details {
+    display: block;
+}
+
+.road {
+    position: absolute;
+    background-color: #FF0;
+    opacity: 0.5;
+    width: 4px;
+    height: 4px;
+}
+.road.center {
+    opacity: 1;
+    background-color: #F0F;
+}
+
+.DungeonLabyrinth {
+    background-color: rgb(215, 119, 39);
+}
+.DungeonKeep {
+    background-color: rgb(191, 87, 27);
+}
+.DungeonRuin {
+    background-color: rgb(171, 51, 15);
+}
+.Graveyard {
+    background-color: rgb(147, 15, 7);
+}
+
+.Coven {
+    background-color: rgb(15, 15, 15);
+}
+
+.HomeFarms {
+    background-color: rgb(165, 100, 70);
+}
+.HomeWealthy {
+    background-color: rgb(193, 133, 100);
+}
+.HomePoor {
+    background-color: rgb(140, 86, 55);
+}
+.ReligionTemple {
+    background-color: rgb(176, 205, 255);
+}
+.ReligionCult {
+    background-color: rgb(68, 124, 192);
+}
+.Tavern {
+    background-color: rgb(126, 81, 89);
+}
+.TownCity {
+    background-color: rgb(220, 177, 177);
+}
+.TownHamlet {
+    background-color: rgb(188, 138, 138);
+}
+.TownVillage {
+    background-color: rgb(155, 105, 106);
+}
+
+.hide {
+    display: none;
+}

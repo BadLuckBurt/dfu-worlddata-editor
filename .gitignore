@@ -1,4 +1,7 @@
 /.idea
 /_temp
+/js/RDB
+/js/RMB-layout
+/js/locations
 /images/terrain/*/
-/js/RMB-layout/
+/WorldDataTest

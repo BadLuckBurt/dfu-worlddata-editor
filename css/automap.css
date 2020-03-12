@@ -1,0 +1,130 @@
+#grid {
+    position: relative;
+    width: 1024px;
+    margin: auto;
+}
+
+#grid.half .grid-wrapper {
+    width: 512px;
+    height: 512px;
+}
+
+.grid-wrapper {
+    outline: 1px #EEE solid;
+    display: flex;
+    width: 1024px;
+    height: 1024px;
+    flex-wrap: wrap;
+    margin: auto;
+}
+.grid-wrapper .cell {
+    width: 16px;
+    height: 16px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-pixelated;
+    image-rendering: pixelated;
+}
+#grid.half .grid-wrapper .cell {
+    width: 8px;
+    height: 8px;
+}
+.cell:hover {
+    outline: 1px #EEE solid;
+}
+
+/*
+case 12: // guildhall
+case 15: // temple
+ */
+.color-12, .color-15 {
+    background-color: rgba(69,125,195,255);
+}
+/*
+case 1: // alchemist
+case 3: // armorer
+case 4: // bank
+case 6: // bookseller
+case 7: // clothing store
+case 9: // gem store
+case 10: // general store
+case 11: // library
+case 13: // pawn shop
+case 14: // weapon smith
+*/
+
+
+.color-1, .color-3, .color-4, .color-6, .color-7, .color-9,
+.color-10, .color-11, .color-13, .color-14 {
+    background-color: rgba(190,85,24,255);
+}
+/* case 16: // tavern */
+.color-16 {
+    background-color: rgba(85,117,48,255);
+}
+
+/*
+// common
+case 2: // house for sale
+case 5: // town4
+case 8: // furniture store
+case 17: // palace
+case 18: // house 1
+case 19: // house 2
+case 20: // house 3
+case 21: // house 4
+case 22: // house 5 (hedge)
+case 23: // house 6
+case 24: // town23
+*/
+.color-2, .color-5, .color-8, .color-17, .color-18, .color-19, .color-20,
+.color-21, .color-22, .color-23, .color-24 {
+    background-color: rgba(69,60,40,255);
+}
+
+/*
+case 25: // ship
+case 117: // special 1
+case 224: // special 2
+case 250: // special 3
+case 251: // special 4
+*/
+.color-25, .color-117, .color-224, .color-250, .color-251 {
+    background-color: rgba(69, 60, 40, 0);
+    /*background-color: rgba(69, 60, 40, 255);*/
+}
+.reveal-all .color-25,
+.reveal-all .color-117,
+.reveal-all .color-224,
+.reveal-all .color-250,
+.reveal-all .color-251 {
+    background-color: rgba(69, 60, 40, 255);
+}
+
+.color-0 {
+    background-color: rgba(0,0,0,0);
+}
+.color-default {
+    background-color: rgba(255, 0, 128, 255);
+}
+
+#grid-controls {
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.paint-type {
+    flex-grow: 1;
+    height: 28px;
+    outline: 1px #EEE solid;
+    position: relative;
+}
+
+.paint-type.active {
+    outline: 4px #EEE solid;
+    z-index: 50;
+}
