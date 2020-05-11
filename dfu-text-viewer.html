@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity Text Viewer</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/text-viewer.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/dfu-text-viewer.js"></script>
+    <script type="text/javascript">
+
+        var textViewer = {
+        	init: function() {
+        		var i, j, text, df, textDiv, linesDiv, lineDiv, line;
+        		df = document.createDocumentFragment();
+
+        		for(i = 0; i < textRSC.length; i++) {
+			        text = textRSC[i];
+
+        			textDiv = document.createElement('div');
+        			textDiv.id = 'text_' + text.id;
+        			textDiv.title = textDiv.id;
+        			textDiv.className = 'text';
+
+        			linesDiv = document.createElement('div');
+        			linesDiv.className = 'lines';
+
+        			for(j = 0; j < text.lines.length; j++) {
+        				line = this.parseLine(text.lines[j]);
+
+        				lineDiv = document.createElement('div');
+        				lineDiv.className = 'line';
+
+        				lineDiv.innerHTML = line;
+
+        				linesDiv.appendChild(lineDiv);
+                    }
+
+                    textDiv.appendChild(linesDiv);
+        			df.appendChild(textDiv);
+                }
+                document.getElementById('dfu-text-container').appendChild(df);
+            },
+	        terminators: {
+		        FB: "margin-left: ",
+		        FC: "text-align: left;",
+		        FD: "text-align: center;"
+	        },
+	        terminatorsRegEx: [
+//		        /([^\]>]+)(\[0xFB])/,
+		        /([^\]>]+)(\[0xFC])/,
+		        /([^\]>]+)(\[0xFD])/
+	        ],
+            parseLine: function(line) {
+        		var result, i, match;
+                for(i = 0; i < this.terminatorsRegEx.length; i++) {
+                	match = line.match(this.terminatorsRegEx[i]);
+                    if(match !== null) {
+                    	break;
+                    }
+                }
+                if(match !== null) {
+                	switch(match[2]) {
+		                case "[0xFB]":
+		                	result = line.replace(match[1] + match[2], '<span style="' + this.terminators.FB + '0px;">' + match[1] + '</span>');
+		                	break;
+                        case "[0xFC]":
+	                        result = line.replace(match[1] + match[2], '<span style="' + this.terminators.FC + '">' + match[1] + '</span>');
+                        	break;
+                        case "[0xFD]":
+	                        result = line.replace(match[1] + match[2], '<span style="' + this.terminators.FD + '">' + match[1] + '</span>');
+                        	break;
+                    }
+                    return this.parseLine(result);
+                } else {
+                	return line;
+                }
+            }
+        };
+
+	    window.addEventListener('DOMContentLoaded', function() {
+		    textViewer.init();
+	    });
+
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity Text Viewer</span></h1>
+    <div id="dfu-text-container" class="dfu-text"></div>
+</div>
+</body>
+</html>

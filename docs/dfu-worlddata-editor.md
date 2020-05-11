@@ -33,15 +33,6 @@ When you dump a location from Daggerfall Unity using the `dumplocation` console 
 
 ## Usage
 
-### Modify an existing location
-
-The steps for modifying an existing location are mostly the same as for creating a new location except you start at step 2.
-
-- Follow step 2 - 4 for Creating a new location. 
-- For step 5: select `Existing location`.
-- Skip steps 6 and 7 (modifying an existing location does not require a new name or location ID to be set)
-- Proceed with steps 8-10 to finish altering the existing location.
-
 ### Creating a new location
 
 #### Step 1 - Find the map coordinates
@@ -56,13 +47,13 @@ Next, you will need a location dump to act as a base for the new location you ar
 
 To get this dump, go to the location you want to clone, open up the console and run the `dumplocation` command. 
 
-This will produce a JSON file in Daggerfall Unity's AppData folder with a filename that looks like this: location-\<region-id\>-\<location-id\>.json.
+This will produce a JSON file in Daggerfall Unity's Persistent Data folder with a filename that looks like this: `location-<region-id>-<location-id>.json`.
 
-The region id is one of the ids that are listed on the Region Numbers page linked in the Primer section. I recommend using a location from the same region where you are creating the new location.
+The region id is one of the ids that are listed on the Region Numbers page linked in the Primer section. Use a location from the same region that you are creating the new location in.
 
 #### Step 3 - Editing the location
 
-Once you have the map pixel coordinates for the new location and the JSON dump, open the dfu-worlddata-editor.html file in your browser.
+Once you have the map pixel coordinates for the new location and the JSON dump, open `dfu-worlddata-editor.html` in your browser.
 
 #### Step 4 - Load Location JSON
 
@@ -91,9 +82,9 @@ Please register your location IDs in that thread to allow other modders to check
 
 #### Step 8 - Location / dungeon types
 
-Location type determines the colour of the pixel that is shown on the Travel map, you can find the available types and their corresponding map pixel colour on the Location Types page linked in the Primer.
+`Location type` determines the colour of the pixel that is shown on the Travel map, you can find the available types and their corresponding map pixel colour on the **Location Types** page linked in the **Primer**.
 
-Dungeon type determines the kind of enemies that will spawn in the location's dungeon if it has one. It also determines the message a player sees when they enter the location. For the available types you can look on the Dungeon Type page linked in the Primer.
+`Dungeon type` determines the kind of enemies that will spawn in the location's dungeon if it has one. It also determines the message a player sees when they enter the location. For the available types you can look on the **Dungeon Type** page linked in the **Primer**.
 
 #### Step 9 - Exterior / dungeon 
 
@@ -105,7 +96,7 @@ Using the `Add row` and `Add column` buttons you can add extra rows and columns 
 
 Using the `Delete row` and `Delete column` buttons you can remove rows or columns to shrink the size of your location. You will be asked to enter the number of the row or column you wish to delete.
 
-Below these buttons you will find a categorised list that contains all the available RMB blocks. Clicking on a category, for example Alchemy 2 will expand that category and show it's available blocks.
+Below these buttons you will find a categorized list that contains all the available RMB blocks. Clicking on a category, for example **Alchemy 2** will expand that category and show it's available blocks.
 
 Clicking on a block in this list puts a white border around it to show that it's selected. After selecting a block, click on a block in the exterior block grid to replace it with the one you've selected.
 
@@ -115,7 +106,7 @@ The dungeon block grid shows a top-down representation of the dungeon block layo
 
 Since dungeons have a few special layout rules, changing the layout works different from the exterior block grid. Dungeons use interior blocks (the N- and W- blocks) and these are always enclosed by border blocks (B- blocks). 
 
-The small graveyard and crypt dungeons use the M- blocks, these blocks are self-enclosed. In classic Daggerfall's data, these M- blocks are still surrounded by border blocks even if they are inaccessible. This layout editor mimicks that behaviour.
+The small graveyard and crypt dungeons use the M- blocks, these blocks are self-enclosed. In classic Daggerfall's data, these M- blocks are still surrounded by border blocks even if they are inaccessible. This layout editor mimics that behavior.
 
 To expand the grid, hover over the border block and choose an N- or W- block from the dropdown list that appears. The border block will be replaced with the block you chose and where necessary, a border block will be added to seal off the new layout.
 
@@ -123,9 +114,17 @@ In the dropdown list you will also see S- blocks, these blocks are used in main 
 
 #### Step 10 - Generate JSON
 
-If you have successfully completed the previous steps, click on the `Generate JSON` button and you will find the generated JSON text in the Result textarea. 
+If you have successfully completed the previous steps, click on the `Generate JSON` button and you will find the generated JSON text in the **Result textarea** at the bottom of the page. 
 
 Copy and paste the JSON text into a new file and save it as `locationnew-\<location-name\>-\<region-id\>.json`. Copy this file to the `StreamingAssets/WorldData` folder in your Daggerfall Unity install.
 
 After starting the game, you should see your location on the travel map if the Discovered flag in MapTableData has been set to `true`.
 
+### Modifying an existing location
+
+The steps for modifying an existing location are mostly the same as for creating a new location except you start at step 2.
+
+- Follow step 2 - 4 for Creating a new location. 
+- For step 5: select `Existing location`.
+- Skip steps 6 and 7 (modifying an existing location does not require a new name or location ID to be set)
+- Proceed with steps 8-10 to finish altering the existing location.

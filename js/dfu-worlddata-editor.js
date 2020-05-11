@@ -170,36 +170,36 @@ var dfuWorldDataEditor = {
 		{label: 'General 8', name: 'GENRGM', start: 0, end: 2, count: 3},
 		{label: 'General 9', name: 'GENRGS', start: 0, end: 2, count: 3},
 		{label: 'Hall', name: 'HAL', value: 'HAL', count: 1},
-		{label: 'KCANAL', name: 'KCANAL', start: 0, end: 1, count: 2},
-		{label: 'KCANBL', name: 'KCANBL00', value: 'KCANBL00', count: 1},
-		{label: 'KCANGL', name: 'KCANGL00', value: 'KCANGL00', count: 1},
-		{label: 'KDRAAL', name: 'KDRAAL', start: 0, end: 1, count: 2},
-		{label: 'KDRABL', name: 'KDRABL00', value: 'KDRABL00', count: 1},
-		{label: 'KDRAGL', name: 'KDRAGL00', value: 'KDRAGL00', count: 1},
-		{label: 'KFLAAL', name: 'KFLAAL', start: 0, end: 1, count: 2},
-		{label: 'KFLABL', name: 'KFLABL00', value: 'KFLABL00', count: 1},
-		{label: 'KFLAGL', name: 'KFLAGL00', value: 'KFLAGL00', count: 1},
-		{label: 'KHAWAL', name: 'KHAWAL', start: 0, end: 1, count: 2},
-		{label: 'KHAWBL', name: 'KHAWBL00', value: 'KHAWBL00', count: 1},
-		{label: 'KHAWGL', name: 'KHAWGL00', value: 'KHAWGL00', count: 1},
-		{label: 'KHORAL', name: 'KHORAL', start: 0, end: 1, count: 2},
-		{label: 'KHORBL', name: 'KHORBL00', value: 'KHORBL00', count: 1},
-		{label: 'KHORGL', name: 'KHORGL00', value: 'KHORGL00', count: 1},
-		{label: 'KOWLAL', name: 'KOWLAL', start: 0, end: 1, count: 2},
-		{label: 'KOWLBL', name: 'KOWLBL00', value: 'KOWLBL00', count: 1},
-		{label: 'KOWLGL', name: 'KOWLGL00', value: 'KOWLGL00', count: 1},
-		{label: 'KRAVAL', name: 'KRAVAL', start: 0, end: 1, count: 2},
-		{label: 'KRAVBL', name: 'KRAVBL00', value: 'KRAVBL00', count: 1},
-		{label: 'KRAVGL', name: 'KRAVGL00', value: 'KRAVGL00', count: 1},
-		{label: 'KROSAL', name: 'KROSAL', start: 0, end: 1, count: 2},
-		{label: 'KROSBL', name: 'KROSBL00', value: 'KROSBL00', count: 1},
-		{label: 'KROSGL', name: 'KROSGL00', value: 'KROSGL00', count: 1},
-		{label: 'KSCAAL', name: 'KSCAAL', start: 0, end: 1, count: 2},
-		{label: 'KSCABL', name: 'KSCABL00', value: 'KSCABL00', count: 1},
-		{label: 'KSCAGL', name: 'KSCAGL00', value: 'KSCAGL00', count: 1},
-		{label: 'KWHEAL', name: 'KWHEAL', start: 0, end: 1, count: 2},
-		{label: 'KWHEBL', name: 'KWHEBL00', value: 'KWHEBL00', count: 1},
-		{label: 'KWHEGL', name: 'KWHEGL00', value: 'KWHEGL00', count: 1},
+		{label: 'Order of the Candle', name: 'KCANAL', start: 0, end: 1, count: 2},
+		{label: 'Order of the Candle', name: 'KCANBL00', value: 'KCANBL00', count: 1},
+		{label: 'Order of the Candle', name: 'KCANGL00', value: 'KCANGL00', count: 1},
+		{label: 'Knights of the Dragon', name: 'KDRAAL', start: 0, end: 1, count: 2},
+		{label: 'Knights of the Dragon', name: 'KDRABL00', value: 'KDRABL00', count: 1},
+		{label: 'Knights of the Dragon', name: 'KDRAGL00', value: 'KDRAGL00', count: 1},
+		{label: 'Knights of the Flame', name: 'KFLAAL', start: 0, end: 1, count: 2},
+		{label: 'Knights of the Flame', name: 'KFLABL00', value: 'KFLABL00', count: 1},
+		{label: 'Knights of the Flame', name: 'KFLAGL00', value: 'KFLAGL00', count: 1},
+		{label: 'Knights of the Hawk', name: 'KHAWAL', start: 0, end: 1, count: 2},
+		{label: 'Knights of the Hawk', name: 'KHAWBL00', value: 'KHAWBL00', count: 1},
+		{label: 'Knights of the Hawk', name: 'KHAWGL00', value: 'KHAWGL00', count: 1},
+		{label: 'Host of the Horn', name: 'KHORAL', start: 0, end: 1, count: 2},
+		{label: 'Host of the Horn', name: 'KHORBL00', value: 'KHORBL00', count: 1},
+		{label: 'Host of the Horn', name: 'KHORGL00', value: 'KHORGL00', count: 1},
+		{label: 'Knights of the Owl', name: 'KOWLAL', start: 0, end: 1, count: 2},
+		{label: 'Knights of the Owl', name: 'KOWLBL00', value: 'KOWLBL00', count: 1},
+		{label: 'Knights of the Owl', name: 'KOWLGL00', value: 'KOWLGL00', count: 1},
+		{label: 'Order of the Raven', name: 'KRAVAL', start: 0, end: 1, count: 2},
+		{label: 'Order of the Raven', name: 'KRAVBL00', value: 'KRAVBL00', count: 1},
+		{label: 'Order of the Raven', name: 'KRAVGL00', value: 'KRAVGL00', count: 1},
+		{label: 'Knights of the Rose', name: 'KROSAL', start: 0, end: 1, count: 2},
+		{label: 'Knights of the Rose', name: 'KROSBL00', value: 'KROSBL00', count: 1},
+		{label: 'Knights of the Rose', name: 'KROSGL00', value: 'KROSGL00', count: 1},
+		{label: 'Order of the Scarab', name: 'KSCAAL', start: 0, end: 1, count: 2},
+		{label: 'Order of the Scarab', name: 'KSCABL00', value: 'KSCABL00', count: 1},
+		{label: 'Order of the Scarab', name: 'KSCAGL00', value: 'KSCAGL00', count: 1},
+		{label: 'Knights of the Wheel', name: 'KWHEAL', start: 0, end: 1, count: 2},
+		{label: 'Knights of the Wheel', name: 'KWHEBL00', value: 'KWHEBL00', count: 1},
+		{label: 'Knights of the Wheel', name: 'KWHEGL00', value: 'KWHEGL00', count: 1},
 		{label: 'Library', name: 'LIBRAL', start: 0, end: 3, count: 4},
 		{label: 'Library 2', name: 'LIBRAM', start: 0, end: 2, count: 3},
 		{label: 'Library 3', name: 'LIBRAS', start: 0, end: 2, count: 3},
@@ -211,15 +211,15 @@ var dfuWorldDataEditor = {
 		{label: 'Mage guild', name: 'MAGEAA', start: 0, end: 14, count: 15},
 		{label: 'Mage guild 2', name: 'MAGEBA', start: 0, end: 4, count: 5},
 		{label: 'Mage guild 3', name: 'MAGEGA', start: 0, end: 4, count: 5},
-		{label: 'MANRAL', name: 'MANRAL', start: 0, end: 3, count: 4},
-		{label: 'MANRAM', name: 'MANRAM', start: 0, end: 3, count: 4},
-		{label: 'MANRAS', name: 'MANRAM', start: 0, end: 2, count: 3},
-		{label: 'MANRBL', name: 'MANRBL00', value: 'MANRBL00', count: 1},
-		{label: 'MANRBM', name: 'MANRBM00', value: 'MANRBM00', count: 1},
-		{label: 'MANRBS', name: 'MANRBS00', value: 'MANRBS00', count: 1},
-		{label: 'MANRGL', name: 'MANRGL00', value: 'MANRGL00', count: 1},
-		{label: 'MANRGM', name: 'MANRGM00', value: 'MANRGM00', count: 1},
-		{label: 'MANRGS', name: 'MANRGS00', value: 'MANRGS00', count: 1},
+		{label: 'Manor A (L)', name: 'MANRAL', start: 0, end: 3, count: 4},
+		{label: 'Manor A (M)', name: 'MANRAM', start: 0, end: 3, count: 4},
+		{label: 'Manor A (S)', name: 'MANRAM', start: 0, end: 2, count: 3},
+		{label: 'Manor B (L)', name: 'MANRBL00', value: 'MANRBL00', count: 1},
+		{label: 'Manor B (M)', name: 'MANRBM00', value: 'MANRBM00', count: 1},
+		{label: 'Manor B (S)', name: 'MANRBS00', value: 'MANRBS00', count: 1},
+		{label: 'Manor G (L)', name: 'MANRGL00', value: 'MANRGL00', count: 1},
+		{label: 'Manor G (M)', name: 'MANRGM00', value: 'MANRGM00', count: 1},
+		{label: 'Manor G (S)', name: 'MANRGS00', value: 'MANRGS00', count: 1},
 		{label: 'Market', name: 'MARKAA', start: 0, end: 1, count: 2},
 		{label: 'Market 2', name: 'MARKBL', start: 0, end: 1, count: 2},
 		{label: 'Market 3', name: 'MARKBM', start: 0, end: 1, count: 2},
@@ -276,9 +276,9 @@ var dfuWorldDataEditor = {
 		{label: 'Temple 9', name: 'TEMPAAH0', value: 'TEMPAAH0', count: 1},
 		{label: 'Temple 10', name: 'TEMPGAB0', value: 'TEMPAAB0', count: 1},
 		{label: 'TEST', name: 'TEST', value: 'TEST', count: 1},
-		{label: 'THIEAL00', name: 'THIEAL00', value: 'THIEAL00', count: 1},
-		{label: 'THIEAM00', name: 'THIEAM00', value: 'THIEAM00', count: 1},
-		{label: 'THIEAS00', name: 'THIEAS00', value: 'THIEAS00', count: 1},
+		{label: 'Thief\'s Guild (L)', name: 'THIEAL00', value: 'THIEAL00', count: 1},
+		{label: 'Thief\'s Guild (M)', name: 'THIEAM00', value: 'THIEAM00', count: 1},
+		{label: 'Thief\'s Guild (S)', name: 'THIEAS00', value: 'THIEAS00', count: 1},
 		{label: 'TMP', name: 'TMP', value: 'TMP', count: 1},
 		{label: 'Tavern', name: 'TVRNAL', start: 0, end: 10, count: 11},
 		{label: 'Tavern 2', name: 'TVRNAM', start: 0, end: 9, count: 10},
@@ -649,6 +649,13 @@ var dfuWorldDataEditor = {
 			}
 		}
 	},
+	lightArchives: [101, 200, 210, 253],
+	lightIndexes: [
+		[0, 2, 3, 5, 6, 7, 8, 9, 11, 12],
+		[7, 8, 9, 10],
+		[0, 1, 2, 3, 4, 5, 6, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+		[10, 17, 18, 19, 22, 49, 50, 51, 52, 75, 77]
+	],
 	processDungeonBlockData: function(txt, index) {
 		var jsonData = JSON.parse(txt);
 		var data;
@@ -660,46 +667,56 @@ var dfuWorldDataEditor = {
 				factionOrMobileIds: [],
 				flatFlags: []
 			};
+			//Not related to code above
+			var modelList = jsonData.RdbBlock.ModelReferenceList;
+			var modelData = [];
+			var name = this.tmpDungeonBlocks[index];
+			if(this.tmpData[name]) {
+				modelData = this.tmpData[name].models;
+			}
 		}
-		var modelList = jsonData.RdbBlock.ModelReferenceList;
-		var modelData = [];
-		var name = this.tmpDungeonBlocks[index];
-		if(this.tmpData[name]) {
-			modelData = this.tmpData[name].models;
-		}
-		var modelResource;
 
+		var modelResource;
+		var lightResources = [];
 		var objectLists = jsonData.RdbBlock.ObjectRootList;
 		for (var i = 0; i < objectLists.length; i++) {
 			if (objectLists[i].RdbObjects !== null) {
 				//console.log('Processing RdbObjects ' + i);
 				var rdbObjects = objectLists[i].RdbObjects;
 				for (var j = 0; j < rdbObjects.length; j++) {
-					if (rdbObjects[j].Type == 'Model') {
+
+					if (rdbObjects[j].Type == 'Light') {
+						lightResources[lightResources.length] = rdbObjects[j].Resources.LightResource;
+					}
+
+					if (rdbObjects[j].Type == 'Model' && 2 == 3) {
 						modelResource = rdbObjects[j].Resources.ModelResource;
-						if(modelResource.ActionResource.Flags == 1 && modelResource.ActionResource.Axis > 6) {
+						if((modelResource.ActionResource.Flags == 1) && modelResource.ActionResource.Axis <= 6) {
 							var modelId = modelList[modelResource.ModelIndex].ModelIdNum;
 							//if(modelId == 54000 || modelId == 54001) {
-							data = {
-								ModelIdNum: modelId,
-								Description: modelList[modelResource.ModelIndex].Description,
-								Axis: modelResource.ActionResource.Axis,
-								Magnitude: modelResource.ActionResource.Magnitude,
+							if(modelList[modelResource.ModelIndex].Description == 'TRP') {
+								data = {
+									ModelIdNum: modelId,
+									Description: modelList[modelResource.ModelIndex].Description,
+									Axis: modelResource.ActionResource.Axis,
+									Magnitude: modelResource.ActionResource.Magnitude,
+									Flags: modelResource.ActionResource.Flags,
+								};
+								modelData[modelData.length] = data;
+							}
+						}
+						if(modelData.length > 0) {
+							this.tmpData[name] = {
+								name: name,
+								count: modelData.length,
+								models: modelData
 							};
-							modelData[modelData.length] = data;
-							//}
 						}
 					}
 				}
-				if(modelData.length > 0) {
-					this.tmpData[name] = {
-						name: name,
-						count: modelData.length,
-						models: modelData
-					};
-				}
 			}
 		}
+		this.tmpData[this.tmpData.length] = lightResources;
 
 		if(2 == 3) {
 
@@ -844,8 +861,8 @@ var dfuWorldDataEditor = {
 	},
 	/* TEMPORARY GENERATOR STUFF END */
 	init: function() {
-		if(2 == 2) {
-			this.tmpData = {};
+		if(2 == 3) {
+			this.tmpData = [];
 			/*this.locationData = [];
 			 this.locationFiles = [];
 			 if (this.getLocationFiles()) {
@@ -1874,15 +1891,19 @@ var dfuWorldDataEditor = {
 				for (var w = 0; w < width; w++) {
 					index = (h * width) + w;
 					blockName = exteriorBlockCells[index].getAttribute('data-blockname');
-					for (b = 0; b < this.blockBuildings[blockName].length; b++) {
-						building = this.blockBuildings[blockName][b];
-						seed = parseInt(this.newJSON.Exterior.RecordElement.Header.LocationId,10) + (h * 100) + (w * 10) + b;
-						sector = (h * 100) + (w * 10) + b;
-						building.NameSeed = seed;
-						//building.FactionId = 0;
-						building.Sector = sector;
-						building.LocationId = this.newJSON.Exterior.ExteriorData.LocationId;
-						buildings[buildings.length] = building;
+					if(this.blockBuildings[blockName] && 2 == 2) {
+						for (b = 0; b < this.blockBuildings[blockName].length; b++) {
+							building = this.blockBuildings[blockName][b];
+							seed = parseInt(this.newJSON.Exterior.RecordElement.Header.LocationId, 10) + (h * 100) + (w * 10) + b;
+							sector = (h * 100) + (w * 10) + b;
+							building.NameSeed = seed;
+							//building.FactionId = 0;
+							building.Sector = sector;
+							building.LocationId = this.newJSON.Exterior.ExteriorData.LocationId;
+							buildings[buildings.length] = building;
+						}
+					} else {
+						buildings = this.copyBuildings(this.original);
 					}
 					blockNames[blockNames.length] = blockName + '.RMB';
 				}

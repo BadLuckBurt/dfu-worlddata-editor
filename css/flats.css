@@ -1,0 +1,33 @@
+.dfu-flats-filter {
+    position: fixed;
+    top: 0.25em;
+    left: 0.25em;
+    padding: 0.25em;
+    background-color: #000;
+}
+
+.dfu-flats {
+    clear: both;
+}
+
+.dfu-flat {
+    width: 33%;
+    float: left;
+    margin-bottom: 1em;
+    border: 0.125em #FFF solid;
+    padding-top: 0.5em;
+    }
+    .dfu-flat img {
+        display: block;
+        width: auto;
+        height: 10em;
+        margin: auto;
+    }
+    .caption {
+        margin-top: 1em;
+    }
+    .caption, .guild {
+        padding: 0.25em;
+        background-color: #333;
+        font-weight: bold;
+    }

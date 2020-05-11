@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity Text Flats.CFG Person - Guilds</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/flats.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/flats.js"></script>
+    <script type="text/javascript">
+        function addFlats() {
+        	var df = document.createDocumentFragment();
+        	var prop, guild, i, flat, div, img, caption, guildEl, txt, className, guildNames;
+        	guildNames = [];
+        	for(prop in guilds) {
+        		guild = guilds[prop];
+        		if(guildNames.indexOf(prop) == -1) {
+			        guildNames[guildNames.length] = prop;
+		        }
+        		for(i = 0; i < guild.length; i++) {
+        			flat = guild[i];
+			        div = document.createElement('div');
+			        div.className = 'dfu-flat ' + prop;
+			        img = document.createElement('img');
+			        className = "guild_" + prop;
+			        txt = "Archive: " + flat.TextureArchive + " - Record: " + flat.TextureRecord;
+			        img.title = txt;
+			        img.alt = txt;
+			        img.src = "images/flats/TEXTURE." + flat.TextureArchive + "/" + flat.TextureRecord + "-0.PNG";
+			        caption = document.createElement('div');
+			        caption.className = 'caption';
+			        caption.innerHTML = txt + "<br />Caption: " + flat.Caption;
+			        guildEl = document.createElement('div');
+			        guildEl.className = 'guild';
+			        guildEl.innerHTML = "Guild: " + flat.Guild + "<br />" + "Unknown2: " + flat.Unknown2;
+
+			        div.appendChild(img);
+			        div.appendChild(caption);
+			        div.appendChild(guildEl);
+
+			        df.appendChild(div);
+                }
+            }
+            //console.log(guildNames);
+
+            if(2 == 3) {
+	            for (i = 0; i < flatsParsed.length; i++) {
+		            div = document.createElement('div');
+		            div.className = 'dfu-flat';
+		            img = document.createElement('img');
+		            img.src = "images/flats/TEXTURE." + flatsParsed[i].TextureArchive + "/" + flatsParsed[i].TextureRecord + "-0.PNG";
+		            caption = document.createElement('div');
+		            caption.className = 'caption';
+		            caption.innerHTML = 'Caption: ' + flatsParsed[i].Caption;
+		            guild = document.createElement('div');
+		            guild.className = 'guild';
+		            guild.innerHTML = 'Guild: ' + flatsParsed[i].Guild;
+
+		            div.appendChild(img);
+		            div.appendChild(caption);
+		            div.appendChild(guild);
+
+		            df.appendChild(div);
+	            }
+            }
+            document.getElementById('dfu-flats-container').appendChild(df);
+
+        	var filter, checkbox, label;
+        	df = document.createDocumentFragment();
+        	for(i = 0; i < guildNames.length; i++) {
+        		filter = document.createElement('div');
+		        filter.className = 'filter';
+        		checkbox = document.createElement('input');
+        		checkbox.type = 'checkbox';
+        		checkbox.value = guildNames[i];
+        		checkbox.id = guildNames[i];
+        		checkbox.checked = true;
+        		label = document.createElement('label');
+        		label.innerHTML = guildNames[i];
+        		label.appendChild(checkbox);
+		        filter.appendChild(label);
+        		df.appendChild(filter);
+            }
+            document.getElementById('dfu-flats-filter').appendChild(df);
+	        document.getElementById('dfu-flats-filter').addEventListener('click', function(event) {
+	        	if(event.target.tagName.toLowerCase() == 'input') {
+	        		toggleFilter(event.target, event.target.checked);
+                }
+            });
+	        document.getElementById('check_uncheck_all').addEventListener('click', function(event) {
+	        	var els = document.querySelectorAll('.filter input');
+	        	for(var i = 0; i < els.length; i++) {
+	        		els[i].checked = this.checked;
+	        		toggleFilter(els[i], this.checked);
+                }
+            });
+        }
+
+        function toggleFilter(input, visible) {
+	        var els = document.getElementsByClassName(input.id);
+	        for(var i = 0; i < els.length; i++) {
+		        if(visible) {
+			        els[i].style.display = '';
+		        } else {
+			        els[i].style.display = 'none';
+		        }
+	        }
+        }
+
+	    window.addEventListener('DOMContentLoaded', function() {
+		    addFlats();
+	    });
+
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity Text Flats.CFG Person - Guilds</span></h1>
+    <div id="dfu-flats-filter" class="dfu-flats-filter">
+        <div class="filter">
+            <label>Check / uncheck all <input type="checkbox" name="check_uncheck_all" id ="check_uncheck_all" value="" checked="checked" /></label>
+        </div>
+    </div>
+    <div id="dfu-flats-container" class="dfu-flats"></div>
+</div>
+</body>
+</html>
