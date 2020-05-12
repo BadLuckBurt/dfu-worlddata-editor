@@ -559,7 +559,7 @@ var dfuWorldDataEditor = {
 			title.setAttribute('data-index', h.toString());
 			title.innerHTML = blockGroups[h].label;
 			title.addEventListener('click', function() {
-				console.log(this);
+				//console.log(this);
 				var el = document.getElementById('tiles-wrapper-' + this.getAttribute('data-index'));
 				el.classList.toggle('collapse');
 			});
