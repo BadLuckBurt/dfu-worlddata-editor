@@ -1903,7 +1903,10 @@ var dfuWorldDataEditor = {
 							buildings[buildings.length] = building;
 						}
 					} else {
-						buildings = this.copyBuildings(this.original);
+						console.log("Ignoring exterior block: " + blockName + " - no building data available");
+						//this.error = true;
+						//return false;
+						//buildings = this.copyBuildings(this.original);
 					}
 					blockNames[blockNames.length] = blockName + '.RMB';
 				}
