@@ -232,3 +232,4 @@ var blockBuildingsMissing = [
 	"ZLNDFLAT.RMB",
 	"ZZZZZZZ.RMB"
 ];
+blockBuildingsMissing = [];

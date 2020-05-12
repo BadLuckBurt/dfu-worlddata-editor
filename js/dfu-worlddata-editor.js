@@ -889,7 +889,7 @@ var dfuWorldDataEditor = {
 				el = this.exteriorBlockTiles.querySelector('#' + block);
 				el.classList.add('active');
 				this.currentExteriorBlock = block;
-				console.log(this.currentExteriorBlock);
+				//console.log(this.currentExteriorBlock);
 			}
 		}.bind(this));
 		this.generateExteriorBlockTiles();
