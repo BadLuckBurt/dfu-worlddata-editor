@@ -230,6 +230,7 @@ var dfuWorldDataEditor = {
 		{label: 'Market 5', name: 'MARKGL', start: 0, end: 1, count: 2},
 		{label: 'Market 6', name: 'MARKGM', start: 0, end: 1, count: 2},
 		{label: 'Market 7', name: 'MARKGS', start: 0, end: 1, count: 2},
+		{label: 'Dark Brotherhood HQ', name: 'NASYLUM', value: 'NASYLUM', count: 1},
 		{label: 'Palace', name: 'PALAAA', start: 0, end: 2, count: 3},
 		{label: 'Palace 2', name: 'PALABA', start: 0, end: 4, count: 5},
 		{label: 'Palace 3', name: 'PALAGA', start: 0, end: 4, count: 5},
@@ -428,6 +429,7 @@ var dfuWorldDataEditor = {
 		{id: '39', label: 'Urvaius'},
 		{id: '23', label: 'Wayrest'},
 		{id: '40', label: 'Ykalon'}
+		//Unused regions
 		//{id: '04', label: 'Yeorth Burrowland'},
 		//{id: '02', label: 'Glenpoint Foothills*'},
 		//{id: '03', label: 'Daggerfall Bluffs*'},
@@ -553,17 +555,17 @@ var dfuWorldDataEditor = {
 	blockBuildingsMissing: [], //Keeps tracks of missing blockBuildings scripts, should not be filled
 	//Init is called when the DOM has been loaded
 	generateExteriorBlockTiles: function(type) {
-		var title, tile, img, blockNames, wrapper;
-		var df = document.createDocumentFragment();
-		var blockGroups = this.generateBlockNames(this.exteriorLocationBlocks, 2, false, true);
-		for(var h = 0; h < blockGroups.length; h++) {
+		let title, tile, img, blockNames, wrapper;
+		let df = document.createDocumentFragment();
+		let blockGroups = this.generateBlockNames(this.exteriorLocationBlocks, 2, false, true);
+		for(let h = 0; h < blockGroups.length; h++) {
 			title = document.createElement('div');
 			title.classList.add('exteriorblock-tile-title');
 			title.setAttribute('data-index', h.toString());
 			title.innerHTML = blockGroups[h].label;
 			title.addEventListener('click', function() {
 				//console.log(this);
-				var el = document.getElementById('tiles-wrapper-' + this.getAttribute('data-index'));
+				let el = document.getElementById('tiles-wrapper-' + this.getAttribute('data-index'));
 				el.classList.toggle('collapse');
 			});
 			df.appendChild(title);
@@ -572,7 +574,7 @@ var dfuWorldDataEditor = {
 			wrapper.id = 'tiles-wrapper-' + h.toString();
 			wrapper.classList.add('exteriorblock-tiles-wrapper');
 			wrapper.classList.add('collapse');
-			for (var i = 0; i < blockNames.length; i++) {
+			for (let i = 0; i < blockNames.length; i++) {
 				tile = document.createElement('div');
 				tile.id = blockNames[i];
 				tile.classList.add('exteriorblock-tile');
@@ -593,14 +595,14 @@ var dfuWorldDataEditor = {
 	tmpDungeonBlocks: [],
 	generateDungeonBlocksData: function(index) {
 		if(index < this.tmpDungeonBlocks.length) {
-			var blocks = this.tmpDungeonBlocks;
-			var req = new XMLHttpRequest();
+			let blocks = this.tmpDungeonBlocks;
+			let req = new XMLHttpRequest();
 			req.overrideMimeType("application/json");
-			var url = '';
+			let url = '';
 			url = 'js/RDB/' + blocks[index] + '.RDB.json';
 			req.open('GET', url, true); // Replace 'my_data' with the path to your file
 			req.onreadystatechange = function (index) {
-				if (req.readyState == 4 && req.status == "200") {
+				if (req.readyState === 4 && req.status === 200) {
 					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
 					dfuWorldDataEditor.processDungeonBlockData(req.responseText, index);
 				} else {
@@ -609,20 +611,20 @@ var dfuWorldDataEditor = {
 			}.bind(req, index);
 			req.send(null);
 		} else {
-			var text = [];
-			var i;
-			var line;
+			let text = [];
+			let i;
+			let line;
 			console.log(this.tmpData);
 
-			if( 2== 3) {
+			if( 2 === 3) {
 				line = "ModelId;Description";
 				text[0] = line;
-				var model;
+				let model;
 				for (model in this.tmpData) {
 					line = this.tmpData[model].ModelId + ";" + this.tmpData[model].Description;
 					text[text.length] = line;
 				}
-				if (2 == 3) {
+				if (2 === 3) {
 					line = "Name;TextureArchive;TextureRecord;Flags;X;Y;Z";
 					//line = "Name;Monster Type";
 					//for(i = 0; i < this.dungeonMarkers.length; i++) {
@@ -631,10 +633,10 @@ var dfuWorldDataEditor = {
 					text[0] = line;
 					for (i = 0; i < this.tmpData.length; i++) {
 						line = this.tmpData[i].name;
-						for (var j = 0; j < this.tmpData[i].flatFlags.length; j++) {
+						for (let j = 0; j < this.tmpData[i].flatFlags.length; j++) {
 							line += ";" + this.tmpData[i].flatFlags[j].join(";") + "\n";
 						}
-						//for(var j = 0; j < this.dungeonMarkers.length; j++) {
+						//for(let j = 0; j < this.dungeonMarkers.length; j++) {
 						//if(this.tmpData[i].factionOrMobileIds.length > 0) {
 						//line += ";" + this.tmpData[i].factionOrMobileIds.join("\n;");
 						//}
@@ -660,10 +662,10 @@ var dfuWorldDataEditor = {
 		[10, 17, 18, 19, 22, 49, 50, 51, 52, 75, 77]
 	],
 	processDungeonBlockData: function(txt, index) {
-		var jsonData = JSON.parse(txt);
-		var data;
+		let jsonData = JSON.parse(txt);
+		let data;
 
-		if(2 == 3) {
+		if(2 === 3) {
 			data = {
 				name: this.tmpDungeonBlocks[index],
 				markers: {},
@@ -671,33 +673,33 @@ var dfuWorldDataEditor = {
 				flatFlags: []
 			};
 			//Not related to code above
-			var modelList = jsonData.RdbBlock.ModelReferenceList;
-			var modelData = [];
-			var name = this.tmpDungeonBlocks[index];
+			let modelList = jsonData.RdbBlock.ModelReferenceList;
+			let modelData = [];
+			let name = this.tmpDungeonBlocks[index];
 			if(this.tmpData[name]) {
 				modelData = this.tmpData[name].models;
 			}
 		}
 
-		var modelResource;
-		var lightResources = [];
-		var objectLists = jsonData.RdbBlock.ObjectRootList;
-		for (var i = 0; i < objectLists.length; i++) {
+		let modelResource;
+		let lightResources = [];
+		let objectLists = jsonData.RdbBlock.ObjectRootList;
+		for (let i = 0; i < objectLists.length; i++) {
 			if (objectLists[i].RdbObjects !== null) {
 				//console.log('Processing RdbObjects ' + i);
-				var rdbObjects = objectLists[i].RdbObjects;
-				for (var j = 0; j < rdbObjects.length; j++) {
+				let rdbObjects = objectLists[i].RdbObjects;
+				for (let j = 0; j < rdbObjects.length; j++) {
 
-					if (rdbObjects[j].Type == 'Light') {
+					if (rdbObjects[j].Type === 'Light') {
 						lightResources[lightResources.length] = rdbObjects[j].Resources.LightResource;
 					}
 
-					if (rdbObjects[j].Type == 'Model' && 2 == 3) {
+					if (rdbObjects[j].Type === 'Model' && 2 === 3) {
 						modelResource = rdbObjects[j].Resources.ModelResource;
-						if((modelResource.ActionResource.Flags == 1) && modelResource.ActionResource.Axis <= 6) {
-							var modelId = modelList[modelResource.ModelIndex].ModelIdNum;
-							//if(modelId == 54000 || modelId == 54001) {
-							if(modelList[modelResource.ModelIndex].Description == 'TRP') {
+						if((modelResource.ActionResource.Flags === 1) && modelResource.ActionResource.Axis <= 6) {
+							let modelId = modelList[modelResource.ModelIndex].ModelIdNum;
+							//if(modelId === 54000 || modelId === 54001) {
+							if(modelList[modelResource.ModelIndex].Description === 'TRP') {
 								data = {
 									ModelIdNum: modelId,
 									Description: modelList[modelResource.ModelIndex].Description,
@@ -721,25 +723,25 @@ var dfuWorldDataEditor = {
 		}
 		this.tmpData[this.tmpData.length] = lightResources;
 
-		if(2 == 3) {
+		if(2 === 3) {
 
-			var objectLists = jsonData.RdbBlock.ObjectRootList;
-			for (var i = 0; i < objectLists.length; i++) {
+			let objectLists = jsonData.RdbBlock.ObjectRootList;
+			for (let i = 0; i < objectLists.length; i++) {
 				if (objectLists[i].RdbObjects !== null) {
 					//console.log('Processing RdbObjects ' + i);
-					var rdbObjects = objectLists[i].RdbObjects;
-					for (var j = 0; j < rdbObjects.length; j++) {
-						if (rdbObjects[j].Type == 'Flat' && 2 == 3) {
-							var object = rdbObjects[j];
-							if (object.Resources.FlatResource.TextureArchive == 199) {
+					let rdbObjects = objectLists[i].RdbObjects;
+					for (let j = 0; j < rdbObjects.length; j++) {
+						if (rdbObjects[j].Type === 'Flat' && 2 === 3) {
+							let object = rdbObjects[j];
+							if (object.Resources.FlatResource.TextureArchive === 199) {
 								if (!data.markers[object.Resources.FlatResource.TextureRecord]) {
 									data.markers[object.Resources.FlatResource.TextureRecord] = {
 										name: this.dungeonMarkers[object.Resources.FlatResource.TextureRecord],
 										count: 0
 									};
 								}
-								if (object.Resources.FlatResource.TextureRecord == 16) {
-									var id = object.Resources.FlatResource.FactionOrMobileId & 0xFF;
+								if (object.Resources.FlatResource.TextureRecord === 16) {
+									let id = object.Resources.FlatResource.FactionOrMobileId & 0xFF;
 									//if(data.factionOrMobileIds.indexOf(id) < 0) {
 									data.factionOrMobileIds[data.factionOrMobileIds.length] = id;
 									//}
@@ -765,13 +767,13 @@ var dfuWorldDataEditor = {
 		this.generateDungeonBlocksData(index + 1);
 	},
 	getLocationFiles: function() {
-		var regionName;
-		var locations;
-		var locationFile;
-		for(var i = 0; i < dfRegions.length; i++) {
+		let regionName;
+		let locations;
+		let locationFile;
+		for(let i = 0; i < dfRegions.length; i++) {
 			regionName = dfRegions[i].name;
 			locations = dfRegions[i].locations;
-			for(var j = 0; j < locations.length; j++) {
+			for(let j = 0; j < locations.length; j++) {
 				locationFile = 'js/locations/location-' + i + '-' + j + '.json';
 				this.locationFiles[this.locationFiles.length] = locationFile;
 			}
@@ -780,29 +782,29 @@ var dfuWorldDataEditor = {
 	},
 	loadLocationFile: function(index) {
 		if(index < this.locationFiles.length) {
-			var req = new XMLHttpRequest();
+			let req = new XMLHttpRequest();
 			req.overrideMimeType("application/json");
-			var url = this.locationFiles[index];
+			let url = this.locationFiles[index];
 			req.open('GET', url, true); // Replace 'my_data' with the path to your file
 			req.onreadystatechange = function (index) {
-				if (req.readyState == 4 && req.status == "200") {
+				if (req.readyState === 4 && req.status === 200) {
 					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
 					dfuWorldDataEditor.processLocationFile(req.responseText, index);
 				}
 			}.bind(req, index);
 			req.send(null);
 		} else {
-			var header = 'RegionName;LocationName;Size;' + this.serviceBlockNames.join(';');
+			let header = 'RegionName;LocationName;Size;' + this.serviceBlockNames.join(';');
 			header += ";" + this.templeBlockGods.join(';');
-			var locations = [];
+			let locations = [];
 			locations[0] = header;
-			var line, serviceBlocks;
-			for(var i = 0; i < this.locationData.length; i++) {
+			let line, serviceBlocks;
+			for(let i = 0; i < this.locationData.length; i++) {
 				serviceBlocks = this.locationData[i].serviceBlocks;
 				line = this.locationData[i].region;
 				line += ";" + this.locationData[i].name;
 				line += ";" + this.locationData[i].blockCount;
-				var j;
+				let j;
 				for(j = 0; j < this.serviceBlocks.length; j++) {
 					if(serviceBlocks[this.serviceBlocks[j]]) {
 						line += ";" + serviceBlocks[this.serviceBlocks[j]];
@@ -824,16 +826,16 @@ var dfuWorldDataEditor = {
 		}
 	},
 	processLocationFile: function(txt, index) {
-		var jsonData = JSON.parse(txt);
-		var exteriorData = jsonData.Exterior.ExteriorData;
-		var data = {
+		let jsonData = JSON.parse(txt);
+		let exteriorData = jsonData.Exterior.ExteriorData;
+		let data = {
 			region: jsonData.RegionName,
 			name: jsonData.Name,
 			blockCount: exteriorData.Width * exteriorData.Height
 		};
-		var serviceBlocks = {};
-		var blockName, blockNameIndex;
-		for(var i = 0; i < exteriorData.BlockNames.length; i++) {
+		let serviceBlocks = {};
+		let blockName, blockNameIndex;
+		for(let i = 0; i < exteriorData.BlockNames.length; i++) {
 			blockName = exteriorData.BlockNames[i].substring(0,4).toUpperCase();
 			blockNameIndex = this.serviceBlocks.indexOf(blockName);
 			if(blockNameIndex > -1) {
@@ -851,7 +853,7 @@ var dfuWorldDataEditor = {
 			}
 			blockNameIndex = this.templeBlocks.indexOf(blockName);
 			if(blockNameIndex > -1) {
-				var templeBlock = this.templeBlocks[blockNameIndex];
+				let templeBlock = this.templeBlocks[blockNameIndex];
 				if(!serviceBlocks[templeBlock]) {
 					serviceBlocks[templeBlock] = 0;
 				}
@@ -864,7 +866,7 @@ var dfuWorldDataEditor = {
 	},
 	/* TEMPORARY GENERATOR STUFF END */
 	init: function() {
-		if(2 == 3) {
+		if(2 === 3) {
 			this.tmpData = [];
 			/*this.locationData = [];
 			 this.locationFiles = [];
@@ -879,10 +881,10 @@ var dfuWorldDataEditor = {
 		this.exteriorBlockTiles = document.getElementById('dfu-exteriorblock-tiles');
 		this.exteriorBlockTiles.addEventListener('click', function(event) {
 			event.preventDefault();
-			var el, block;
+			let el, block;
 			if(event.target.parentNode.classList.contains('exteriorblock-tile')) {
 				block = event.target.parentNode.getAttribute('data-block');
-				if(this.currentExteriorBlock == block) {
+				if(this.currentExteriorBlock === block) {
 					return false;
 				}
 				if(this.currentExteriorBlock !== null) {
@@ -917,8 +919,8 @@ var dfuWorldDataEditor = {
 		this.exteriorGrid = document.getElementById('dfu-worlddata-exteriorblock-grid');
 		this.exteriorGrid.addEventListener('click', function(event) {
 			if(event.target.parentNode.classList.contains('cell')) {
-				var cell = event.target.parentNode;
-				var select = cell.querySelector('select');
+				let cell = event.target.parentNode;
+				let select = cell.querySelector('select');
 				select.value = this.currentExteriorBlock;
 				this.handleExteriorCellChange(select);
 			}
@@ -985,7 +987,7 @@ var dfuWorldDataEditor = {
 	},
 	//Load all block buildings JS, not the most elegant solution but it works well
 	handleBlockBuildingsScriptLoad: function() {
-		var index = this.blockScriptIndex + 1;
+		let index = this.blockScriptIndex + 1;
 		//Keep loading scripts until the end of blockNames is reached
 		if(index < this.blockNames.length) {
 			//Skip blocks that are not used in Daggerfall (missing block buildings data)
@@ -1019,13 +1021,13 @@ var dfuWorldDataEditor = {
 	},
 	//Called by the blockBuilding JS files as they're loaded
 	registerBlockBuildings: function(blockBuildings) {
-		var name = blockBuildings.BlockName.replace('.RMB','');
+		let name = blockBuildings.BlockName.replace('.RMB','');
 		this.blockBuildings[name] = blockBuildings.Buildings;
 	},
 
 	//TODO: Add logic to handle locationType changes
 	handleLocationTypeChange: function() {
-		var value = this.locationTypeList.value;
+		let value = this.locationTypeList.value;
 		//Dungeon exterior location selected
 		if(this.isLocationTypeDungeon(value)) {
 			//this.populateList(this.exteriorBlocksList, 'exteriorDungeonBlocks');
@@ -1043,9 +1045,9 @@ var dfuWorldDataEditor = {
 	},
 	//TODO: Add logic to handle dungeonType changes
 	handleDungeonTypeChange: function() {
-		var value = this.dungeonTypeList.value;
+		let value = this.dungeonTypeList.value;
 		//Disable dungeon block select and clear dungeon block grid
-		if(value == this.noDungeonType) {
+		if(value === this.noDungeonType) {
 			//this.dungeonBlocksList.disabled = true;
 			this.clearGrid('dungeon');
 		} else {
@@ -1055,7 +1057,7 @@ var dfuWorldDataEditor = {
 	},
 	//TODO: Add logic to handle exterior cell change
 	handleExteriorCellChange: function(el) {
-		var value = el.value;
+		let value = el.value;
 		el.parentNode.setAttribute('data-blockname',value);
 		el.parentNode.title = value;
 		this.setExteriorCellImage(el.parentNode, value);
@@ -1067,21 +1069,21 @@ var dfuWorldDataEditor = {
 	},
 	//Handle a dungeon cell change
 	handleDungeonCellChange: function(el) {
-		var z = parseInt(el.getAttribute('data-z'),10);
-		var x = parseInt(el.getAttribute('data-x'),10);
-		var radio = document.getElementById('startblock-yes_' + z.toString() + '_' + x.toString());
-		var blockName = el.value;
-		if(blockName == '') {
+		let z = parseInt(el.getAttribute('data-z'),10);
+		let x = parseInt(el.getAttribute('data-x'),10);
+		let radio = document.getElementById('startblock-yes_' + z.toString() + '_' + x.toString());
+		let blockName = el.value;
+		if(blockName === '') {
 			//Remove block from grid
 			this.removeDungeonCell(el.parentNode);
 			//When a non-border block has been selected:
 			//Checks boundaries for border blocks and expands grid if necessary and allowed
 		} else if(this.allowDungeonBlockStart(blockName)) {
-			var checkX, checkZ, size;
+			let checkX, checkZ, size;
 			//Calculate vertical offset for boundary check
-			if(z == this.dungeonGridBounds.minZ) {
+			if(z === this.dungeonGridBounds.minZ) {
 				checkZ = z - 1;
-			} else if(z == this.dungeonGridBounds.maxZ) {
+			} else if(z === this.dungeonGridBounds.maxZ) {
 				checkZ = z + 1;
 			} else {
 				checkZ = z;
@@ -1104,7 +1106,7 @@ var dfuWorldDataEditor = {
 				size = this.calculateSize(this.dungeonGridBounds.maxZ, this.dungeonGridBounds.minZ);
 				this.addColumnsToDungeonGrid(checkZ);
 				//If the dungeon size was 1, add columns to the opposite side of the cell to ensure closed boundaries
-				if(size == 1) {
+				if(size === 1) {
 					if(checkZ < z) {
 						this.addColumnsToDungeonGrid(z + 1);
 					} else if(checkZ > z) {
@@ -1114,9 +1116,9 @@ var dfuWorldDataEditor = {
 
 			}
 			//Calculate horizontal offset for boundary check
-			if(x == this.dungeonGridBounds.minX) {
+			if(x === this.dungeonGridBounds.minX) {
 				checkX = x - 1;
-			} else if(x == this.dungeonGridBounds.maxX) {
+			} else if(x === this.dungeonGridBounds.maxX) {
 				checkX = x + 1;
 			} else {
 				checkX = x;
@@ -1139,7 +1141,7 @@ var dfuWorldDataEditor = {
 				size = this.calculateSize(this.dungeonGridBounds.maxX, this.dungeonGridBounds.minX);
 				this.addRowToDungeonGrid(checkX);
 				//If the dungeon size was 1, add a row to the opposite side of the cell to ensure closed boundaries
-				if(size == 1) {
+				if(size === 1) {
 					if(checkX < x) {
 						this.addRowToDungeonGrid(x + 1);
 					} else if(checkX > x) {
@@ -1160,15 +1162,15 @@ var dfuWorldDataEditor = {
 		}
 		//Update the cell's block image
 		if(blockName !== '') {
-			var cell = document.getElementById(this.getDungeonCellId(z, x));
+			let cell = document.getElementById(this.getDungeonCellId(z, x));
 			cell = this.setDungeonCellImage(cell, blockName);
 		}
 	},
 	//Clears a dungeon cell (removes image, select and radio button
 	removeDungeonCell: function(cell) {
-		var select = cell.getElementsByTagName('SELECT');
-		var z = parseInt(select[0].getAttribute('data-z'),10);
-		var x = parseInt(select[0].getAttribute('data-x'),10);
+		let select = cell.getElementsByTagName('SELECT');
+		let z = parseInt(select[0].getAttribute('data-z'),10);
+		let x = parseInt(select[0].getAttribute('data-x'),10);
 		//TODO: Needs proper boundary check to ensure the cell can be cleared
 		if(this.checkAdjacentCells(z, x)) {
 			this.clearChildren(cell);
@@ -1178,7 +1180,7 @@ var dfuWorldDataEditor = {
 	},
 	//TODO: Implement logic for valid cell removal
 	checkAdjacentCells: function(z, x) {
-		var checkZ, checkX;
+		let checkZ, checkX;
 		//TODO: Figure out proper logic for cell removal
 		return true;
 	},
@@ -1194,15 +1196,15 @@ var dfuWorldDataEditor = {
 
 	//Generates an exterior grid from the original JSON data
 	generateExteriorGrid: function() {
-		//var exteriorBlocks = this.original.Exterior.ExteriorData.BlockNames;
-		var exteriorWidth = this.original.Exterior.ExteriorData.Width;
-		var exteriorHeight = this.original.Exterior.ExteriorData.Height;
+		//let exteriorBlocks = this.original.Exterior.ExteriorData.BlockNames;
+		let exteriorWidth = this.original.Exterior.ExteriorData.Width;
+		let exteriorHeight = this.original.Exterior.ExteriorData.Height;
 		this.exteriorGridBounds = {
 			width: exteriorWidth,
 			height: exteriorHeight
 		};
-		var width, height, index, cell, nameIndex;
-		var documentFragment = document.createDocumentFragment();
+		let width, height, index, cell, nameIndex;
+		let documentFragment = document.createDocumentFragment();
 		for(height = 0; height < exteriorHeight; height++) {
 			for(width = 0; width < exteriorWidth; width++) {
 				index = (this.original.Exterior.ExteriorData.Height - 1) - height;
@@ -1219,9 +1221,9 @@ var dfuWorldDataEditor = {
 	},
 	//Generates an exterior grid cell
 	generateExteriorCell: function(z, x) {
-		var cell = document.createElement('div');
+		let cell = document.createElement('div');
 		cell.className = 'cell';
-		var cellTitle = document.createElement('div');
+		let cellTitle = document.createElement('div');
 		cellTitle.innerHTML = 'Z: ' + z.toString() + ', X:' + x.toString();
 		cellTitle.className = 'cell-coordinates';
 		cell.appendChild(cellTitle);
@@ -1230,9 +1232,9 @@ var dfuWorldDataEditor = {
 	},
 	//Generates an exterior grid cell dropdown list with available blocks
 	generateExteriorGridDropdown: function(z, x, value) {
-		var options = this.generateBlockOptions(this.exteriorLocationBlocks, 2);
-		var select = document.createElement('select');
-		var id = 'select_exterior_cell_' + z.toString() + '_' + x.toString();
+		let options = this.generateBlockOptions(this.exteriorLocationBlocks, 2);
+		let select = document.createElement('select');
+		let id = 'select_exterior_cell_' + z.toString() + '_' + x.toString();
 		select.id = id;
 		select.name = id;
 		select.setAttribute('data-z',z);
@@ -1247,9 +1249,9 @@ var dfuWorldDataEditor = {
 	},
 	//Sets the block image for a cell
 	setExteriorCellImage: function(cell, blockName) {
-		var img;
+		let img;
 		img = cell.getElementsByTagName('IMG');
-		if(img.length == 0) {
+		if(img.length === 0) {
 			img = document.createElement('img');
 		} else {
 			img = img[0];
@@ -1260,8 +1262,8 @@ var dfuWorldDataEditor = {
 	},
 	//Sets a default block for a new cell
 	checkExteriorCell: function(z, x, cell) {
-		var blockName = 'ZLNDFLAT';
-		var select = this.generateExteriorGridDropdown(z, x, blockName);
+		let blockName = 'ZLNDFLAT';
+		let select = this.generateExteriorGridDropdown(z, x, blockName);
 		select.value = blockName;
 		cell.appendChild(select);
 		cell = this.setExteriorCellImage(cell, blockName);
@@ -1272,10 +1274,10 @@ var dfuWorldDataEditor = {
 	//Adds a new row to the exterior grid
 	addRowToExteriorGrid: function() {
 		if(this.exteriorGridBounds.height < this.maxExteriorHeight || this.ignoreExteriorMax === true) {
-			var documentFragment = document.createDocumentFragment();
-			var newZ = this.exteriorGridBounds.height;
-			var cell;
-			for(var x = 0; x < this.exteriorGridBounds.width; x++) {
+			let documentFragment = document.createDocumentFragment();
+			let newZ = this.exteriorGridBounds.height;
+			let cell;
+			for(let x = 0; x < this.exteriorGridBounds.width; x++) {
 				cell = this.generateExteriorCell(newZ, x);
 				cell = this.checkExteriorCell(newZ, x, cell);
 				documentFragment.appendChild(cell);
@@ -1288,10 +1290,10 @@ var dfuWorldDataEditor = {
 	//Adds new columns to the exterior grid
 	addColumnsToExteriorGrid: function() {
 		if(this.exteriorGridBounds.width < this.maxExteriorWidth || this.ignoreExteriorMax === true) {
-			var targetX = this.exteriorGridBounds.width - 1;
-			var newX = this.exteriorGridBounds.width;
-			var cell, targetCell;
-			for(var z = 0; z < this.exteriorGridBounds.height; z++) {
+			let targetX = this.exteriorGridBounds.width - 1;
+			let newX = this.exteriorGridBounds.width;
+			let cell, targetCell;
+			for(let z = 0; z < this.exteriorGridBounds.height; z++) {
 				targetCell = document.getElementById(this.getExteriorCellId(z, targetX));
 				cell = this.generateExteriorCell(z, newX);
 				cell = this.checkExteriorCell(z, newX, cell);
@@ -1304,21 +1306,21 @@ var dfuWorldDataEditor = {
 	//Removes a row from the exterior grid
 	removeRowFromExteriorGrid: function() {
 
-		if(this.exteriorGridBounds.height == 1) {
+		if(this.exteriorGridBounds.height === 1) {
 			alert('You can not remove the row');
 			return false;
 		}
 
-		var row = prompt('Please enter the row number that you want to remove (1-' + this.exteriorGridBounds.height,'');
+		let row = prompt('Please enter the row number that you want to remove (1-' + this.exteriorGridBounds.height,'');
 		if(row !== null) {
 			row = parseInt(row,10);
 			if(row < 1 || row > this.exteriorGridBounds.height) {
 				alert('Row number ' + row.toString() + ' is out of bounds');
 				return false;
 			}
-			var index = row - 1;
-			var cell;
-			for(var x = 0; x < this.exteriorGridBounds.width; x++) {
+			let index = row - 1;
+			let cell;
+			for(let x = 0; x < this.exteriorGridBounds.width; x++) {
 				cell = document.getElementById(this.getExteriorCellId(index, x));
 				cell.parentNode.removeChild(cell);
 			}
@@ -1330,21 +1332,21 @@ var dfuWorldDataEditor = {
 	//Removes columns from the exterior grid
 	removeColumnsFromExteriorGrid: function() {
 
-		if(this.exteriorGridBounds.width == 1) {
+		if(this.exteriorGridBounds.width === 1) {
 			alert('You can not remove the column');
 			return false;
 		}
 
-		var column = prompt('Please enter the column number that you want to remove (1-' + this.exteriorGridBounds.width,'');
+		let column = prompt('Please enter the column number that you want to remove (1-' + this.exteriorGridBounds.width,'');
 		if(column !== null) {
 			column = parseInt(column, 10);
 			if(column < 1 || column > this.exteriorGridBounds.width) {
 				alert('Column number ' + column.toString() + ' is out of bounds');
 				return false;
 			}
-			var index = column - 1;
-			var cell;
-			for(var z = 0; z < this.exteriorGridBounds.height; z++) {
+			let index = column - 1;
+			let cell;
+			for(let z = 0; z < this.exteriorGridBounds.height; z++) {
 				cell = document.getElementById(this.getExteriorCellId(z, index));
 				cell.parentNode.removeChild(cell);
 			}
@@ -1356,8 +1358,8 @@ var dfuWorldDataEditor = {
 	//Re-assigns exterior cell ids for proper indexation, called after removing rows or columns
 	updateExteriorCellIds: function() {
 		console.log('updating cell ids');
-		var cells = this.exteriorGrid.querySelectorAll('.cell');
-		var z, x, id, select, row, index;
+		let cells = this.exteriorGrid.querySelectorAll('.cell');
+		let z, x, id, select, row, index;
 		for(z = (this.exteriorGridBounds.height - 1); z >= 0; z--) {
 			for(x = 0; x < this.exteriorGridBounds.width; x++) {
 				index = (z * this.exteriorGridBounds.width) + x;
@@ -1383,17 +1385,17 @@ var dfuWorldDataEditor = {
 	},
 	//Sets the grid layout, called after generating grid and adding / removing rows or columns
 	updateExteriorGridRowsColumns: function(height, width) {
-		var rowsClass = 'rows-' + height.toString();
-		var columnsClass = 'columns-' + width.toString();
+		let rowsClass = 'rows-' + height.toString();
+		let columnsClass = 'columns-' + width.toString();
 		this.exteriorGrid.className = rowsClass + ' ' + columnsClass;
 	},
 
 	//Generates the dungeon grid
 	generateDungeonGrid: function() {
-		var documentFragment = document.createDocumentFragment();
-		var cell, cellTitle;
-		for(var i = this.dungeonGridBounds.maxZ; i >= this.dungeonGridBounds.minZ; i--) {
-			for(var j = this.dungeonGridBounds.minX; j <= this.dungeonGridBounds.maxX; j++) {
+		let documentFragment = document.createDocumentFragment();
+		let cell, cellTitle;
+		for(let i = this.dungeonGridBounds.maxZ; i >= this.dungeonGridBounds.minZ; i--) {
+			for(let j = this.dungeonGridBounds.minX; j <= this.dungeonGridBounds.maxX; j++) {
 				cell = this.generateDungeonCell(i, j);
 				documentFragment.appendChild(cell);
 			}
@@ -1406,9 +1408,9 @@ var dfuWorldDataEditor = {
 	},
 	//Generates a dungeon grid cell
 	generateDungeonCell: function(z, x) {
-		var cell = document.createElement('div');
+		let cell = document.createElement('div');
 		cell.className = 'cell';
-		var cellTitle = document.createElement('div');
+		let cellTitle = document.createElement('div');
 		cellTitle.innerHTML = 'Z: ' + z.toString() + ', X:' + x.toString();
 		cellTitle.className = 'cell-coordinates';
 		cell.appendChild(cellTitle);
@@ -1417,9 +1419,9 @@ var dfuWorldDataEditor = {
 	},
 	//Generates a dungeon grid cell dropdown list with available dungeon blocks
 	generateDungeonGridDropdown: function(z, x, value) {
-		var options = this.generateBlockOptions(this.dungeonBlocks, 7);
-		var select = document.createElement('select');
-		var id = 'select_dungeon_cell_' + z.toString() + '_' + x.toString();
+		let options = this.generateBlockOptions(this.dungeonBlocks, 7);
+		let select = document.createElement('select');
+		let id = 'select_dungeon_cell_' + z.toString() + '_' + x.toString();
 		select.id = id;
 		select.name = id;
 		select.setAttribute('data-z',z);
@@ -1430,17 +1432,17 @@ var dfuWorldDataEditor = {
 	},
 	//Generates a dungeon grid cell radio button to indicate starting block
 	generateDungeonGridStartChoice: function(z, x, isStart, blockName) {
-		var div = document.createElement('div');
-		var id = 'startblock-yes_' + z.toString() + '_' + x.toString();
+		let div = document.createElement('div');
+		let id = 'startblock-yes_' + z.toString() + '_' + x.toString();
 
-		var label = document.createElement('label');
+		let label = document.createElement('label');
 		label.for = id;
 
-		var span = document.createElement('span');
+		let span = document.createElement('span');
 		span.innerHTML = 'Start here';
 		label.appendChild(span);
 
-		var input = document.createElement('input');
+		let input = document.createElement('input');
 		input.id = id;
 		input.type = 'radio';
 		input.name = 'isStartBlock';
@@ -1473,9 +1475,9 @@ var dfuWorldDataEditor = {
 	},
 	//Sets the block image for a dungeon cell
 	setDungeonCellImage: function(cell, blockName) {
-		var img;
+		let img;
 		img = cell.getElementsByTagName('IMG');
-		if(img.length == 0) {
+		if(img.length === 0) {
 			img = document.createElement('img');
 		} else {
 			img = img[0];
@@ -1486,7 +1488,7 @@ var dfuWorldDataEditor = {
 	},
 	//Check adjacent cells for a new dungeon cell
 	checkDungeonCellBorders: function(z, x) {
-		var newX, newZ;
+		let newX, newZ;
 		newZ = z - 1;
 		this.checkDungeonCell(newZ, x);
 		newZ = z + 1;
@@ -1498,14 +1500,14 @@ var dfuWorldDataEditor = {
 	},
 	//Adds missing border cell to keep dungeon 'airtight'
 	checkDungeonCell: function(z, x) {
-		var blockName = 'B0000001';
-		var el = document.getElementById('select_' + this.getDungeonCellId(z, x));
+		let blockName = 'B0000001';
+		let el = document.getElementById('select_' + this.getDungeonCellId(z, x));
 		if(!el) {
 			el = document.getElementById(this.getDungeonCellId(z, x));
 			if(el) {
-				var select = this.generateDungeonGridDropdown(z, x, blockName);
+				let select = this.generateDungeonGridDropdown(z, x, blockName);
 				el.appendChild(select);
-				var radio = this.generateDungeonGridStartChoice(z, x, false, blockName);
+				let radio = this.generateDungeonGridStartChoice(z, x, false, blockName);
 				el.appendChild(radio);
 				el = this.setDungeonCellImage(el, blockName);
 			}
@@ -1513,7 +1515,7 @@ var dfuWorldDataEditor = {
 	},
 	//Adds new columns to the dungeon grid
 	addColumnsToDungeonGrid: function(z) {
-		var targetZ, insertAfter;
+		let targetZ, insertAfter;
 		if(z < this.dungeonGridBounds.minZ) {
 			this.dungeonGridBounds.minZ = z;
 			targetZ = z + 1;
@@ -1523,9 +1525,9 @@ var dfuWorldDataEditor = {
 			targetZ = z - 1;
 			insertAfter = false;
 		}
-		var cell, target, documentFragment;
+		let cell, target, documentFragment;
 		documentFragment = document.createDocumentFragment();
-		for(var i = this.dungeonGridBounds.minX; i <= this.dungeonGridBounds.maxX; i++) {
+		for(let i = this.dungeonGridBounds.minX; i <= this.dungeonGridBounds.maxX; i++) {
 			cell = this.generateDungeonCell(z, i);
 			documentFragment.appendChild(cell);
 		}
@@ -1539,7 +1541,7 @@ var dfuWorldDataEditor = {
 	},
 	//Adds a new row to the dungeon grid
 	addRowToDungeonGrid: function(x) {
-		var targetX, insertAfter;
+		let targetX, insertAfter;
 		if(x < this.dungeonGridBounds.minX) {
 			this.dungeonGridBounds.minX = x;
 			targetX = x + 1;
@@ -1549,8 +1551,8 @@ var dfuWorldDataEditor = {
 			targetX = x - 1;
 			insertAfter = true;
 		}
-		var cell, target;
-		for(var i = this.dungeonGridBounds.maxZ; i >= this.dungeonGridBounds.minZ; i--) {
+		let cell, target;
+		for(let i = this.dungeonGridBounds.maxZ; i >= this.dungeonGridBounds.minZ; i--) {
 			cell = this.generateDungeonCell(i, x);
 			target = document.getElementById(this.getDungeonCellId(i, targetX));
 			if(insertAfter === true) {
@@ -1563,13 +1565,13 @@ var dfuWorldDataEditor = {
 	},
 	//Sets the grid layout, called after generating a grid and adding a row or columns
 	updateDungeonGridRowsColumns: function() {
-		var rowsClass = 'rows-' + this.calculateSize(this.dungeonGridBounds.maxZ, this.dungeonGridBounds.minZ).toString();
-		var columnsClass = 'columns-' + this.calculateSize(this.dungeonGridBounds.maxX, this.dungeonGridBounds.minX).toString();
+		let rowsClass = 'rows-' + this.calculateSize(this.dungeonGridBounds.maxZ, this.dungeonGridBounds.minZ).toString();
+		let columnsClass = 'columns-' + this.calculateSize(this.dungeonGridBounds.maxX, this.dungeonGridBounds.minX).toString();
 		this.dungeonGrid.className = rowsClass + ' ' + columnsClass;
 	},
 	//Determines the min and max boundaries for the dungeon grid
 	getGridBoundariesFromBlocks: function(blocks) {
-		var minX, maxX, minZ, maxZ, index;
+		let minX, maxX, minZ, maxZ, index;
 		minX = 0; maxX = 0; minZ = 0; maxZ = 0;
 		for(index = 0; index < blocks.length; index++) {
 			if(blocks[index].X < minX) {
@@ -1595,9 +1597,9 @@ var dfuWorldDataEditor = {
 
 	//Clear the exterior or dungeon grid
 	clearGrid: function(type) {
-		if(type == 'dungeon') {
+		if(type === 'dungeon') {
 			return this.clearChildren(this.dungeonGrid);
-		} else if(type == 'exterior') {
+		} else if(type === 'exterior') {
 			return this.clearChildren(this.exteriorGrid);
 		}
 	},
@@ -1606,18 +1608,18 @@ var dfuWorldDataEditor = {
 	loadJSON: function () {
 		event.preventDefault();
 		event.stopPropagation();
-		if(this.fileInput.files.length == 0) {
+		if(this.fileInput.files.length === 0) {
 			alert('Please select a location JSON file to load');
 			return false;
 		}
 		// Check for the various File API support.
 		if (window.File && window.FileReader && window.FileList && window.Blob) {
-			var file = this.fileInput.files[0];
+			let file = this.fileInput.files[0];
 			if(file) {
-				var fr = new FileReader();
+				let fr = new FileReader();
 				fr.onload = function(e) {
-					var output = document.querySelector('#output');
-					var text = e.target.result;
+					let output = document.querySelector('#output');
+					let text = e.target.result;
 					this.processJSON(text);
 				}.bind(this);
 				fr.readAsText(file);
@@ -1632,8 +1634,8 @@ var dfuWorldDataEditor = {
 		this.newJSON = JSON.parse(location);
 
 		//console.log(this.original);
-		var mapId = [];
-		var matches = this.original.Exterior.ExteriorData.MapId.toString().match(/(\d{1,3})(\d{3})/);
+		let mapId = [];
+		let matches = this.original.Exterior.ExteriorData.MapId.toString().match(/(\d{1,3})(\d{3})/);
 		if(matches.length < 3) {
 			alert('Error: could convert map id to coordinates');
 			return false;
@@ -1657,10 +1659,10 @@ var dfuWorldDataEditor = {
 		}
 
 		this.generateExteriorGrid();
-		var exteriorBlocks = this.original.Exterior.ExteriorData.BlockNames;
-		var index, span, cell, blockName;
-		for(var height = (this.original.Exterior.ExteriorData.Height - 1); height >= 0; height--) {
-			for(var width = 0; width < this.original.Exterior.ExteriorData.Width; width++) {
+		let exteriorBlocks = this.original.Exterior.ExteriorData.BlockNames;
+		let index, span, cell, blockName;
+		for(let height = (this.original.Exterior.ExteriorData.Height - 1); height >= 0; height--) {
+			for(let width = 0; width < this.original.Exterior.ExteriorData.Width; width++) {
 				index = (height * this.original.Exterior.ExteriorData.Width) + width;
 
 				span = document.createElement('span');
@@ -1674,13 +1676,13 @@ var dfuWorldDataEditor = {
 			}
 		}
 
-		var dungeonBlocks = this.original.Dungeon.Blocks;
-		var startingBlock = '';
+		let dungeonBlocks = this.original.Dungeon.Blocks;
+		let startingBlock = '';
 		if(dungeonBlocks !== null) {
 			this.dungeonGridBounds = this.getGridBoundariesFromBlocks(dungeonBlocks);
 			this.generateDungeonGrid();
 
-			var select, value, radio, img;
+			let select, value, radio, img;
 
 			for (index = 0; index < dungeonBlocks.length; index++) {
 				cell = document.getElementById(this.getDungeonCellId(dungeonBlocks[index].Z,dungeonBlocks[index].X));
@@ -1690,11 +1692,11 @@ var dfuWorldDataEditor = {
 				cell.appendChild(select);
 				cell.appendChild(radio);
 				cell = this.setDungeonCellImage(cell, dungeonBlocks[index].BlockName.replace('.RDB',''));
-				if (dungeonBlocks[index].IsStartingBlock == true) {
+				if (dungeonBlocks[index].IsStartingBlock === true) {
 					startingBlock = dungeonBlocks[index].BlockName.replace('.RDB', '');
 				}
 			}
-			if(startingBlock == '') {
+			if(startingBlock === '') {
 				alert('Error: Unable to find starting dungeon block');
 			}
 		}
@@ -1707,7 +1709,7 @@ var dfuWorldDataEditor = {
 		this.error = false;
 		this.errors = [];
 
-		var mapX, mapY;
+		let mapX, mapY;
 		mapX = parseInt(this.form.mapX.value,10);
 		if(mapX < 0 || mapX > this.mapMaxX) {
 			this.addError('Map coordinate X should be between 0 and ' + this.mapMaxX);
@@ -1719,13 +1721,13 @@ var dfuWorldDataEditor = {
 			this.error = true;
 		}
 
-		var type = this.form.location.value;
+		let type = this.form.location.value;
 		if(type != 'new' && type != 'existing') {
 			this.addError('Please select \'New\' or \'Existing\' location.');
 			this.error = true;
 		}
-		if(type == 'new') {
-			if(mapX == this.original.mapId[1] && mapY == this.original.mapId[0]) {
+		if(type === 'new') {
+			if(mapX === this.original.mapId[1] && mapY === this.original.mapId[0]) {
 				this.addError('The Map pixel X and Y can not be at the same location as the original JSON');
 				this.error = true;
 			}
@@ -1742,7 +1744,7 @@ var dfuWorldDataEditor = {
 
 		this.deleteDungeonHeader(type);
 
-		if(this.newJSON.MapTableData.DungeonType == this.noDungeonType) {
+		if(this.newJSON.MapTableData.DungeonType === this.noDungeonType) {
 			this.clearDungeonBlock();
 		} else {
 			this.setDungeonBlocks(type);
@@ -1751,7 +1753,7 @@ var dfuWorldDataEditor = {
 		this.setLatLong(type, mapX, mapY);
 		this.setWorldCoordinates(type, mapX, mapY);
 
-		var text;
+		let text;
 		if(this.error) {
 			text = this.errors.join("\n");
 		} else {
@@ -1768,7 +1770,7 @@ var dfuWorldDataEditor = {
 
 	//Methods to set the various values for the new location JSON object
 	setLocationIndex: function(type) {
-		if(type == 'new') {
+		if(type === 'new') {
 			this.newJSON.Exterior.RecordElement.Header.Unknown2 = 0;
 			this.newJSON.LocationIndex = 0;
 		} else {
@@ -1777,18 +1779,18 @@ var dfuWorldDataEditor = {
 		}
 	},
 	setLocationId: function(type) {
-		if(type == 'new') {
-			if(this.form.locationId.value == '') {
+		if(type === 'new') {
+			if(this.form.locationId.value === '') {
 				this.addError('Please enter an location id');
 				this.error = true;
 				return false;
 			}
-			var locationId = parseInt(this.form.locationId.value);
+			let locationId = parseInt(this.form.locationId.value);
 			if(locationId < this.minLocationId || locationId > this.maxLocationId) {
 				this.addError('Location ID should be between ' + this.minLocationId + ' and ' + this.maxLocationId);
 				this.error = true;
 				return false;
-			} else if(locationId == this.original.Exterior.RecordElement.Header.LocationId) {
+			} else if(locationId === this.original.Exterior.RecordElement.Header.LocationId) {
 				this.addError('Location ID for an new location can not be the same as the original location!');
 				this.error = true;
 				return false;
@@ -1805,10 +1807,10 @@ var dfuWorldDataEditor = {
 		}
 	},
 	setName: function(type) {
-		var name = this.form.locationName.value;
-		if(name == '') {
+		let name = this.form.locationName.value;
+		if(name === '') {
 			name = prompt('Please enter a location name or leave blank to use the original name','Missing Location name');
-			if(name == '') {
+			if(name === '') {
 				name = this.original.Name;
 			}
 			this.form.locationName.value = name;
@@ -1819,8 +1821,8 @@ var dfuWorldDataEditor = {
 		this.newJSON.Dungeon.RecordElement.Header.LocationName = name;
 	},
 	setMapId: function(type, mapX, mapY) {
-		if(type == 'new') {
-			var mapId = this.calculateMapId(mapX, mapY);
+		if(type === 'new') {
+			let mapId = this.calculateMapId(mapX, mapY);
 			this.newJSON.MapTableData.MapId = mapId;
 			this.newJSON.Exterior.ExteriorData.MapId = mapId;
 		} else {
@@ -1829,9 +1831,9 @@ var dfuWorldDataEditor = {
 		}
 	},
 	setLatLong: function(type, mapX, mapY) {
-		if(type == 'new') {
-			var latitude = this.calculateLatitude(mapY);
-			var longitude = this.calculateLongitude(mapX);
+		if(type === 'new') {
+			let latitude = this.calculateLatitude(mapY);
+			let longitude = this.calculateLongitude(mapX);
 
 			this.newJSON.MapTableData.Latitude = latitude;
 			this.newJSON.MapTableData.Longitude = longitude;
@@ -1841,7 +1843,7 @@ var dfuWorldDataEditor = {
 		}
 	},
 	setLocationType: function(type) {
-		if(this.form.locationType.value == '') {
+		if(this.form.locationType.value === '') {
 			this.addError('Please choose a location type');
 			this.error = true;
 			return false;
@@ -1849,7 +1851,7 @@ var dfuWorldDataEditor = {
 		this.newJSON.MapTableData.LocationType = this.form.locationType.value;
 	},
 	setDungeonType: function(type) {
-		if(this.form.dungeonType.value == '') {
+		if(this.form.dungeonType.value === '') {
 			this.addError('Please choose a dungeon type');
 			this.error = true;
 			return false;
@@ -1857,8 +1859,8 @@ var dfuWorldDataEditor = {
 		this.newJSON.MapTableData.DungeonType = this.form.dungeonType.value;
 	},
 	setWorldCoordinates: function(type, mapX, mapY) {
-		if(type == 'new') {
-			var worldX, worldY;
+		if(type === 'new') {
+			let worldX, worldY;
 			worldX = this.calculateWorldCoordinateX(mapX);
 			worldY = this.calculateWorldCoordinateY(mapY);
 
@@ -1874,27 +1876,27 @@ var dfuWorldDataEditor = {
 		}
 	},
 	setExteriorBlocks: function(type) {
-		var exteriorBlockCells = this.exteriorGrid.querySelectorAll('.cell');
-		if(exteriorBlockCells.length == 0) {
+		let exteriorBlockCells = this.exteriorGrid.querySelectorAll('.cell');
+		if(exteriorBlockCells.length === 0) {
 			this.addError('Please add one or more exterior blocks');
 			this.error = true;
 			return false;
 		}
-		var blockName;
-		var blockNames = [];
+		let blockName;
+		let blockNames = [];
 
-		var index;
-		var width = this.exteriorGridBounds.width;
-		var height = this.exteriorGridBounds.height;
+		let index;
+		let width = this.exteriorGridBounds.width;
+		let height = this.exteriorGridBounds.height;
 
-		if(type == 'new') {
-			var buildings = [];
-			var b, building, seed, sector;
-			for (var h = (height - 1); h >= 0; h--) {
-				for (var w = 0; w < width; w++) {
+		if(type === 'new') {
+			let buildings = [];
+			let b, building, seed, sector;
+			for (let h = (height - 1); h >= 0; h--) {
+				for (let w = 0; w < width; w++) {
 					index = (h * width) + w;
 					blockName = exteriorBlockCells[index].getAttribute('data-blockname');
-					if(this.blockBuildings[blockName] && 2 == 2) {
+					if(this.blockBuildings[blockName] && 2 === 2) {
 						for (b = 0; b < this.blockBuildings[blockName].length; b++) {
 							building = this.blockBuildings[blockName][b];
 							seed = parseInt(this.newJSON.Exterior.RecordElement.Header.LocationId, 10) + (h * 100) + (w * 10) + b;
@@ -1924,8 +1926,8 @@ var dfuWorldDataEditor = {
 		this.newJSON.Exterior.ExteriorData.BlockNames = blockNames;
 	},
 	copyBuildings: function(originalBuildings) {
-		var buildings = [];
-		for(var i = 0; i < originalBuildings.length; i++) {
+		let buildings = [];
+		for(let i = 0; i < originalBuildings.length; i++) {
 			buildings[i] =             {
 				"NameSeed": originalBuildings[i].NameSeed,
 				"FactionId": originalBuildings[i].FactionId,
@@ -1938,10 +1940,10 @@ var dfuWorldDataEditor = {
 		return buildings;
 	},
 	setDungeonBlocks: function(type) {
-		var dungeonBlocks = [];
-		if(type == 'new' || 2 == 2) {
-			var dungeonBlock, select, radio, i, x, z, startingBlock, originX, originZ;
-			var cells = document.querySelectorAll('#dfu-worlddata-dungeonblock-grid .cell');
+		let dungeonBlocks = [];
+		if(type === 'new' || 2 === 2) {
+			let dungeonBlock, select, radio, i, x, z, startingBlock, originX, originZ;
+			let cells = document.querySelectorAll('#dfu-worlddata-dungeonblock-grid .cell');
 			for (i = 0; i < cells.length; i++) {
 				select = cells[i].querySelector('select');
 				if (select) {
@@ -2007,16 +2009,16 @@ var dfuWorldDataEditor = {
 
 	//Helper methods to handle DOM element creation and removal
 	populateList: function(el, type) {
-		var options;
-		if(type == 'locationType') {
+		let options;
+		if(type === 'locationType') {
 			options = this.generateTypeOptions(this.locationTypes);
-		} else if(type == 'dungeonType') {
+		} else if(type === 'dungeonType') {
 			options = this.generateTypeOptions(this.dungeonTypes);
-		} else if(type == 'exteriorLocationBlocks') {
+		} else if(type === 'exteriorLocationBlocks') {
 			options = this.generateBlockOptions(this.exteriorLocationBlocks, 2);
-		} else if(type == 'exteriorDungeonBlocks') {
+		} else if(type === 'exteriorDungeonBlocks') {
 			options = this.generateBlockOptions(this.exteriorDungeonBlocks, 2);
-		} else if(type == 'dungeonBlock') {
+		} else if(type === 'dungeonBlock') {
 			options = this.generateBlockOptions(this.dungeonBlocks, 7);
 		}
 		if(this.clearChildren(el)) {
@@ -2030,7 +2032,7 @@ var dfuWorldDataEditor = {
 		return true;
 	},
 	generateTypeOptions: function(types) {
-		var documentFragment, index, option;
+		let documentFragment, index, option;
 		documentFragment = document.createDocumentFragment();
 		option = document.createElement('option');
 		option.innerHTML = 'Please choose a type';
@@ -2045,7 +2047,7 @@ var dfuWorldDataEditor = {
 		return documentFragment;
 	},
 	generateBlockNames: function(blocks, padLength, addRMB, addLabel) {
-		var index, count, blockGroups, blockNames, name;
+		let index, count, blockGroups, blockNames, name;
 		if(addLabel) {
 			blockGroups = [];
 		}
@@ -2080,13 +2082,13 @@ var dfuWorldDataEditor = {
 		return blockNames;
 	},
 	generateBlockName: function(name, count, padLength) {
-		var blockName = name + count.toString().padStart(padLength,'0');
+		let blockName = name + count.toString().padStart(padLength,'0');
 		return blockName;
 	},
 	generateBlockOptions: function(blocks, padLength) {
-		var names = [];
-		var documentFragment = document.createDocumentFragment();
-		var index, count, optionGroup, option, optionName;
+		let names = [];
+		let documentFragment = document.createDocumentFragment();
+		let index, count, optionGroup, option, optionName;
 		option = document.createElement('option');
 		option.innerHTML = 'Please choose a block';
 		option.value = '';

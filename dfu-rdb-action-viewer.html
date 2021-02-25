@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity RDB Action Viewer</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/rdb-action-viewer.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/dfu-rdb-action-viewer.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity RDB Action Viewer</span></h1>
+    <div class="json-upload">
+        <h2>Load RDB JSON</h2>
+        <p>Please select the RDB JSON file you exported from Daggerfall Unity and click the Load JSON button</p>
+        <form id="json-upload-form" method="post" action="">
+            <div>
+                <input type="file" name="json-upload-file" id="json-upload-file" />
+                <button type="submit" id="json-upload-button" name="json-upload-button">Load JSON</button>
+            </div>
+        </form>
+    </div>
+    <div id="dfu-rdb-actions" class="dfu-rdb-actions">
+
+    </div>
+    <h2>Result</h2>
+    <div class="dfu-result">
+        <textarea id="dfu-terrain-viewer-result" name="dfu-terrain-viewer-result"></textarea>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+.dfu-rdb-actions {
+
+}
+.dfu-rdb-action {
+    padding-bottom: 1em;
+    border-bottom: 1px #EEE solid;
+    margin-bottom: 1em;
+    float: left;
+    width: 50%;
+}
+
+.label {
+    width: 50%;
+    float: left;
+}
+.value {
+    width: 50%;
+    float: left;
+}
+.resource {
+    width: 100%;
+    float: left;
+    font-weight: bold;
+    padding: 0.5em 0;
+}
