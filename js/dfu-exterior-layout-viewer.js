@@ -81,7 +81,8 @@ var layoutRenderer = {
 
 				div.id = 'exterior-' + id;
 				div.title = modelId;
-				div.style.top = (this.height - z).toString() + 'px';
+				//div.style.top = (this.height - z).toString() + 'px';
+				div.style.top = z.toString() + 'px';
 				div.style.left = x.toString() + 'px';
 				div.style.transform = 'rotate(' + yRotation.toString() + 'deg)';
 				div.style.backgroundColor = 'rgb(' + r.toString() + ',' + g.toString() + ',' + b.toString() + ')';
