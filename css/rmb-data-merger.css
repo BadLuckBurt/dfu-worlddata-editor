@@ -1,0 +1,27 @@
+div {
+    box-sizing: border-box;
+}
+
+.dfu-rmb-overview {
+
+}
+.rmb-data {
+    padding: 0.25em 0.25em 0.25em 0;
+}
+
+.rmb-property {
+    padding: 0.25em;
+    margin-bottom: 0.125em;
+    display: flex;
+    width: 100%;
+}
+.property-name {
+    width: 20em;
+}
+.property-value {
+    padding-left: 0.25em;
+}
+.property-value textarea {
+    width: 20em;
+    height: 10em;
+}

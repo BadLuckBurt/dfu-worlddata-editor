@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity World Data Merger</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/rmb-data-merger.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/dfu-rmb-data-merger.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity RMB Data Merger</span></h1>
+    <div class="json-upload">
+        <h2>Load RMB JSON</h2>
+        <p>Please select the RMB JSON file you exported from Daggerfall Unity and click the Load JSON button</p>
+        <form id="json-upload-form" method="post" action="">
+            <div>
+                <input type="file" name="json-upload-file" id="json-upload-file" />
+                <button type="submit" id="json-upload-button" name="json-upload-button">Load JSON</button>
+            </div>
+        </form>
+    </div>
+    <div class="dfu-explanation">
+        <h2>Explanation</h2>
+        <p>Click the label or the checkbox of the RMB properties you want merge and paste the correct data into the textarea that gets enabled.</p>
+        <p>When you are ready, click the Merge button and copy the new JSON contents from the Results textarea and paste them into your RMB.json file.</p>
+    </div>
+    <div id="dfu-rmb-overview" class="dfu-rmb-overview">
+        <div class="rmb-data">
+            <div class="rmb-property">
+                <label>Block name:</label>
+                <div class="property-value">
+                    <span id="rmb-block-name"></span>
+                </div>
+            </div>
+        </div>
+        <div id="dfu-rmb-data" class="rmb-data">
+            <h2>FldHeader:</h2>
+            <div class="rmb-property">
+                <label for="rmb-ground-tiles" class="property-name">GroundTiles</label>
+                <div class="property-value">
+                    <input id="rmb-ground-tiles" type="checkbox" name="rmb-ground-tiles" value="1" autocomplete="off" />
+                </div>
+                <div class="property-value">
+                    <textarea id="rmb-ground-tiles-replacement" disabled></textarea>
+                </div>
+            </div>
+            <div class="rmb-property">
+                <label for="rmb-automap-data" class="property-name">AutoMapData</label>
+                <div class="property-value">
+                    <input id="rmb-automap-data" type="checkbox" name="rmb-automap-data" value="1" autocomplete="off" />
+                </div>
+                <div class="property-value">
+                    <textarea id="rmb-automap-data-replacement" disabled></textarea>
+                </div>
+            </div>
+            <div class="rmb-property">
+                <label for="rmb-misc-3d-object-records" class="property-name">Misc3dObjectRecords</label>
+                <div class="property-value">
+                    <input id="rmb-misc-3d-object-records" type="checkbox" name="rmb-misc-3d-object-records" value="1" autocomplete="off" />
+                </div>
+                <div class="property-value">
+                    <textarea id="rmb-misc-3d-object-records-replacement" disabled></textarea>
+                </div>
+            </div>
+            <div class="rmb-property">
+                <label for="rmb-misc-flat-object-records" class="property-name">MiscFlatObjectRecords</label>
+                <div class="property-value">
+                    <input id="rmb-misc-flat-object-records" type="checkbox" name="rmb-misc-flat-object-records" value="1" autocomplete="off" />
+                </div>
+                <div class="property-value">
+                    <textarea id="rmb-misc-flat-object-records-replacement" disabled></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dfu-buttons">
+        <button type="button" id="merge-rmb-data">Merge</button>
+    </div>
+    <h2>Result</h2>
+    <div class="dfu-result">
+        <textarea id="dfu-rmb-data-merger-result" name="dfu-rmb-data-merger-result"></textarea>
+    </div>
+</div>
+</body>
+</html>
