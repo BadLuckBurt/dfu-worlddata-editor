@@ -970,8 +970,8 @@ var dfuWorldDataEditor = {
 
 		//Store reference to form DOM element and configure form fields
 		this.form = document.getElementById('dfu-worlddata-form');
-		this.form.locationId.min = this.minLocationId;
-		this.form.locationId.max = this.maxLocationId;
+		//this.form.locationId.min = this.minLocationId;
+		//this.form.locationId.max = this.maxLocationId;
 		this.form.mapX.min = 0;
 		this.form.mapY.min = 0;
 		this.form.mapX.max = this.mapMaxX;
@@ -982,8 +982,8 @@ var dfuWorldDataEditor = {
 		this.generateButton.addEventListener('click', this.generateJSON.bind(this));
 
 		//Fill out min / max values for LocationId
-		document.getElementById('dfu-worlddata-minlocationid').innerHTML = this.minLocationId.toString();
-		document.getElementById('dfu-worlddata-maxlocationid').innerHTML = this.maxLocationId.toString();
+		//document.getElementById('dfu-worlddata-minlocationid').innerHTML = this.minLocationId.toString();
+		//document.getElementById('dfu-worlddata-maxlocationid').innerHTML = this.maxLocationId.toString();
 	},
 	//Load all block buildings JS, not the most elegant solution but it works well
 	handleBlockBuildingsScriptLoad: function() {
@@ -1786,8 +1786,12 @@ var dfuWorldDataEditor = {
 				return false;
 			}
 			let locationId = parseInt(this.form.locationId.value);
-			if(locationId < this.minLocationId || locationId > this.maxLocationId) {
-				this.addError('Location ID should be between ' + this.minLocationId + ' and ' + this.maxLocationId);
+			let existingLocIndex = locationIds.indexOf(locationId);
+			//if(locationId < this.minLocationId || locationId > this.maxLocationId) {
+			if(existingLocIndex > -1) {
+				this.addError('Location ID can not the same as location ' + locationNames[existingLocIndex] + ' in region ' + locationRegions[existingLocIndex]);
+
+				//this.addError('Location ID should be between ' + this.minLocationId + ' and ' + this.maxLocationId);
 				this.error = true;
 				return false;
 			} else if(locationId === this.original.Exterior.RecordElement.Header.LocationId) {

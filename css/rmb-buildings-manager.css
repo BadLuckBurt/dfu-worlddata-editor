@@ -1,0 +1,15 @@
+.row {
+    display: flex;
+}
+.sub-record,
+.building-data {
+    width: 50%;
+}
+
+.sub-record-value {
+    display: flex;
+    margin-bottom: 0.25em;
+}
+.sub-record-value label {
+    width: 10em;
+}

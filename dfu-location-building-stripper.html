@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity World Data Merger</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/location-house-stripper.css" rel="stylesheet" />
+    <style type="text/css">
+
+        .dfu-building-type-selection {
+            flex-wrap: wrap;
+        }
+
+        .dfu-building-type-selection,
+        .row {
+            display: flex;
+        }
+
+        .row {
+            min-width: 10em;
+
+        }
+
+    </style>
+    <script type="text/javascript" src="js/building-types.js"></script>
+    <script type="text/javascript" src="js/dfu-location-building-stripper.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity RMB Buildings Manager</span></h1>
+    <div class="json-upload">
+        <h2>Load Location JSON</h2>
+        <p>Please select the Location JSON file you exported from Daggerfall Unity and click the Load JSON button</p>
+        <form id="json-upload-form" method="post" action="">
+            <div>
+                <input type="file" name="json-upload-file" id="json-upload-file" />
+                <button type="submit" id="json-upload-button" name="json-upload-button">Load JSON</button>
+            </div>
+        </form>
+    </div>
+    <div class="dfu-explanation">
+        <h2>Explanation</h2>
+        <p>After uploading the location file, check the BuildingTypes below that you want to remove from BuildingData and click 'Strip buildings'. You can leave your hat on.</p>
+    </div>
+    <div clas="dfu-building-type-selection">
+        <div class="row">
+            <input type="checkbox" id="select-all-buildings" name="select-all-buildings" value="1" />
+            <label for="select-all-buildings">All buildings</label>
+        </div>
+    </div>
+    <div id="dfu-building-type-selection" class="dfu-building-type-selection">
+
+    </div>
+    <div class="dfu-buttons">
+        <button type="button" id="strip-buildings">Strip buildings</button>
+    </div>
+    <h2>Result</h2>
+    <div class="dfu-result">
+        <textarea id="dfu-location-building-stripper-result" name="dfu-location-building-stripper-result"></textarea>
+    </div>
+</div>
+</body>
+</html>

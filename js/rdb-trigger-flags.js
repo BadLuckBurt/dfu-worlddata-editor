@@ -1,0 +1,10 @@
+let triggerFlags = [];
+triggerFlags[0] = "None"; 
+triggerFlags[2] = "Direct"; 
+triggerFlags[6] = "Direct6"; 
+triggerFlags[1] = "Collision01"; 
+triggerFlags[3] = "Collision03"; 
+triggerFlags[9] = "Collision09"; 
+triggerFlags[5] = "Attack"; 
+triggerFlags[8] = "MultiTrigger"; 
+triggerFlags[10] = "Door";

@@ -31,7 +31,6 @@ var layoutRenderer = {
 			if(file) {
 				var fr = new FileReader();
 				fr.onload = function(e) {
-					console.log('WTF');
 					var text = e.target.result;
 					this.processJSON(text);
 				}.bind(this);
@@ -80,7 +79,7 @@ var layoutRenderer = {
 				yRotation = Math.ceil(records[i].YRotation / this.rotationDivider);
 
 				div.id = 'exterior-' + id;
-				div.title = modelId;
+				div.title = 'Index: ' + i + ' - modelID: ' + modelId;
 				//div.style.top = (this.height - z).toString() + 'px';
 				div.style.top = z.toString() + 'px';
 				div.style.left = x.toString() + 'px';

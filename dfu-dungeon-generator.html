@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity Automap Painter</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/dungeon-generator.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/seedrandom.js"></script>
+    <script type="text/javascript">
+
+        let dfuDungeonGenerator = {
+        	seed: 0,
+        	gridEl: null,
+            cellSize: 48,
+            button: null,
+            gridSize: {
+        		x: 0,
+                y: 0
+            },
+            init: function() {
+
+        		this.gridEl = document.getElementById('grid');
+        		this.button = document.getElementById('dungeonGenerateButton');
+
+        		this.button.addEventListener('click', function() {
+        			this.generate();
+                }.bind(this));
+
+        		this.setSeed();
+            },
+            setSeed: function() {
+	            this.seed = document.getElementById('dungeonSeed').value;
+	            Math.seedrandom(this.seed);
+            },
+            generate: function() {
+	            this.setGridSize();
+	            this.updateGrid();
+            },
+            setGridSize: function() {
+        		this.gridSize.x = parseInt(document.getElementById('gridSizeX').value, 10) + 2;
+        		this.gridSize.y = parseInt(document.getElementById('gridSizeY').value, 10) + 2;
+            },
+            updateGrid: function() {
+        		//Get a grid with all border blocks
+        		let grid = this.buildGrid();
+        		this.injectGrid(grid);
+            },
+            injectGrid: function(grid) {
+        		let y, x, cells, el;
+        		cells = document.createDocumentFragment();
+        		for(y = 0; y < grid.length; y++) {
+        			for(x = 0; x < grid[y].length; x++) {
+        				el = document.createElement('div');
+        				el.className = 'cell';
+        				el.innerHTML = grid[y][x];
+        				cells.appendChild(el);
+                    }
+                }
+        		this.gridEl.style.width = (this.cellSize * grid[0].length) + 'px';
+	            this.gridEl.style.height = (this.cellSize * grid.length) + 'px';
+        		this.gridEl.replaceChildren(cells);
+            },
+            buildGrid: function() {
+        		let y, x;
+        		let grid = [];
+        		for(y = 0; y < this.gridSize.y; y++) {
+        			grid[y] = [];
+        			for(x = 0; x < this.gridSize.x; x++) {
+        				grid[y][x] = "B";
+                    }
+                }
+        		grid = this.chiselGrid(grid);
+        		return grid;
+            },
+            chiselGrid: function(grid) {
+        		let yLength, x, y, rand;
+                for(x = 1; x < this.gridSize.x - 1; x++) {
+                    for(y = 1; y < this.gridSize.y - 1; y++) {
+	                    rand = Math.random();
+	                    if(rand > 0.35) {
+                            grid[y][x] = 'N';
+                        }
+                    }
+                }
+                return grid;
+            }
+        };
+        window.addEventListener('DOMContentLoaded', function() {
+	        dfuDungeonGenerator.init();
+        });
+
+    </script>
+    <style type="text/css">
+
+        #dungeonGrid {
+            width: 40em;
+            margin: auto;
+        }
+        .controls {
+            padding: 0.25em;
+        }
+        .control {
+            padding: 0.25em;
+        }
+        label {
+            margin-right: 1em;
+        }
+        .grid {
+            background-color: #000;
+        }
+
+        .cell {
+            color: #FFF;
+            outline: 1px #FFF solid;
+            float: left;
+            width: 3em;
+            height: 3em;
+            text-align: center;
+            text-anchor: middle;
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity Dungeon Generator</span></h1>
+    <div id="dungeonGrid">
+        <div class="controls">
+            <div class="control"><label for="dungeonSeed">Seed</label> <input id="dungeonSeed" name="dungeonSeed" type="number" /></div>
+            <div class="control"><label for="gridSizeX">Dungeon width</label> <input id="gridSizeX" name="gridSizeX" type="number" min="1" max="8" value="1" /></div>
+            <div class="control"><label for="gridSizeY">Dungeon height</label> <input id="gridSizeY" name="gridSizeY" type="number" min="1" max="8" value="1" /></div>
+            <div class="control"><button id="dungeonGenerateButton">Generate</button></div>
+        </div>
+        <div id="grid" class="grid"></div>
+    </div>
+</div>
+</body>
+</html>

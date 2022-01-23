@@ -23,3 +23,45 @@
     font-weight: bold;
     padding: 0.5em 0;
 }
+
+.block-action {
+   margin-bottom: 1em;
+}
+
+.action {
+    border: 1px #EEE solid;
+    padding: 0.125em;
+    margin-bottom: 0.5em;
+    background-color: #444;
+}
+
+.action-resource,
+.action-property {
+    width: 50%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.action-property:nth-child(even) {
+    background-color: #666;
+}
+
+.action label {
+    width: 15em;
+}
+
+.action-resource:nth-child(even) {
+    background-color: #8B8B8B;
+}
+
+.linked-action {
+    width: 50%;
+    margin: 0.5em 0 0.5em 4em;
+}
+.linked-action .linked-action {
+    width: 100%;
+}
+.linked-action .action-resource,
+.linked-action .action-property {
+    width: 100%;
+}

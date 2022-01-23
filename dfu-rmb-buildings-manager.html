@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity World Data Merger</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/rmb-buildings-manager.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/model-names.js"></script>
+    <script type="text/javascript" src="js/building-types.js"></script>
+    <script type="text/javascript" src="js/dfu-rmb-buildings-manager.js"></script>
+    <script type="text/javascript">
+
+        let dfuRMBBuildingsManager = {
+        	buildingTypes: buildingTypes,
+            fileInput: null,
+            loadButton: null,
+        	rmbJSON: null,
+            buildings: [],
+        	init: function() {
+		        this.fileInput = document.getElementById('json-upload-file');
+
+		        this.loadButton = document.getElementById('json-upload-button');
+		        this.loadButton.addEventListener('click', function() {
+			        this.loadJSON();
+		        }.bind(this));
+            },
+	        loadJSON: function() {
+		        event.preventDefault();
+		        event.stopPropagation();
+		        //No file selected
+		        if(this.fileInput.files.length == 0) {
+			        alert('Please select a location JSON file to load');
+			        return false;
+		        }
+		        // Check for the various File API support.
+		        if (window.File && window.FileReader && window.FileList && window.Blob) {
+			        let file = this.fileInput.files[0];
+			        if(file) {
+				        let fr = new FileReader();
+				        fr.onload = function(e) {
+					        let text = e.target.result;
+					        this.processJSON(text);
+				        }.bind(this);
+				        fr.readAsText(file);
+			        }
+		        } else {
+			        alert('FileReader is not supported by your browser.');
+		        }
+	        },
+	        processJSON: function(rmb) {
+		        this.rmbJSON = JSON.parse(rmb);
+		        let buildingData = this.rmbJSON.RmbBlock.FldHeader.BuildingDataList;
+		        let subRecords = this.rmbJSON.RmbBlock.SubRecords;
+		        for(let i = 0; i < subRecords.length; i++) {
+			        this.buildings[i] = {
+				        SubRecord: subRecords[i],
+				        BuildingData: buildingData[i]
+			        }
+		        }
+		        this.generateOverview();
+	        },
+            generateOverview: function() {
+        		let buildingDataProperties = [
+			        "BuildingType",
+		            "Quality"
+                ];
+        		let rows = document.createDocumentFragment();
+	            let row, subRecord, subRecordValue, label, value, buildingData;
+        		for(let i = 0; i < this.buildings.length; i++) {
+        			row = this.createEl('row');
+
+        			subRecord = this.createEl('sub-record');
+        			subRecordValue = this.createEl('sub-record-value');
+        			label = this.createLabel();
+        			value = this.createEl('value');
+
+        			label.innerHTML = 'Model ID';
+        			value.innerHTML = this.buildings[i].SubRecord.Exterior.Block3dObjectRecords[0].ModelId;
+        			subRecordValue.appendChild(label);
+        			subRecordValue.appendChild(value);
+        			subRecord.appendChild(subRecordValue);
+
+			        subRecordValue = this.createEl('sub-record-value');
+			        label = this.createLabel();
+			        value = this.createEl('value');
+
+			        label.innerHTML = 'Model description';
+			        value.innerHTML = modelNames[this.buildings[i].SubRecord.Exterior.Block3dObjectRecords[0].ModelId];
+			        subRecordValue.appendChild(label);
+			        subRecordValue.appendChild(value);
+			        subRecord.appendChild(subRecordValue);
+
+        			row.appendChild(subRecord);
+
+        			buildingData = this.createEl('building-data');
+
+        			subRecordValue = this.createEl('sub-record-value');
+        			label = this.createLabel();
+        			value = this.createEl('value');
+                    label.innerHTML = buildingDataProperties[0];
+                    value.innerHTML = this.buildings[i].BuildingData[buildingDataProperties[0]];
+
+                    subRecordValue.appendChild(label);
+                    subRecordValue.appendChild(value);
+                    buildingData.appendChild(subRecordValue);
+
+			        subRecordValue = this.createEl('sub-record-value');
+			        label = this.createLabel();
+			        value = this.createEl('value');
+			        label.innerHTML = buildingDataProperties[1];
+			        value.innerHTML = this.buildings[i].BuildingData[buildingDataProperties[1]];
+			        subRecordValue.appendChild(label);
+			        subRecordValue.appendChild(value);
+			        buildingData.appendChild(subRecordValue);
+
+			        subRecordValue = this.createEl('sub-record-value');
+			        label = this.createLabel();
+			        value = this.createEl('value');
+			        label.innerHTML = "Hint";
+			        value.innerHTML = this.getBuildingType(this.buildings[i].BuildingData[buildingDataProperties[0]]);
+			        subRecordValue.appendChild(label);
+			        subRecordValue.appendChild(value);
+			        buildingData.appendChild(subRecordValue);
+
+			        row.appendChild(subRecord);
+			        row.appendChild(buildingData);
+
+        			rows.appendChild(row);
+                }
+        		document.getElementById('dfu-rmb-overview').replaceChildren(rows);
+            },
+            getBuildingType: function(buildingType) {
+            	for(let i = 0; i < this.buildingTypes.length; i++) {
+            		if(this.buildingTypes[i].type == buildingType) {
+            			return this.buildingTypes[i].hint;
+                    }
+                }
+            	return "No hint found";
+            },
+            createLabel: function() {
+        		return document.createElement('label');
+            },
+            createEl: function(className) {
+        		let el = document.createElement('div');
+        		el.className = className;
+        		return el;
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', function() {
+	        dfuRMBBuildingsManager.init();
+        });
+
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity RMB Buildings Manager</span></h1>
+    <div class="json-upload">
+        <h2>Load RMB JSON</h2>
+        <p>Please select the RMB JSON file you exported from Daggerfall Unity and click the Load JSON button</p>
+        <form id="json-upload-form" method="post" action="">
+            <div>
+                <input type="file" name="json-upload-file" id="json-upload-file" />
+                <button type="submit" id="json-upload-button" name="json-upload-button">Load JSON</button>
+            </div>
+        </form>
+    </div>
+    <div class="dfu-explanation">
+        <h2>Explanation</h2>
+        <p>I have no idea</p>
+    </div>
+    <div id="dfu-rmb-overview" class="dfu-rmb-overview">
+
+    </div>
+    <div class="dfu-buttons">
+        <button type="button" id="export-rmb-data">Export</button>
+    </div>
+    <h2>Result</h2>
+    <div class="dfu-result">
+        <textarea id="dfu-rmb-buildings-manager-result" name="dfu-rmb-buildings-manager-result"></textarea>
+    </div>
+</div>
+</body>
+</html>

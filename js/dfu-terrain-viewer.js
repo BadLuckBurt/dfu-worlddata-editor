@@ -90,7 +90,7 @@ var terrainViewer = {
 			}
 			this.grid.appendChild(df);
 			var template = this.getTiledTemplate();
-			console.log(template);
+
 			var text = JSON.stringify(template, null, "\t");
 			document.getElementById('dfu-terrain-viewer-result').innerHTML = text;
 		}
@@ -149,7 +149,7 @@ var terrainViewer = {
 			data[i] = parseInt(id,10);
 		}
 		template.layers[0].data = data;
-		template.tilesets[0].source = '..\/' + this.textureSelect.value + '.tsx';
+		template.tilesets[0].source = '..\/blb-dfu-tiled\/' + this.textureSelect.value + '.tsx';
 		return template;
 	}
 };
