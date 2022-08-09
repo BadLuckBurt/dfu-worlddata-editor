@@ -75,11 +75,15 @@ var layoutRenderer = {
 				id = records[i].XPos + '-' + records[i].ZPos;
 				modelId = exterior.Block3dObjectRecords[0].ModelId;
 				x = Math.floor((records[i].XPos - modelSizes[modelId].center.X) / this.scale);
-				z = Math.floor((records[i].ZPos + modelSizes[modelId].center.Z) / this.scale);
+				z = Math.floor((records[i].ZPos - modelSizes[modelId].center.Z) / this.scale);
 				yRotation = Math.ceil(records[i].YRotation / this.rotationDivider);
 
 				div.id = 'exterior-' + id;
 				div.title = 'Index: ' + i + ' - modelID: ' + modelId;
+				let descriptionIndex = modelIds.indexOf('' + modelId);
+				if(descriptionIndex > -1) {
+					div.title += ' | ' + modelNames[descriptionIndex];
+				}
 				//div.style.top = (this.height - z).toString() + 'px';
 				div.style.top = z.toString() + 'px';
 				div.style.left = x.toString() + 'px';
@@ -229,6 +233,10 @@ var layoutRenderer = {
 
 				div = document.createElement('div');
 				div.title = modelId;
+				let descriptionIndex = modelIds.indexOf('' + modelId);
+				if(descriptionIndex > -1) {
+					div.title += ' | ' + modelNames[descriptionIndex];
+				}
 				div.setAttribute('data-y',interior.Block3dObjectRecords[i].YPos);
 
 				var top, left;

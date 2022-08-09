@@ -3,5 +3,8 @@
 /js/RDB
 /js/RMB-layout
 /js/locations
-/images/terrain/*/
-/images/flats/*
+/images/terrain
+/images/flats
+/images/paperdoll
+/nameGen
+/js/test

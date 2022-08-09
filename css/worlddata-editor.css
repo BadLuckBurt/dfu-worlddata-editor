@@ -42,14 +42,14 @@ input, select {
     height: 30rem;
 }
 
-#dfu-worlddata-exteriorblock-grid,
-#dfu-worlddata-dungeonblock-grid {
+.dfu-worlddata-exteriorblock-grid,
+.dfu-worlddata-dungeonblock-grid {
     display: grid;
     overflow-x: auto;
     overflow-y: auto;
     padding: 0.5rem;
 }
-#dfu-worlddata-dungeonblock-grid {
+.dfu-worlddata-dungeonblock-grid {
     margin: auto;
     max-width: 75%;
     min-width: 50%;
@@ -160,7 +160,7 @@ input, select {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
-#dfu-worlddata-exteriorblock-grid {
+.dfu-worlddata-exteriorblock-grid {
     width: 100%;
     align-self: flex-start;
     justify-content: start;
@@ -176,13 +176,13 @@ input, select {
     overflow: hidden;
     background-color: #000;
 }
-#dfu-worlddata-exteriorblock-grid .cell {
+.dfu-worlddata-exteriorblock-grid .cell {
     padding: 0;
     min-height: auto;
     border: none;
     align-self: start;
 }
-#dfu-worlddata-exteriorblock-grid .cell span {
+.dfu-worlddata-exteriorblock-grid .cell span {
     display: block;
 }
 .cell img {
@@ -214,7 +214,7 @@ input, select {
 .cell:hover select {
     opacity: 1;
 }
-#dfu-worlddata-exteriorblock-grid .cell:hover select {
+.dfu-worlddata-exteriorblock-grid .cell:hover select {
     display: none;
 }
 .cell select, .cell label {
@@ -233,8 +233,8 @@ input, select {
     outline: 0.125rem #AC5 solid;
     z-index: 64;
 }
-#dfu-worlddata-dungeonblock-grid .cell:hover select,
-#dfu-worlddata-dungeonblock-grid .cell:hover label {
+.dfu-worlddata-dungeonblock-grid .cell:hover select,
+.dfu-worlddata-dungeonblock-grid .cell:hover label {
     display: block;
     margin: 0;
 }
@@ -264,17 +264,17 @@ input#dfu-worlddata-mapY {
     min-width: auto;
 }
 
-#dfu-worlddata-exteriorblock-grid-controls {
+.dfu-worlddata-exteriorblock-grid-controls {
     padding-right: 0.25rem;
     display: block;
 }
 
-#dfu-worlddata-exteriorblock-grid-controls button {
+.dfu-worlddata-exteriorblock-grid-controls button {
     padding: 0.25rem;
     width: 14.5rem;
 }
 
-#dfu-exteriorblock-tiles {
+.dfu-exteriorblock-tiles {
     padding-left: 0.5rem;
     width: 224px;
     height:512px;

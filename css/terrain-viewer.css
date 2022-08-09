@@ -1,13 +1,60 @@
-#grid {
+.scenery-items {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.scenery-items img {
+    width: 32px;
+    height: 32px;
+}
+
+.scenery-items img:hover {
+    outline: 2px #EEE solid;
+}
+.scenery-items img.selected {
+    outline: 2px #5E5 solid;
+}
+
+.grid {
     position: relative;
     width: 1024px;
     height: 1024px;
     margin: auto;
 }
 
-#grid.half {
+.grid.half {
     width: 512px;
     height: 512px;
+}
+
+.scenery-overlay {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 1024px;
+    height: 1024px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.half .scenery-overlay {
+    top: 8px;
+    left: 0;
+    width: 512px;
+    height: 512px;
+}
+.scenery-overlay img{
+    width: 64px;
+    height: 64px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-pixelated;
+    image-rendering: pixelated;
+}
+
+.scenery-overlay img:hover {
+    outline: 2px #EEE solid;
 }
 
 .grid-wrapper {
@@ -25,8 +72,11 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: -o-pixelated;
     image-rendering: pixelated;
+    position: relative;
 }
-#grid.half .grid-wrapper img {
+
+.grid.half .grid-wrapper img,
+.grid.half .scenery-overlay img {
     width: 32px;
     height: 32px;
 }
@@ -35,7 +85,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
+    top: 0.5rem;
     left: 0;
     -ms-interpolation-mode: nearest-neighbor;
     image-rendering: -webkit-optimize-contrast;

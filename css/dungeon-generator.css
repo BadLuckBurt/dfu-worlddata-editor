@@ -1,0 +1,33 @@
+.dungeon-grid {
+    width: 32em;
+    height: 32em;
+    margin: auto;
+}
+
+.grid-controls {
+    clear: both;
+    padding: 1em 0;
+}
+
+.control {
+    padding: 0.25em;
+}
+label {
+    margin-right: 1em;
+}
+.grid {
+    background-color: #000;
+}
+
+.cell {
+    color: #FFF;
+    outline: 1px #FFF solid;
+    float: left;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    text-anchor: middle;
+}
+.cell.filled {
+    background-color: #CCC;
+}

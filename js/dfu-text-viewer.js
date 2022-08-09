@@ -1,8 +1,4 @@
-var terminators = {
-
-};
-
-var textRSC = [
+let textRSC = [
 	{
 		id: 0,
 		lines: [
@@ -8070,3 +8066,76 @@ var textRSC = [
 	{id: 9999, lines: [
 			"Dummy entry. Must always "]},
 ];
+
+let textViewer = {
+	init: function() {
+		let i, j, text, df, textDiv, linesDiv, lineDiv, line;
+		df = document.createDocumentFragment();
+
+		for(i = 0; i < textRSC.length; i++) {
+			text = textRSC[i];
+
+			textDiv = document.createElement('div');
+			textDiv.id = 'text_' + text.id;
+			textDiv.title = textDiv.id;
+			textDiv.className = 'text';
+
+			linesDiv = document.createElement('div');
+			linesDiv.className = 'lines';
+
+			for(j = 0; j < text.lines.length; j++) {
+				line = this.parseLine(text.lines[j]);
+
+				lineDiv = document.createElement('div');
+				lineDiv.className = 'line';
+
+				lineDiv.innerHTML = line;
+
+				linesDiv.appendChild(lineDiv);
+			}
+
+			textDiv.appendChild(linesDiv);
+			df.appendChild(textDiv);
+		}
+		document.getElementById('dfu-text-container').appendChild(df);
+	},
+	terminators: {
+		FB: "margin-left: ",
+		FC: "text-align: left;",
+		FD: "text-align: center;"
+	},
+	terminatorsRegEx: [
+//		        /([^\]>]+)(\[0xFB])/,
+		/([^\]>]+)(\[0xFC])/,
+		/([^\]>]+)(\[0xFD])/
+	],
+	parseLine: function(line) {
+		let result, i, match;
+		for(i = 0; i < this.terminatorsRegEx.length; i++) {
+			match = line.match(this.terminatorsRegEx[i]);
+			if(match !== null) {
+				break;
+			}
+		}
+		if(match !== null) {
+			switch(match[2]) {
+				case "[0xFB]":
+					result = line.replace(match[1] + match[2], '<span style="' + this.terminators.FB + '0px;">' + match[1] + '</span>');
+					break;
+				case "[0xFC]":
+					result = line.replace(match[1] + match[2], '<span style="' + this.terminators.FC + '">' + match[1] + '</span>');
+					break;
+				case "[0xFD]":
+					result = line.replace(match[1] + match[2], '<span style="' + this.terminators.FD + '">' + match[1] + '</span>');
+					break;
+			}
+			return this.parseLine(result);
+		} else {
+			return line;
+		}
+	}
+};
+
+window.addEventListener('DOMContentLoaded', function() {
+	textViewer.init();
+});

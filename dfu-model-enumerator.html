@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity World Data Merger</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/model-enumerator.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/dfu-model-enumerator.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity RMB Data Merger</span></h1>
+    <div class="dfu-explanation">
+        <h2>Explanation</h2>
+        <p>Paste the list of model names you want to enumerate in the textarea below and enter the starting ID in the textbox then click Enumerate.</p>
+    </div>
+    <div id="dfu-model-enumerator" class="dfu-form">
+        <div class="form-row">
+            <label for="dfu-model-starting-id">Model start ID:</label>
+            <input type="number" value="0" id="dfu-model-starting-id" name="dfu-model-starting-id" />
+        </div>
+        <div class="form-row">
+            <div class="form-cell">
+                <label for="dfu-model-names">Model names:</label>
+                <textarea id="dfu-model-names" name="dfu-model-names"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="dfu-buttons">
+        <button type="button" id="dfu-enumerate-button">Enumerate</button>
+    </div>
+    <h2>Result</h2>
+    <div class="dfu-result multiple">
+        <div class="result-wrapper">
+            <div class="result-description">Define arrays in scripts with this result</div>
+            <textarea id="dfu-models-quotes" name="dfu-models-quotes"></textarea>
+        </div>
+        <div class="result-wrapper">
+            <div class="result-description">Paste into CMD script to rename prefab files</div>
+            <textarea id="dfu-rename-models-result" name="dfu-rename-models-result"></textarea>
+        </div>
+        <div class="result-wrapper">
+            <div class="result-description">Plain list of enumerated model IDs</div>
+            <textarea id="dfu-model-ids" name="dfu-model-ids"></textarea>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,10 +1,10 @@
-#grid {
+.grid {
     position: relative;
     width: 1024px;
     margin: auto;
 }
 
-#grid.half .grid-wrapper {
+.grid.half .grid-wrapper {
     width: 512px;
     height: 512px;
 }
@@ -28,12 +28,30 @@
     image-rendering: -o-pixelated;
     image-rendering: pixelated;
 }
-#grid.half .grid-wrapper .cell {
+.grid.half .grid-wrapper .cell {
     width: 8px;
     height: 8px;
 }
 .cell:hover {
     outline: 1px #EEE solid;
+}
+
+.grid-controls {
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.paint-type {
+    flex-grow: 1;
+    height: 28px;
+    outline: 1px #EEE solid;
+    position: relative;
+}
+
+.paint-type.active {
+    outline: 4px #EEE solid;
+    z-index: 50;
 }
 
 /*
@@ -109,22 +127,4 @@ case 251: // special 4
 }
 .color-default {
     background-color: rgba(255, 0, 128, 255);
-}
-
-#grid-controls {
-    padding: 0;
-    display: flex;
-    flex-wrap: nowrap;
-}
-
-.paint-type {
-    flex-grow: 1;
-    height: 28px;
-    outline: 1px #EEE solid;
-    position: relative;
-}
-
-.paint-type.active {
-    outline: 4px #EEE solid;
-    z-index: 50;
 }

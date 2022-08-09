@@ -1,8 +1,10 @@
 let dfuLocationBuildingStripper = {
 	buildingTypes: null,
 	fileInput: null,
+	fileName: '',
 	loadButton: null,
 	stripButton: null,
+	downloadButton: null,
 	selectAllInput: null,
 	locationJSON: null,
 	init: function() {
@@ -16,7 +18,12 @@ let dfuLocationBuildingStripper = {
 
 		this.stripButton = document.getElementById('strip-buildings');
 		this.stripButton.addEventListener('click', function() {
-			this.stripBuildings();
+			this.stripBuildings(false);
+		}.bind(this));
+
+		this.downloadButton = document.getElementById('download-rmb');
+		this.downloadButton.addEventListener('click', function() {
+			this.stripBuildings(true);
 		}.bind(this));
 
 		this.selectAllInput = document.getElementById('select-all-buildings');
@@ -60,6 +67,7 @@ let dfuLocationBuildingStripper = {
 		if (window.File && window.FileReader && window.FileList && window.Blob) {
 			let file = this.fileInput.files[0];
 			if(file) {
+				this.fileName = file.name;
 				let fr = new FileReader();
 				fr.onload = function(e) {
 					let text = e.target.result;
@@ -73,9 +81,8 @@ let dfuLocationBuildingStripper = {
 	},
 	processJSON: function(location) {
 		this.locationJSON = JSON.parse(location);
-
 	},
-	stripBuildings: function() {
+	stripBuildings: function(download) {
 		let inputs = document.querySelectorAll('#dfu-building-type-selection input:checked');
 		if(inputs.length == 0) {
 			alert('No BuildingTypes selected, nothing will be removed');
@@ -96,6 +103,9 @@ let dfuLocationBuildingStripper = {
 
 		let text = JSON.stringify(this.locationJSON, null, "\t");
 		document.getElementById('dfu-location-building-stripper-result').innerHTML = text;
+		if(download) {
+			saveFile(text, this.fileName);
+		}
 	},
 	createEl: function(className) {
 		let el = document.createElement('div');

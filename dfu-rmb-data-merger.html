@@ -5,6 +5,7 @@
     <title>Daggerfall Unity World Data Merger</title>
     <link href="css/base.css" rel="stylesheet" />
     <link href="css/rmb-data-merger.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/dfu-global.js"></script>
     <script type="text/javascript" src="js/dfu-rmb-data-merger.js"></script>
 </head>
 <body>
@@ -20,12 +21,67 @@
             </div>
         </form>
     </div>
-    <div class="dfu-explanation">
+    <div>
         <h2>Explanation</h2>
-        <p>Click the label or the checkbox of the RMB properties you want merge and paste the correct data into the textarea that gets enabled.</p>
+        <p>Click the label or the checkbox of the RMB properties you want merge and choose the correct file for the upload field that gets enabled.</p>
         <p>When you are ready, click the Merge button and copy the new JSON contents from the Results textarea and paste them into your RMB.json file.</p>
     </div>
     <div id="dfu-rmb-overview" class="dfu-rmb-overview">
+        <div class="dfu-form">
+            <div class="form-row">
+                <label>Block name:</label>
+                <span id="rmb-block-name"></span>
+            </div>
+            <div class="form-row header">
+                <h3>FldHeader</h3>
+            </div>
+            <div class="form-row">
+                <div class="form-cell radio">
+                    <input id="rmb-ground-tiles" type="checkbox" name="rmb-ground-tiles" value="1" autocomplete="off" />
+                    <label for="rmb-ground-tiles" class="property-name">GroundTiles</label>
+                </div>
+                <div class="form-cell">
+                    <input type="file" id="rmb-ground-tiles-replacement" name="rmb-ground-tiles-replacement" disabled />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-cell radio">
+                    <input id="rmb-ground-scenery" type="checkbox" name="rmb-ground-scenery" value="1" autocomplete="off" />
+                    <label for="rmb-ground-scenery" class="property-name">GroundScenery</label>
+                </div>
+                <div class="form-cell">
+                    <input type="file" id="rmb-ground-scenery-replacement" name="rmb-ground-scenery-replacement" disabled />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-cell radio">
+                    <input id="rmb-automap-data" type="checkbox" name="rmb-automap-data" value="1" autocomplete="off" />
+                    <label for="rmb-automap-data" class="property-name">AutoMapData</label>
+                </div>
+                <div class="form-cell">
+                    <input type="file" id="rmb-automap-data-replacement" name="rmb-automap-data-replacement" disabled />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-cell radio">
+                    <input id="rmb-misc-3d-object-records" type="checkbox" name="rmb-misc-3d-object-records" value="1" autocomplete="off" />
+                    <label for="rmb-misc-3d-object-records" class="property-name">Misc3dObjectRecords</label>
+                </div>
+                <div class="form-cell">
+                    <input type="file" id="rmb-misc-3d-object-records-replacement" name="rmb-misc-3d-object-records-replacement" disabled />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-cell radio">
+                    <input id="rmb-misc-flat-object-records" type="checkbox" name="rmb-misc-flat-object-records" value="1" autocomplete="off" />
+                    <label for="rmb-misc-flat-object-records" class="property-name">MiscFlatObjectRecords</label>
+                </div>
+                <div class="form-cell">
+                    <input type="file" id="rmb-misc-flat-object-records-replacement" name="rmb-misc-flat-object-records-replacement" disabled />
+                </div>
+            </div>
+        </div>
+        <!--
         <div class="rmb-data">
             <div class="rmb-property">
                 <label>Block name:</label>
@@ -42,7 +98,16 @@
                     <input id="rmb-ground-tiles" type="checkbox" name="rmb-ground-tiles" value="1" autocomplete="off" />
                 </div>
                 <div class="property-value">
-                    <textarea id="rmb-ground-tiles-replacement" disabled></textarea>
+                    <input type="file" id="rmb-ground-tiles-replacement" name="rmb-ground-tiles-replacement" disabled />
+                </div>
+            </div>
+            <div class="rmb-property">
+                <label for="rmb-ground-scenery" class="property-name">GroundScenery</label>
+                <div class="property-value">
+                    <input id="rmb-ground-scenery" type="checkbox" name="rmb-ground-scenery" value="1" autocomplete="off" />
+                </div>
+                <div class="property-value">
+                    <input type="file" id="rmb-ground-scenery-replacement" name="rmb-ground-scenery-replacement" disabled />
                 </div>
             </div>
             <div class="rmb-property">
@@ -51,7 +116,7 @@
                     <input id="rmb-automap-data" type="checkbox" name="rmb-automap-data" value="1" autocomplete="off" />
                 </div>
                 <div class="property-value">
-                    <textarea id="rmb-automap-data-replacement" disabled></textarea>
+                    <input type="file" id="rmb-automap-data-replacement" name="rmb-automap-data-replacement" disabled />
                 </div>
             </div>
             <div class="rmb-property">
@@ -60,7 +125,7 @@
                     <input id="rmb-misc-3d-object-records" type="checkbox" name="rmb-misc-3d-object-records" value="1" autocomplete="off" />
                 </div>
                 <div class="property-value">
-                    <textarea id="rmb-misc-3d-object-records-replacement" disabled></textarea>
+                    <input type="file" id="rmb-misc-3d-object-records-replacement" name="rmb-misc-3d-object-records-replacement" disabled />
                 </div>
             </div>
             <div class="rmb-property">
@@ -69,13 +134,17 @@
                     <input id="rmb-misc-flat-object-records" type="checkbox" name="rmb-misc-flat-object-records" value="1" autocomplete="off" />
                 </div>
                 <div class="property-value">
-                    <textarea id="rmb-misc-flat-object-records-replacement" disabled></textarea>
+                    <input type="file" id="rmb-misc-flat-object-records-replacement" name="rmb-misc-flat-object-records-replacement" disabled />
                 </div>
             </div>
         </div>
+        -->
     </div>
-    <div class="dfu-buttons">
-        <button type="button" id="merge-rmb-data">Merge</button>
+    <div class="form">
+        <div>
+            <button type="button" id="merge-rmb-data">Merge</button>
+            <button type="button" id="download-rmb-data">Download</button>
+        </div>
     </div>
     <h2>Result</h2>
     <div class="dfu-result">

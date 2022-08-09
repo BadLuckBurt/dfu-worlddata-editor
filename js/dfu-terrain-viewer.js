@@ -2,9 +2,45 @@ const TILED_FLIPPED_HORIZONTALLY_FLAG = 0x80000000; //2147483648
 const TILED_FLIPPED_VERTICALLY_FLAG   = 0x40000000; //1073741824
 const TILED_FLIPPED_DIAGONALLY_FLAG   = 0x20000000; //536870912
 
-var terrainViewer = {
+let terrainViewer = {
+	sceneryIndex: 0,
+	sceneryTextureSet: 'temperate_flora',
+	tiledText: '',
+	sceneryText: '',
+	filename: '',
 	init: function() {
 		this.overlay = document.getElementById('automap-overlay');
+
+		this.sceneryOverlay = document.getElementById('scenery-overlay');
+		this.sceneryOverlay.addEventListener('click', function(evt) {
+			evt.stopPropagation();
+			evt.preventDefault();
+			let img = evt.target;
+			let index = parseInt(img.title,10);
+			if(this.sceneryIndex > 0) {
+				img.src = 'images/terrain/' + this.sceneryTextureSet + '/' + this.sceneryIndex + '-0.png';
+				this.scenery[index].TextureRecord = this.sceneryIndex;
+			} else {
+				img.src = 'images/terrain/none.png';
+				this.scenery[index].TextureRecord = -1;
+			}
+
+		}.bind(this));
+		this.scenery = null;
+
+		this.sceneryItemsEl = document.getElementById('scenery-items');
+		this.sceneryItemsEl.addEventListener('click', function(evt) {
+			evt.stopPropagation();
+			evt.preventDefault();
+
+			this.sceneryIndex = parseInt(evt.target.title,10);
+			let sceneryItems = this.sceneryItemsEl.querySelectorAll('img');
+			for(let i = 0; i < sceneryItems.length; i++) {
+				sceneryItems[i].classList.remove('selected');
+			}
+			evt.target.classList.add('selected');
+		}.bind(this));
+
 		this.fileInput = document.getElementById('json-upload-file');
 		this.grid = document.getElementById('grid').querySelector('.grid-wrapper');
 		this.tiles = null;
@@ -18,6 +54,16 @@ var terrainViewer = {
 		this.textureSelect.addEventListener('change', function() {
 			this.viewGroundTiles();
 		}.bind(this));
+
+		this.downloadTiledButton = document.getElementById('dfu-download-tiled-data');
+		this.downloadTiledButton.addEventListener('click', function() {
+			this.downloadTiledData();
+		}.bind(this));
+
+		this.downloadSceneryButton = document.getElementById('dfu-download-scenery-data');
+		this.downloadSceneryButton.addEventListener('click', function() {
+			this.downloadSceneryData();
+		}.bind(this));
 	},
 	loadJSON: function() {
 		event.preventDefault();
@@ -29,11 +75,12 @@ var terrainViewer = {
 		}
 		// Check for the various File API support.
 		if (window.File && window.FileReader && window.FileList && window.Blob) {
-			var file = this.fileInput.files[0];
+			let file = this.fileInput.files[0];
 			if(file) {
-				var fr = new FileReader();
+				this.filename = file.name.replace('.json','');
+				let fr = new FileReader();
 				fr.onload = function(e) {
-					var text = e.target.result;
+					let text = e.target.result;
 					this.processJSON(text);
 				}.bind(this);
 				fr.readAsText(file);
@@ -43,8 +90,9 @@ var terrainViewer = {
 		}
 	},
 	processJSON: function(rmb) {
-		var rmbJSON = JSON.parse(rmb);
-		var src = 'images/RMB/' + rmbJSON.Name + '.png';
+		let rmbJSON = JSON.parse(rmb);
+		console.log(rmbJSON);
+		let src = 'images/RMB/' + rmbJSON.Name + '.png';
 		this.overlay.addEventListener('error',function() {
 			this.style.display = 'none';
 		});
@@ -54,7 +102,9 @@ var terrainViewer = {
 		this.overlay.src = src;
 		//Store the tiles in this object for easy access
 		this.tiles = rmbJSON.RmbBlock.FldHeader.GroundData.GroundTiles;
+		this.scenery = rmbJSON.RmbBlock.FldHeader.GroundData.GroundScenery;
 		this.viewGroundTiles();
+		this.viewScenery();
 	},
 	clearGroundTiles: function() {
 		while(this.grid.firstElementChild) {
@@ -64,14 +114,15 @@ var terrainViewer = {
 	},
 	viewGroundTiles: function() {
 		if(this.clearGroundTiles()) {
-			var df = document.createDocumentFragment();
-			var img, src, transform;
-			var index;
-			var textureSet = this.textureSelect.value;
+			let df = document.createDocumentFragment();
+			let img, src, transform;
+			let index;
+			let textureSet = this.textureSelect.value;
 			if (textureSet == '') {
 				textureSet = 'temperate';
 				this.textureSelect.value = textureSet;
 			}
+			this.sceneryTextureSet = textureSet + '_flora';
 			for (index = 0; index < this.tiles.length; index++) {
 				img = document.createElement('img');
 				src = 'images/terrain/' + textureSet + '/' + this.tiles[index].TextureRecord.toString() + '-0.png';
@@ -89,15 +140,63 @@ var terrainViewer = {
 				df.appendChild(img);
 			}
 			this.grid.appendChild(df);
-			var template = this.getTiledTemplate();
+			let template = this.getTiledTemplate();
 
-			var text = JSON.stringify(template, null, "\t");
-			document.getElementById('dfu-terrain-viewer-result').innerHTML = text;
+			let text = JSON.stringify(template, null, "\t");
+			this.tiledText = text;
+			//document.getElementById('dfu-terrain-viewer-result').innerHTML = text;
 		}
+	},
+	downloadTiledData: function() {
+		saveFile(this.tiledText, this.filename + '_tiles.json');
+	},
+	downloadSceneryData: function() {
+		let data = {data: this.scenery};
+		let sceneryText = JSON.stringify(data, null, "\t");
+		saveFile(sceneryText, this.filename + '_scenery.json');
+	},
+	clearScenery: function() {
+		while(this.sceneryOverlay.firstElementChild) {
+			this.sceneryOverlay.removeChild(this.sceneryOverlay.firstElementChild);
+		}
+		return true;
+	},
+	viewScenery: function() {
+		if(this.clearScenery()) {
+			this.generateSceneryItems();
+			let df, img;
+			df = document.createDocumentFragment();
+			let index = 0;
+			for(let y = 0; y < 16; y++) {
+				for(let x = 0; x < 16; x++) {
+					index = (y * 16) + x;
+					img = document.createElement('img');
+					img.title = index.toString();
+					if(this.scenery[index].TextureRecord > 0) {
+						img.src = 'images/terrain/' + this.sceneryTextureSet + '/' + this.scenery[index].TextureRecord + '-0.png';
+					} else {
+						img.src = 'images/terrain/none.png';
+					}
+					df.appendChild(img);
+				}
+			}
+			this.sceneryOverlay.appendChild(df);
+		}
+	},
+	generateSceneryItems: function() {
+		let df, img;
+		df = document.createDocumentFragment();
+		for(let i = 0; i < 32; i++) {
+			img = document.createElement('img');
+			img.title = i.toString();
+			img.src = 'images/terrain/' + this.sceneryTextureSet + '/' + i + '-0.png';
+			df.appendChild(img);
+		}
+		this.sceneryItemsEl.replaceChildren(df);
 	},
 	//Returns a template that matches Tiled's JSON format
 	getTiledTemplate: function() {
-		var template = { "height":16,
+		let template = { "height":16,
 			"infinite":false,
 			"layers":[
 				{
@@ -128,10 +227,10 @@ var terrainViewer = {
 			"version":1.2,
 			"width":16
 		};
-		var data = [];
-		var id;
+		let data = [];
+		let id;
 		//Convert the DFU values to Tiled's values
-		for(var i = 0; i < this.tiles.length; i++) {
+		for(let i = 0; i < this.tiles.length; i++) {
 			id = this.tiles[i].TextureRecord + 1;
 			if(this.tiles[i].IsFlipped && this.tiles[i].IsRotated) {
 				//console.log('Flipped and rotated id ' + id);
@@ -155,11 +254,11 @@ var terrainViewer = {
 };
 
 function switchGridSize(size) {
-	document.getElementById('grid').className = size;
+	document.getElementById('grid').className = 'grid ' + size;
 }
 
 function toggleAutomap() {
-	var el = document.getElementById('automap-overlay');
+	let el = document.getElementById('automap-overlay');
 	if(el.style.display == 'block') {
 		el.style.display = 'none';
 	} else {

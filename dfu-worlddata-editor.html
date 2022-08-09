@@ -28,8 +28,99 @@
             </div>
         </form>
     </div>
-    <div class="dfu-worlddata">
+    <form>
         <h2>Settings</h2>
+        <form id="dfu-worlddata-form" method="post" action="" class="dfu-form">
+            <div class="form-row header">
+                <h3>New / existing location</h3>
+                <p>Please specify if you are making a new location or want to change an existing one.<br />
+                    <br />
+                    <em>If you are making a new location, don't forget to enter the new map pixel coordinates and a new Location ID.</em></p>
+            </div>
+            <div class="form-row quart">
+                <div class="form-cell flex-start">
+                    <input type="radio" id="dfu-worlddata-new" name="location" value="new" />
+                    <label for="dfu-worlddata-new">New location</label>
+                </div>
+                <div class="form-cell flex-start">
+                    <input type="radio" id="dfu-worlddata-existing" name="location" value="existing" /><label for="dfu-worlddata-existing">Existing location</label>
+                </div>
+            </div>
+
+            <div class="form-row header">
+                <h3>Map pixels</h3>
+                <p>You can find the map pixel coordinates in-game using the <code>tdbg</code> command from the console</p>
+            </div>
+            <div class="form-row quart">
+                <div class="form-cell">
+                    <label for="dfu-worlddata-mapX">X (0 to 999):</label>
+                    <input type="number" step="1" name="mapX" id="dfu-worlddata-mapX" maxlength="3" />
+                </div>
+                <div class="form-cell">
+                    <label for="dfu-worlddata-mapY">Y (0 to 499):</label>
+                    <input type="number" step="1" name="mapY" id="dfu-worlddata-mapY" maxlength="3" />
+                </div>
+            </div>
+
+            <div class="form-row header">
+                <h3>Location Name / ID</h3>
+                <p>You only need to change the location name and ID to something unique if you're making a new location.
+                    Please note that if you change the name of an existing location it will not show on the worldmap but it will be shown using the <code>tdbg</code> command in the console.</code></p>
+            </div>
+            <div class="form-row">
+                <label for="dfu-worlddata-name">Location name:</label>
+                <input type="text" name="locationName" id="dfu-worlddata-name" />
+            </div>
+            <div class="form-row">
+                <label for="dfu-worlddata-id">Location ID (<span id="dfu-worlddata-minlocationid"></span> to <span id="dfu-worlddata-maxlocationid"></span>):</label>
+                <input type="number" step="1" name="locationId" id="dfu-worlddata-id" value="" />
+            </div>
+
+            <div class="form-row header">
+                <h3>Location / dungeon types</h3>
+            </div>
+            <div class="form-row">
+                <label for="dfu-worlddata-locationtype">Location type:</label>
+                <select id="dfu-worlddata-locationtype" name="locationType"></select>
+            </div>
+            <div class="form-row">
+                <label for="dfu-worlddata-dungeontype">Dungeon type:</label>
+                <select id="dfu-worlddata-dungeontype" name="dungeonType"></select>
+            </div>
+
+            <div class="form-row header">
+                <h3>Exterior / dungeon layouts</h3>
+                <h4>Exterior block grid</h4>
+            </div>
+            <div class="form-row">
+                <div id="dfu-worlddata-exteriorblock-grid-controls" class="dfu-worlddata-exteriorblock-grid-controls">
+                    <button type="button">Add row</button>
+                    <button type="button">Add column</button>
+                    <hr />
+                    <button type="button">Delete row</button>
+                    <button type="button">Delete column</button>
+                    <hr />
+                    <div id="dfu-exteriorblock-tiles" class="dfu-exteriorblock-tiles">
+
+                    </div>
+                </div>
+                <div id="dfu-worlddata-exteriorblock-grid" class="dfu-worlddata-exteriorblock-grid"></div>
+            </div>
+            <div class="form-row header">
+                <h4>Dungeon block grid</h4>
+            </div>
+            <div class="form-row">
+                <div id="dfu-worlddata-dungeonblock-grid" class="dfu-worlddata-dungeonblock-grid"></div>
+            </div>
+            <div class="form-row header">
+                <h4>Generate JSON</h4>
+            </div>
+            <div class="form-row">
+                <button type="submit" id="dfu-worlddata-generate" class="generate-button" name="generateButton">Generate JSON</button>
+            </div>
+        </form>
+
+        <!--
         <form id="dfu-worlddata-form" method="post" action="">
             <h3>New / existing location</h3>
             <p>Please specify if you are making a new location or want to change an existing one.<br />
@@ -96,6 +187,7 @@
                 <button type="submit" id="dfu-worlddata-generate" class="generate-button" name="generateButton">Generate JSON</button>
             </div>
         </form>
+        -->
         <h2>Result</h2>
         <div class="dfu-result">
             <textarea id="dfu-worlddata-result" name="dfu-worlddata-result"></textarea>

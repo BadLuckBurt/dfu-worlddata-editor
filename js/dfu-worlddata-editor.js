@@ -972,10 +972,23 @@ var dfuWorldDataEditor = {
 		this.form = document.getElementById('dfu-worlddata-form');
 		//this.form.locationId.min = this.minLocationId;
 		//this.form.locationId.max = this.maxLocationId;
-		this.form.mapX.min = 0;
-		this.form.mapY.min = 0;
-		this.form.mapX.max = this.mapMaxX;
-		this.form.mapY.max = this.mapMaxY;
+
+		this.formLocationNew = document.getElementById('dfu-worlddata-new');
+		this.formLocationExisting = document.getElementById('dfu-worlddata-existing');
+
+		this.formMapX = document.getElementById('dfu-worlddata-mapX');
+		this.formMapX.min = 0;
+		this.formMapX.max = this.mapMaxX;
+
+		this.formMapY = document.getElementById('dfu-worlddata-mapY');
+		this.formMapY.min = 0;
+		this.formMapY.max = this.mapMaxY;
+
+		this.formLocationName = document.getElementById('dfu-worlddata-name');
+		this.formLocationId = document.getElementById('dfu-worlddata-id');
+		this.formLocationType = document.getElementById('dfu-worlddata-locationtype');
+
+		this.formDungeonType = document.getElementById('dfu-worlddata-dungeontype');
 
 		//Store reference to generate button DOM element and add event listener
 		this.generateButton = document.getElementById('dfu-worlddata-generate');
@@ -1387,7 +1400,7 @@ var dfuWorldDataEditor = {
 	updateExteriorGridRowsColumns: function(height, width) {
 		let rowsClass = 'rows-' + height.toString();
 		let columnsClass = 'columns-' + width.toString();
-		this.exteriorGrid.className = rowsClass + ' ' + columnsClass;
+		this.exteriorGrid.className = 'dfu-worlddata-exteriorblock-grid ' + rowsClass + ' ' + columnsClass;
 	},
 
 	//Generates the dungeon grid
@@ -1643,16 +1656,19 @@ var dfuWorldDataEditor = {
 		mapId[0] = parseInt(matches[1], 10);
 		mapId[1] = parseInt(matches[2], 10);
 		this.original.mapId = mapId;
-		this.form.locationName.value = this.original.Name;
-		this.form.locationId.value = this.original.Exterior.RecordElement.Header.LocationId;
-		this.form.mapY.value = this.original.mapId[0];
-		this.form.mapX.value = this.original.mapId[1];
-		this.form.locationType.value = this.original.MapTableData.LocationType;
+
+		this.formLocationName.value = this.original.Name;
+
+		this.formLocationId.value = this.original.Exterior.RecordElement.Header.LocationId;
+		this.formMapY.value = this.original.mapId[0];
+		this.formMapX.value = this.original.mapId[1];
+
+		this.formLocationType.value = this.original.MapTableData.LocationType;
 
 		if(this.handleLocationTypeChange()) {
 			//this.form.exteriorBlock.value = this.original.Exterior.ExteriorData.BlockNames[0].replace('.RMB', '');
 
-			this.form.dungeonType.value = this.original.MapTableData.DungeonType;
+			this.formDungeonType.value = this.original.MapTableData.DungeonType;
 			if(this.handleDungeonTypeChange()) {
 
 			}
@@ -1710,18 +1726,23 @@ var dfuWorldDataEditor = {
 		this.errors = [];
 
 		let mapX, mapY;
-		mapX = parseInt(this.form.mapX.value,10);
+		mapX = parseInt(this.formMapX.value,10);
 		if(mapX < 0 || mapX > this.mapMaxX) {
 			this.addError('Map coordinate X should be between 0 and ' + this.mapMaxX);
 			this.error = true;
 		}
-		mapY = parseInt(this.form.mapY.value,10);
+		mapY = parseInt(this.formMapY.value,10);
 		if(mapY < 0 || mapY > this.mapMaxY) {
 			this.addError('Map coordinate Y should be between 0 and ' + this.mapMaxY);
 			this.error = true;
 		}
 
-		let type = this.form.location.value;
+		let type = '';
+		if(this.formLocationNew.checked) {
+			type = this.formLocationNew.value;
+		} else if(this.formLocationExisting.checked) {
+			type = this.formLocationExisting.value;
+		}
 		if(type != 'new' && type != 'existing') {
 			this.addError('Please select \'New\' or \'Existing\' location.');
 			this.error = true;
@@ -1780,12 +1801,12 @@ var dfuWorldDataEditor = {
 	},
 	setLocationId: function(type) {
 		if(type === 'new') {
-			if(this.form.locationId.value === '') {
+			if(this.formLocationId.value === '') {
 				this.addError('Please enter an location id');
 				this.error = true;
 				return false;
 			}
-			let locationId = parseInt(this.form.locationId.value);
+			let locationId = parseInt(this.formLocationId.value);
 			let existingLocIndex = locationIds.indexOf(locationId);
 			//if(locationId < this.minLocationId || locationId > this.maxLocationId) {
 			if(existingLocIndex > -1) {
@@ -1811,13 +1832,13 @@ var dfuWorldDataEditor = {
 		}
 	},
 	setName: function(type) {
-		let name = this.form.locationName.value;
+		let name = this.formLocationName.value;
 		if(name === '') {
 			name = prompt('Please enter a location name or leave blank to use the original name','Missing Location name');
 			if(name === '') {
 				name = this.original.Name;
 			}
-			this.form.locationName.value = name;
+			this.formLocationName.value = name;
 		}
 		this.newJSON.Name = name;
 		this.newJSON.Exterior.RecordElement.Header.LocationName = name;
@@ -1847,20 +1868,20 @@ var dfuWorldDataEditor = {
 		}
 	},
 	setLocationType: function(type) {
-		if(this.form.locationType.value === '') {
+		if(this.formLocationType.value === '') {
 			this.addError('Please choose a location type');
 			this.error = true;
 			return false;
 		}
-		this.newJSON.MapTableData.LocationType = this.form.locationType.value;
+		this.newJSON.MapTableData.LocationType = this.formLocationType.value;
 	},
 	setDungeonType: function(type) {
-		if(this.form.dungeonType.value === '') {
+		if(this.formDungeonType.value === '') {
 			this.addError('Please choose a dungeon type');
 			this.error = true;
 			return false;
 		}
-		this.newJSON.MapTableData.DungeonType = this.form.dungeonType.value;
+		this.newJSON.MapTableData.DungeonType = this.formDungeonType.value;
 	},
 	setWorldCoordinates: function(type, mapX, mapY) {
 		if(type === 'new') {

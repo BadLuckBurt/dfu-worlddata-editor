@@ -333,8 +333,10 @@ var rdbActionViewer = {
 						} else {
 							actionObject.ActionResource.AxisDescription = "No valid axis.";
 						}
-						if(modelNames[actionObject.ModelId.ModelIdNum] != null) {
-							actionObject.ModelDescription = modelNames[actionObject.ModelId.ModelIdNum];
+						let descriptionIndex = modelIds.indexOf('' + actionObject.ModelId.ModelIdNum);
+						if(descriptionIndex > -1) {
+							let description = modelNames[descriptionIndex];
+							actionObject.ModelDescription = description;
 						} else {
 							this.unknownModels[this.unknownModels.length] = actionObject.ModelId.ModelIdNum;
 							actionObject.ModelDescription = "No description";

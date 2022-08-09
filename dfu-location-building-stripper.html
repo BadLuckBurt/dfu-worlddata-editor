@@ -7,22 +7,13 @@
     <link href="css/location-house-stripper.css" rel="stylesheet" />
     <style type="text/css">
 
-        .dfu-building-type-selection {
-            flex-wrap: wrap;
-        }
-
-        .dfu-building-type-selection,
-        .row {
-            display: flex;
-        }
-
         .row {
             min-width: 10em;
-
         }
 
     </style>
     <script type="text/javascript" src="js/building-types.js"></script>
+    <script type="text/javascript" src="js/dfu-global.js"></script>
     <script type="text/javascript" src="js/dfu-location-building-stripper.js"></script>
 </head>
 <body>
@@ -38,21 +29,22 @@
             </div>
         </form>
     </div>
-    <div class="dfu-explanation">
+    <div>
         <h2>Explanation</h2>
         <p>After uploading the location file, check the BuildingTypes below that you want to remove from BuildingData and click 'Strip buildings'. You can leave your hat on.</p>
     </div>
-    <div clas="dfu-building-type-selection">
+    <div class="dfu-flex flex-wrap">
         <div class="row">
             <input type="checkbox" id="select-all-buildings" name="select-all-buildings" value="1" />
             <label for="select-all-buildings">All buildings</label>
         </div>
     </div>
-    <div id="dfu-building-type-selection" class="dfu-building-type-selection">
-
-    </div>
-    <div class="dfu-buttons">
-        <button type="button" id="strip-buildings">Strip buildings</button>
+    <div id="dfu-building-type-selection" class="dfu-flex flex-wrap"></div>
+    <div class="dfu-form">
+        <div>
+            <button type="button" id="strip-buildings">Strip buildings</button>
+            <button type="button" id="download-rmb">Download RMB.json</button>
+        </div>
     </div>
     <h2>Result</h2>
     <div class="dfu-result">

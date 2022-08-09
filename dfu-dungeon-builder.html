@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity Dungeon Block Builder</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/dungeon-generator.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/seedrandom.js"></script>
+    <script type="text/javascript">
+
+		let dfuDungeonBlockBuilder = {
+			gridEl: null,
+			cellSize: 48,
+			button: null,
+			gridSize: {
+				x: 16,
+				y: 16
+			},
+            cells: [],
+			init: function() {
+				this.gridEl = document.getElementById('grid');
+				this.gridEl.addEventListener('click', function(event) {
+                    this.toggleCell(event);
+                }.bind(this));
+				this.button = document.getElementById('dungeonBlockExportButton');
+
+				this.button.addEventListener('click', function() {
+					this.exportCells();
+				}.bind(this));
+
+				if(this.generateCells()) {
+                    this.generateRooms();
+                }
+			},
+            generateCells: function() {
+				let cell;
+				let df = document.createDocumentFragment();
+				this.cells = [];
+				for(let y = 0; y < this.gridSize.y; y++) {
+					this.cells[this.cells.length] = [];
+					for(let x = 0; x < this.gridSize.x; x++) {
+						cell = document.createElement('div');
+						cell.className = 'cell';
+						this.cells[y][x] = df.appendChild(cell);
+                    }
+                }
+				this.gridEl.replaceChildren(df);
+	            Math.seedrandom(Math.ceil(64 * Math.random()));
+	            return true;
+            },
+            roomSettings: {
+				types: ['large','medium','small'],
+                roomTypes: {
+					large: {
+						minY: 3,
+						maxY: 7,
+						minX: 3,
+                        maxX: 7
+                    },
+	                medium: {
+		                minY: 3,
+		                maxY: 5,
+		                minX: 3,
+		                maxX: 5
+	                },
+                    small: {
+						minY: 3,
+                        maxY: 3,
+                        minX: 3,
+                        maxX: 3
+                    }
+                }
+            },
+            generateRooms: function() {
+				let startX = 1;
+				let startY = 1;
+				let roomSizeX, roomSizeY;
+				let newX, newY, roomType;
+				for(let y = 0; y < 16; y = y + 2) {
+					newY = startY + y;
+					for(let x = 0; x < 16; x = x + 2) {
+						newX = startX + x;
+						if(Math.random() > 0.75 && Math.random() > 0.5) {
+							if(Math.random() > 0.66) {
+								roomType = this.roomSettings.roomTypes.small;
+							} else if(Math.random() > 0.33) {
+								roomType = this.roomSettings.roomTypes.medium;
+                            } else {
+								roomType = this.roomSettings.roomTypes.large;
+                            }
+						} else {
+							roomType = null;
+                        }
+						if(roomType) {
+							roomSizeX = Math.max(roomType.minX, Math.ceil(roomType.maxX * Math.random()));
+							roomSizeY = Math.max(roomType.minY, Math.ceil(roomType.maxY * Math.random()));
+						} else {
+							roomSizeX = 0;
+							roomSizeY = 0;
+                        }
+
+						if(roomSizeX > 0 && roomSizeY > 0) {
+							for(let row = 0; row < roomSizeY; row++) {
+								if(newY + row >= 15) {
+									continue;
+                                }
+								for(let column = 0; column < roomSizeX; column++) {
+									if(newX + column >= 15) {
+										continue;
+                                    }
+									if(!this.cells[newY + row][newX + column].classList.contains('filled')) {
+										this.cells[newY + row][newX + column].classList.add('filled');
+									}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            pickDirection: function(startY, startX) {
+				let rand = Math.random();
+				let direction = "";
+				if(rand < 0.25) {
+					direction = "north";
+                } else if(rand < 0.5) {
+					direction = "east";
+                } else if(rand < 0.75) {
+					direction = "south";
+                } else { //if(rand < 1.0) {
+					direction = "west";
+                }
+				return this.flipDirection(startY, startX, direction);
+            },
+            settings: {
+				maxSteps: 8,
+                directions: {
+					north: -1,
+                    east: 1,
+                    south: 1,
+	                west: -1
+                },
+                opposite: {
+					north: "south",
+                    east: "west",
+                    south: "north",
+                    west: "east"
+                }
+            },
+            toggleCell: function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				if(event.target.classList.contains('cell')) {
+					event.target.classList.toggle('filled');
+				}
+				return false;
+            },
+            flipDirection: function(startY, startX, direction) {
+	            if(startY <= 1 && direction == 'north') {
+		            return this.settings.opposite[direction];
+	            }
+	            if(startX >= 15 && direction == 'east') {
+		            return this.settings.opposite[direction];
+	            }
+	            if(startY >= 15 && direction == 'south') {
+	            	return this.settings.opposite[direction];
+                }
+	            if(startX <= 1 && direction == 'west') {
+		            return this.settings.opposite[direction];
+                }
+	            return direction;
+            },
+            populateCells: function() {
+				let startY = Math.floor(14 * Math.random()) + 1;
+				let startX = Math.floor(14 * Math.random()) + 1;
+				let coordinate = {
+					y: startY,
+					x: startX
+                };
+				let direction = this.pickDirection(startY, startX);
+				let maxLength = this.settings.maxSteps; //Math.ceil(this.settings.maxSteps * Math.random() + 1);
+				let rand;
+				for(let i = 0; i < maxLength; i++) {
+					if(!this.cells[coordinate.y][coordinate.x].classList.contains('filled')) {
+						this.cells[coordinate.y][coordinate.x].classList.add('filled');
+					}
+					if(direction == 'north' || direction == 'south') {
+						direction = this.flipDirection(coordinate.y + this.settings.directions[direction], coordinate.x, direction);
+						coordinate.y += this.settings.directions[direction];
+                    } else if(direction == 'east' || direction == 'west') {
+						direction = this.flipDirection(coordinate.y, coordinate.x + this.settings.directions[direction], direction);
+						coordinate.x += this.settings.directions[direction];
+                    }
+					console.log('Direction: ' + direction);
+					console.log('Coordinate: y = ' + coordinate.y + ' - x = ' + coordinate.x);
+					rand = Math.random();
+					if(rand < 0.25) {
+						direction = this.pickDirection(coordinate.y, coordinate.x);
+                    }
+                }
+
+				/*
+				for(let y = 1; y < this.cells.length - 1; y++) {
+					for(let x = 1; x < this.cells[y].length - 1; x++) {
+						if(Math.random() > 0.5) {
+							this.cells[y][x].classList.add('filled');
+                        }
+                    }
+                }*/
+            },
+            exportCells: function() {
+
+            }
+		};
+		window.addEventListener('DOMContentLoaded', function() {
+			dfuDungeonBlockBuilder.init();
+		});
+
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity Dungeon Builder</span></h1>
+    <div id="dungeon-grid" class="dungeon-grid">
+        <div id="grid" class="grid">
+
+        </div>
+        <div class="grid-controls">
+            <div class="control"><button id="dungeonBlockExportButton">Export</button></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

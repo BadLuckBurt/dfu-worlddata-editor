@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity Showcase Block Generator</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/model-flats-showcase.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/dfu-global.js"></script>
+    <script type="text/javascript" src="js/dfu-showcase-generator.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Showcase Block Generator</span></h1>
+    <div>
+        <p>Add the model ranges / texture archives below and hit Generate.</p>
+    </div>
+    <div class="dfu-form">
+        <div class="form-row header">
+            <h3>Model ranges</h3>
+        </div>
+        <div id="model-ranges-wrapper" class="dfu-form">
+            <!--
+            <div class="model-range">
+                <div class="form-row quart">
+                    <div class="form-cell"><label>Start:</label></div>
+                    <div class="form-cell"><label>End:</label></div>
+                    <div class="form-cell"></div>
+                    <div class="form-cell"><label>Filename:</label></div>
+                </div>
+                <div class="form-row quart">
+                    <div class="form-cell"><input type="number" pattern="\d+" /></div>
+                    <div class="form-cell"><input type="number" pattern="\d+" /></div>
+                    <div class="form-cell"></div>
+                    <div class="form-cell"><input type="text" /></div>
+                    <div class="form-cell form-row-end">
+                        <button type="button">Remove</button>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+        <div class="form-row header">
+            <h3>Texture archives</h3>
+        </div>
+        <div id="texture-archives-wrapper" class="dfu-form">
+            <!--
+            <div class="texture-archive">
+                <div class="form-row fifth">
+                    <div class="form-cell"><label>Archive</label></div>
+                    <div class="form-cell"><label>Record count</label></div>
+                    <div class="form-cell"><label>Nature</label></div>
+                    <div class="form-cell"><label>Filename</label></div>
+                </div>
+                <div class="form-row fifth">
+                    <div class="form-cell"><input type="number" pattern="\d+" /></div>
+                    <div class="form-cell"><input type="number" pattern="\d+" /></div>
+                    <div class="form-cell radio"><input type="checkbox" value="1" /></div>
+                    <div class="form-cell"><input type="text" /></div>
+                    <div class="form-cell form-row-end"><button type="button">Remove</button></div>
+                </div>
+            </div>
+            -->
+        </div>
+    </div>
+    <div>
+        <button type="button" class="button" id="add-model-range">Add model range</button> |
+        <button type="button" class="button" id="add-texture-archive">Add texture archive</button> |
+        <button type="button" class="button" id="generate-showcase-data">Generate showcase</button>
+    </div>
+    <h3>Result</h3>
+    <div class="dfu-form">
+        <div class="form-row">
+            <div class="form-cell">
+                <ul id="download-links" class="download-links">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

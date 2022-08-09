@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Daggerfall Unity Automap Painter</title>
+    <title>Daggerfall Unity Dungeon Generator</title>
     <link href="css/base.css" rel="stylesheet" />
     <link href="css/dungeon-generator.css" rel="stylesheet" />
     <script type="text/javascript" src="js/seedrandom.js"></script>
@@ -92,14 +92,14 @@
     </script>
     <style type="text/css">
 
-        #dungeonGrid {
+        .dungeon-grid {
             width: 40em;
             margin: auto;
         }
-        .controls {
+        .grid-controls {
             padding: 0.25em;
         }
-        .control {
+        .grid-control {
             padding: 0.25em;
         }
         label {
@@ -124,12 +124,12 @@
 <body>
 <div class="wrapper">
     <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity Dungeon Generator</span></h1>
-    <div id="dungeonGrid">
-        <div class="controls">
-            <div class="control"><label for="dungeonSeed">Seed</label> <input id="dungeonSeed" name="dungeonSeed" type="number" /></div>
-            <div class="control"><label for="gridSizeX">Dungeon width</label> <input id="gridSizeX" name="gridSizeX" type="number" min="1" max="8" value="1" /></div>
-            <div class="control"><label for="gridSizeY">Dungeon height</label> <input id="gridSizeY" name="gridSizeY" type="number" min="1" max="8" value="1" /></div>
-            <div class="control"><button id="dungeonGenerateButton">Generate</button></div>
+    <div id="dungeon-grid" class="dungeon-grid">
+        <div class="grid-controls">
+            <div class="grid-control"><label for="dungeonSeed">Seed</label> <input id="dungeonSeed" name="dungeonSeed" type="number" /></div>
+            <div class="grid-control"><label for="gridSizeX">Dungeon width</label> <input id="gridSizeX" name="gridSizeX" type="number" min="1" max="8" value="1" /></div>
+            <div class="grid-control"><label for="gridSizeY">Dungeon height</label> <input id="gridSizeY" name="gridSizeY" type="number" min="1" max="8" value="1" /></div>
+            <div class="grid-control"><button id="dungeonGenerateButton">Generate</button></div>
         </div>
         <div id="grid" class="grid"></div>
     </div>

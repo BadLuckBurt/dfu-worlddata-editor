@@ -18,11 +18,73 @@ div {
 .wrapper > div {
     padding: 0.5rem 0;
 }
-.form > div,
-form > div {
+.dfu-form {
     padding: 0.5rem;
-    display: flex;
     background-color: #333;
+}
+
+.dfu-form button {
+    margin: auto;
+    padding: 0.125rem 0.25rem;
+}
+
+.form-row {
+    display: flex;
+    width: 100%;
+}
+.form-row.header {
+    display: block;
+}
+.form-row label {
+    min-width: 8em;
+}
+.form-cell {
+    min-width: 50%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+.form-cell button {
+    margin: 0;
+}
+.quart .form-cell,
+.fifth .form-cell {
+    flex-grow: 0;
+    margin-right: 1em;
+    min-width: auto;
+}
+.quart .form-cell {
+    width: calc(25% - 1em);
+}
+.quart .form-cell.two {
+    width: calc(50% - 1em);
+}
+.quart .form-cell.three {
+    width: calc(75% - 1em);
+}
+.fifth .form-cell {
+    width: calc(20% - 1em);
+}
+
+input[type=radio],
+input[type=checkbox] {
+    min-width: auto !important;
+    width: auto !important;
+}
+
+
+.dfu-result.multiple {
+    display: flex;
+}
+.result-wrapper {
+    width: 50%;
+}
+.result-description {
+    font-size: 0.875em;
+    font-weight: bold;
+}
+
+.dfu-result textarea {
+    height: 15em;
 }
 
 h1 {
@@ -44,18 +106,22 @@ h1 span {
     height: 30rem;
 }
 
-.generate-button {
-    display: block;
-    margin: auto;
-    width: 15rem;
-    padding: 1rem;
-    flex-wrap: wrap;
-}
-
 img {
     -ms-interpolation-mode: nearest-neighbor;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: -moz-crisp-edges;
     image-rendering: -o-pixelated;
     image-rendering: pixelated;
+}
+
+.dfu-flex {
+    display: flex;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-start {
+    align-items: flex-start;
 }

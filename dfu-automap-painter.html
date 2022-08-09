@@ -5,6 +5,7 @@
     <title>Daggerfall Unity Automap Painter</title>
     <link href="css/base.css" rel="stylesheet" />
     <link href="css/automap.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/dfu-global.js"></script>
     <script type="text/javascript" src="js/dfu-automap-painter.js"></script>
 </head>
 <body>
@@ -20,20 +21,23 @@
             </div>
         </form>
     </div>
-    <div id="grid-buttons">
+    <div id="grid-buttons" class="grid-buttons">
         <button type="button" onclick="switchGridSize('half');">Half size</button> |
         <button type="button" onclick="switchGridSize('');">Full size</button> |
         <button type="button" onclick="toggleRevealAll();">Reveal / hide extra</button>
     </div>
-    <div id="grid-controls" class="reveal-all">
+    <div id="grid-controls" class="grid-controls reveal-all">
 
     </div>
-    <div id="grid" class="half">
+    <div id="grid" class="grid half">
         <div class="grid-wrapper">
         </div>
     </div>
-    <div class="form">
-        <div><button id="generate-automap" class="generate-button">Generate automap array</button></div>
+    <div class="dfu-form">
+        <div>
+            <button id="generate-automap" class="button">Generate automap array</button>
+            <button id="download-automap" class="button">Download automap JSON</button>
+        </div>
     </div>
     <h2>Result</h2>
     <div class="dfu-result">

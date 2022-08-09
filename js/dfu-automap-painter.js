@@ -1,4 +1,4 @@
-var automapPainter = {
+let automapPainter = {
 	paintTypes: [
 		{type: 12, name: 'guildhall'},
 		{type: 15, name: 'temple'},
@@ -32,6 +32,7 @@ var automapPainter = {
 		{type: 0, name: 'blank'},
 		{type: 'default', name: 'default?'}
 	],
+	rmbName: '',
 	init: function() {
 		this.paint = false;
 		this.fileInput = document.getElementById('json-upload-file');
@@ -80,10 +81,14 @@ var automapPainter = {
 		this.generateAutomapButton.addEventListener('click', function() {
 			this.generateAutomap();
 		}.bind(this));
+		this.downloadAutomapButton = document.getElementById('download-automap');
+		this.downloadAutomapButton.addEventListener('click', function () {
+			this.downloadAutomap();
+		}.bind(this));
 		this.result = document.getElementById('dfu-automap-generator-result');
 	},
 	setPaintType: function(type, title) {
-		var current = this.gridControls.querySelector('.color-' + this.currentPaintType);
+		let current = this.gridControls.querySelector('.color-' + this.currentPaintType);
 		current.classList.remove('active');
 		current = this.gridControls.querySelector('.color-' + type);
 		current.classList.add('active');
@@ -92,12 +97,12 @@ var automapPainter = {
 	},
 	paintCell: function(event, clicked) {
 		if(event.target.classList.contains('cell')) {
-			var cell = event.target;
-			var currentType = cell.getAttribute('data-type');
+			let cell = event.target;
+			let currentType = cell.getAttribute('data-type');
 			if(currentType == this.currentPaintType) {
 				return false;
 			}
-			var colorClass = 'color-' + this.currentPaintType;
+			let colorClass = 'color-' + this.currentPaintType;
 			cell.title = this.currentPaintName;
 			cell.setAttribute('data-type', this.currentPaintType.toString());
 			cell.classList.add(colorClass);
@@ -114,11 +119,11 @@ var automapPainter = {
 		}
 		// Check for the various File API support.
 		if (window.File && window.FileReader && window.FileList && window.Blob) {
-			var file = this.fileInput.files[0];
+			let file = this.fileInput.files[0];
 			if(file) {
-				var fr = new FileReader();
+				let fr = new FileReader();
 				fr.onload = function(e) {
-					var text = e.target.result;
+					let text = e.target.result;
 					this.processJSON(text);
 				}.bind(this);
 				fr.readAsText(file);
@@ -128,16 +133,25 @@ var automapPainter = {
 		}
 	},
 	processJSON: function(rmb) {
-		var rmbJSON = JSON.parse(rmb);
-		var automapData = rmbJSON.RmbBlock.FldHeader.AutoMapData;
+		let rmbJSON = JSON.parse(rmb);
+		this.rmbName = rmbJSON.Name;
+		let automapData = rmbJSON.RmbBlock.FldHeader.AutoMapData;
 		this.generateGridCells(automapData);
 	},
 	generateAutomap: function() {
-		var automap = [];
-		var tiles = this.gridWrapper.querySelectorAll('.cell');
-		var result = "[\n";
-		var r = 1;
-		for (var i = 0; i < tiles.length; i++) {
+		let result = this.getAutomapText();
+		this.result.innerHTML = result;
+	},
+	downloadAutomap: function() {
+		let result = this.getAutomapText();
+		saveFile(result, this.rmbName + "_automap.json");
+	},
+	getAutomapText: function() {
+		let automap = [];
+		let tiles = this.gridWrapper.querySelectorAll('.cell');
+		let result = "{data:[\n";
+		let r = 1;
+		for (let i = 0; i < tiles.length; i++) {
 			if(r == 1) {
 				result += "\t\t";
 			}
@@ -149,13 +163,13 @@ var automapPainter = {
 				r = 1;
 			}
 		}
-		result += "\t]";
-		this.result.innerHTML = result;
+		result += "\t]}";
+		return result;
 	},
 	createGridControls: function() {
-		var df, el;
+		let df, el;
 		df = document.createDocumentFragment();
-		for(var i = 0; i < this.paintTypes.length; i++) {
+		for(let i = 0; i < this.paintTypes.length; i++) {
 			el = document.createElement('div');
 			el.title = this.paintTypes[i].type.toString() + ': ' + this.paintTypes[i].name;
 			el.setAttribute('data-type',this.paintTypes[i].type);
@@ -172,10 +186,10 @@ var automapPainter = {
 		this.gridControls.appendChild(df);
 	},
 	generateGridCells: function(cellTypes) {
-		var cell;
-		var df = document.createDocumentFragment();
-		var length = 64 * 64;
-		for(var i = 0; i < length; i++) {
+		let cell;
+		let df = document.createDocumentFragment();
+		let length = 64 * 64;
+		for(let i = 0; i < length; i++) {
 			cell = document.createElement('div');
 			cell.classList.add('cell');
 			if(cellTypes.length == length) {
@@ -195,7 +209,7 @@ var automapPainter = {
 		this.gridWrapper.appendChild(df);
 	},
 	getPaintName: function(type) {
-		for(var i = 0; i < this.paintTypes.length; i++) {
+		for(let i = 0; i < this.paintTypes.length; i++) {
 			if(this.paintTypes[i].type == type) {
 				return type + ': ' + this.paintTypes[i].name;
 			}
@@ -205,7 +219,7 @@ var automapPainter = {
 };
 
 function switchGridSize(half) {
-	var el = document.getElementById('grid');
+	let el = document.getElementById('grid');
 	if(half) {
 		el.classList.add('half');
 	} else {

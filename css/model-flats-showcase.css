@@ -1,0 +1,20 @@
+#model-ranges-wrapper input,
+#texture-archives-wrapper input {
+    width: 6em;
+}
+
+.form-row {
+    padding-bottom: 0.25em;
+}
+
+.dfu-form a {
+    color: #EEE;
+}
+
+.form-row-end {
+    justify-content: flex-end;
+}
+
+.radio-label {
+    width: 100%;
+}

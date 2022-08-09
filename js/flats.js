@@ -1855,7 +1855,7 @@ var flats = [
 	{
 		"TextureArchive": 346,
 		"TextureRecord": 0,
-		"Caption": "Princess Mougiah",
+		"Caption": "Princess Morgiah",
 		"Gender": "2",
 		"Unknown2": 0,
 		"Unknown3": 0,
@@ -1864,7 +1864,7 @@ var flats = [
 	{
 		"TextureArchive": 346,
 		"TextureRecord": 22,
-		"Caption": "Queen Baueuziah",
+		"Caption": "Queen Barenziah",
 		"Gender": "2",
 		"Unknown2": 0,
 		"Unknown3": 0,

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daggerfall Unity Terrain Viewer</title>
+    <link href="css/base.css" rel="stylesheet" />
+    <link href="css/rmb-builder.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/model-flat-data/flat-names.js"></script>
+    <script type="text/javascript" src="js/model-flat-data/model-names.js"></script>
+    <script src="js/dfu-rmb-builder.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <h1><img src="images/daggerfall_logo_pngkit.png" /> <span>Unity Terrain Viewer</span></h1>
+    <div class="json-upload">
+        <h2>Load RMB JSON</h2>
+        <p>Please select the RMB JSON file you exported from Daggerfall Unity and click the Load JSON button</p>
+        <form id="json-upload-form" method="post" action="">
+            <div>
+                <input type="file" name="json-upload-file" id="json-upload-file" />
+                <button type="button" id="json-upload-button" name="json-upload-button">Load JSON</button>
+            </div>
+        </form>
+    </div>
+    <div id="grid-controls">
+        <button type="button" onclick="switchGridSize('half');">Half size</button> |
+        <button type="button" onclick="switchGridSize('');">Full size</button>
+    </div>
+    <div id="grid" class="half">
+        <div class="grid-wrapper"></div>
+    </div>
+    <h2>Downloads</h2>
+    <div class="dfu-result">
+        <button type="button" id="dfu-download-rmb-json">Download RMB json</button>
+        <textarea id="dfu-rmb-builder-result" name="dfu-rmb-builder-result" style="display: none;"></textarea>
+    </div>
+
+</div>
+</body>
