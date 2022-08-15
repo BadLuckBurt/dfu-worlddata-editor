@@ -104,7 +104,7 @@ let dfuShowcaseGenerator = {
 				showcaseData[showcaseData.length] = record;
 			}
 		} else if(showcaseType == 'texture-archive') {
-			if(textureArchives[index].isNature) {
+			if(this.textureArchives[index].isNature) {
 				for(i = 0; i < this.textureArchives[index].recordCount; i++) {
 					record = this.getGroundSceneryRecord();
 					record.TextureRecord = i;
