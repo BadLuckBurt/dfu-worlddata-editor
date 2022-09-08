@@ -91,7 +91,7 @@ let terrainViewer = {
 	},
 	processJSON: function(rmb) {
 		let rmbJSON = JSON.parse(rmb);
-		console.log(rmbJSON);
+		//console.log(rmbJSON);
 		let src = 'images/RMB/' + rmbJSON.Name + '.png';
 		this.overlay.addEventListener('error',function() {
 			this.style.display = 'none';
